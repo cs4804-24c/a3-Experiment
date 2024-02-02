@@ -1,4 +1,4 @@
-Assignment 3 - Replicating a Classic Experiment  
+Assignment 3 - Replicating a Classic Experiment
 ===
 
 For the scope of this project, assume the role of a scientist who runs experiments for a living.

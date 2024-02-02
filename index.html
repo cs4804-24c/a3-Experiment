@@ -1,9 +1,56 @@
 <!DOCTYPE html>
-<div id="container"></div>
-<script type="module">
+<html>
+<head>
+    <title>D3 : Random Number Generation - Column Chart</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
+    <style type="text/css">
+        #chartholder {
+            height: 400px;
+            width: 600px;
+        }
+        .bar {
+            display: inline-block;
+            width: 15px;
+            height: 10px; /* Gets overridden by D3 height below */
+            margin-right: 2px;
+            background-color: teal;
+        }
+    </style>
+</head>
+<body>
+<div id="chartholder"></div>
 
-import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+<script type="text/javascript">
+    // Random Dataset Method 1 (Manual Random Number Generation)
+    var data1 = [0.27, 0.5, 0.1, 0.15, 0.3, 0.21, 0.25, 0.94, 0.04, 1.00];
 
-console.log(d3);
+    // Random Dataset Method 2 (JavaScript Random Number Generation)
+    var data2 = [];
+    for (var i = 0; i < 10; i++) {
+        var newNumber = Math.random();
+        data2.push(newNumber);
+    }
+
+    // Random Dataset Method 3 (D3 Random Number Generation)
+    var data3 = d3.range(10).map(function() {
+        return Math.random();
+    });
+
+    // Concatinate the 3 Random Datasets
+    var data = data1.concat(data2, data2);
+    console.log(data);
+
+    // Display a simple Column Chart using the above Random Data
+    var svg = d3.select('#chartholder').selectAll('div')
+        .data(data)
+        .enter()
+        .append('div')
+        .attr('class', 'bar')
+        .style('fill', '#ffffff')
+        .style('height', function (d) {
+            return d * 400 + 'px';
+        });
 
 </script>
+</body>
+</html>
