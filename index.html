@@ -1,9 +1,308 @@
 <!DOCTYPE html>
-<div id="container"></div>
-<script type="module">
+<html>
 
-import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+<head>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
 
-console.log(d3);
+  <style>
 
-</script>
+    /*for style later on*/
+
+  </style>
+</head>
+
+<body>
+  
+  <div id="svgcontainer"></div>
+
+  <script>
+
+    /* initial svg set up */
+    var margin = { top: 75, right: 150, bottom: 150, left: 150 },
+      width = 800 - margin.left - margin.right,
+      height = 700 - margin.top - margin.bottom;
+
+    var svg = d3.select("#svgcontainer")
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+    /* Function For generateing the random data foor the charts*
+    
+    Returns array of sets of random data and what chart it goes too
+    */
+    function generateData() {
+
+      //charts array for random chart order 1,2,3 correlates to the chart
+      var chartArray = Array(29).fill(1).concat(Array(29).fill(2), Array(29).fill(3));
+      var data = [];
+      //randomize the chart order
+      chartArray = chartArray.sort(() => Math.random() - 0.5);
+
+
+      //for each chart we generate data
+      for (let i = 0; i < chartArray.length; i++) {
+
+        // random number of data points between 5 and 10
+        var numPoints = Math.floor(Math.random() * 6) + 5;
+        
+        //data array forr single chart
+        var singleChartData = [];
+
+        //for filling the data array
+        for (let j = 0; j < numPoints; j++) {
+          singleChartData.push({
+            value: Math.floor(Math.random() * 101),
+            selected: j < 2, //set the first two grapghs to selected
+          });
+        }
+
+        // randomize order of the chart data so the selected charts are random
+        singleChartData = singleChartData.sort(() => Math.random() - 0.5);
+        singleChartData = singleChartData.sort(() => Math.random() - 0.5);
+        singleChartData = singleChartData.sort(() => Math.random() - 0.5);
+
+        // push chart data to main  
+        data.push({
+          values: singleChartData,
+          type: chartArray[i]
+        });
+      }
+      return data;
+    }
+
+
+
+
+
+
+
+
+    /* bar chart section*/
+
+
+    //  sacler for the bar chart
+    var y = d3.scaleLinear()
+      .domain([0, 100])
+      .range([height, 0]);
+    
+
+
+    
+    /*
+
+    function for drawing the bar chart
+
+    */ 
+
+    function drawBarChart(data) {
+    
+       // remove previous elements
+        svg.selectAll("circle").remove();
+        svg.selectAll("rect").remove();
+        svg.selectAll("line").remove();
+        svg.selectAll("text").remove();
+        svg.selectAll('polygon').remove();
+        svg.selectAll('g').remove();
+        
+        
+        // make rectangle for each data point
+        svg.selectAll("rect")
+        .data(data)
+        .enter()
+        .append("rect")
+        .attr("x", (d, i) => i * 40) // space bars
+        .attr("y", function(d) { return y(d.value); })// height of bar
+        .attr("width", 30)
+        .attr("height", function(d) { return height - y(d.value); })// height of bar
+        .style("stroke", "black")
+        .style("fill", "white");
+
+        svg.selectAll("circle")// for selected bars mark with circle
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("cx", (d, i) => i * 40 + 15)
+        .attr("cy", function(d) { return y(d.value) + (height - y(d.value)) / 2; }) 
+        .attr("r", d => d.selected ? 4 : 0)
+        .style("fill", d => d.selected ? "black" : "white");
+
+        svg.append("g")
+      .call(d3.axisLeft(y).tickValues([0, 100]));// add axis with single label
+    }
+
+
+
+
+
+    /* Radar chart section*/
+
+    
+    /*
+
+    function for drawing the radar chart
+
+    */ 
+
+    function radarChart(data) {
+
+
+      var centerX = 200;//radar location
+      var centerY = 200;
+
+
+      //remove previous elements
+      svg.selectAll("circle").remove();
+      svg.selectAll("rect").remove();
+      svg.selectAll("line").remove();
+      svg.selectAll("text").remove();
+      svg.selectAll('polygon').remove();
+      svg.selectAll('g').remove();
+
+      var points = [] // for dat points
+        
+      const angle = 360/data.length // increasing angle of radar char
+
+
+      // x and y value of points
+        for(let i = 0; i < data.length; i++){
+          points.push({
+            x: 0,
+            y: data[i].value *2
+          });
+        }
+
+
+      //for rotating the points by the increasing angle
+        points.forEach((point, i) => {
+          var angleInRadians = (i * angle * Math.PI) / 180;
+          var newX = point.x * Math.cos(angleInRadians) - point.y * Math.sin(angleInRadians);
+          var newY = point.x * Math.sin(angleInRadians) + point.y * Math.cos(angleInRadians);
+  
+          // Update the point's coordinates
+          point.x = newX;
+          point.y = newY;
+      });
+  
+      
+   // lines for the chart they will be rotated as well
+      for (var i = 0; i < data.length; i++) {
+        
+        var angleInRadians = (i * angle * Math.PI) / 180;
+        var x2 = 0 * Math.cos(angleInRadians) - 200 * Math.sin(angleInRadians);
+        var y2 = 0 * Math.sin(angleInRadians) + 200 * Math.cos(angleInRadians);
+
+        svg.append("line")
+            .attr("x1", 0)
+            .attr("y1", 0)
+            .attr("x2", x2)
+            .attr("y2", y2)
+            .attr("stroke", "grey")
+            .attr("transform", "translate(" + centerX + "," + centerY + ")");
+
+            if( i== data.length-2){ // add a signle 100 lable for scale
+            svg.append("text")
+            .attr("x",x2)  
+            .attr("y",y2)  
+            .attr("transform", "translate(" + centerX + "," + centerY + ")")
+            .attr("text-anchor", "top")
+            .attr("alignment-baseline", "top")
+            .text("100");
+            }
+    }
+     
+      
+    // use rotated points to build radar polygon
+      svg.append("polygon")
+      .attr("points", points.map(point => point.x + "," + point.y).join(" "))
+      .attr("fill", "none")
+      .attr("stroke", "black")
+      .attr("transform", "translate(" + centerX + "," + centerY + ")")
+      .style("stroke-width", '3px' );
+
+    
+
+      //add circle to selected data points
+    svg.selectAll("circle")
+          .data(data)
+          .enter()
+          .append("circle")
+          .attr("cx", (d, i) => points[i].x)
+          .attr("cy", (d, i) => points[i].y)
+          .attr("transform", "translate(" + centerX + "," + centerY + ")")
+          .attr("r", d => d.selected ? 4 : 0)
+          .style("fill", d => d.selected ? "black" : "white");
+
+
+  
+}
+
+
+
+        
+ /* third chart section*/
+
+    
+    /*
+
+    function for drawing the third chart
+
+    */ 
+
+    function third(data) {
+
+      //not yet implemented
+
+    }
+
+
+
+
+
+
+        
+
+
+    /*
+
+
+    function to help run expirement will have to be changed
+
+    */
+      
+
+    function runExperiment() {
+        var results = [];
+        const data = generateData();
+        console.log(data);
+        
+
+        // just looping through to see if it works
+        for (let i = 0; i < data.length; i++) {
+          setTimeout(function () {
+            const currentData = data[i];
+      
+            if (currentData.type === 1) {
+              drawBarChart(currentData.values);
+            } else if (currentData.type === 2) {
+              radarChart(currentData.values);
+            } else if (currentData.type === 3) {
+              third(); 
+            }
+      
+          }, 2000 * i); // just delaaying as i loop through
+        }
+      }
+      
+
+    runExperiment();
+  </script>
+</body>
+
+</html>
+
+        
+    

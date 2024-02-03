@@ -110,3 +110,13 @@ GitHub Details
 ```
 a3-FirstLastnameMember1-FirstLastnameMember2-FirstLastnameMember3-...
 ```
+
+
+
+
+## current sources:
+
+- https://d3-graph-gallery.com/graph/barplot_basic.html
+- https://academo.org/demos/rotation-about-point/
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
+-https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/join
