@@ -1,10 +1,51 @@
 <!DOCTYPE html>
-<div id="container"></div>
-<script type="module">
+<html>
+    <head>
+        <script src="https://d3js.org/d3.v6.min.js"></script>
+        <style>
 
-import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+        </style>
+    </head>
 
-console.log('hi');
-console.log('change #2');
+    <body>
+        <div id="initial">
+            <h1>
+                Data Visualization (CS4804) Experiment
+            </h1>
+            <h3>
+                Group Members: Ryan Dillon, Alessandra Giovenco, Pegah Emdad
+            </h3>
+            <p>
+                Thank you for participating! <br>
+                In this study, you will be shown a series of visualizations. <br>
+                In each visualization, two sections of the graph will be marked with a dot. <br>
+                In the text box, please enter the percentage that represents the fraction of the smaller marked section to the larger marked section. <br>
+                For example, if the smaller section appears to be 50% of the larger section, enter "50" in the text box.
+            </p>
+            <h5>Ready to start?</h5>
+            <button id ="begin" onclick="return showExperiment()">Begin</button>
+        </div>
 
-</script>
+        <div id="experiment" style="display:none">
+            <h1>
+                Data Visualization (CS4804) Experiment
+            </h1>
+            <p>
+                In the text box, please enter the percentage that represents the fraction of the smaller marked section to the larger marked section. <br>
+                For example, if the smaller section appears to be 50% of the larger section, enter "50" in the text box.
+            </p>
+            <input type="text" value="0"></input>
+            <button id="submit" onclick="return recordResult()">Submit</button>
+        </div>
+
+        <script>
+            console.log(d3); // test if d3 is loaded
+        
+            function showExperiment() {
+                document.getElementById('initial').style.display='none';
+                document.getElementById('experiment').style.display='block';
+            }
+
+        </script>
+    </body>
+</html>
