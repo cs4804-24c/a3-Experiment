@@ -18,20 +18,12 @@
             margin-bottom: 20px;
         }
 
-        #chartholderholder {
-            border: 1px solid red;
-        }
-
         .bar {
             display: inline-block;
             width: 15px;
             height: 10px; /* Gets overridden by D3 height below */
             margin-left: 2px;
-            background-color: white;
-            /*make outline black*/
-            border-left: 1px solid black;
-            border-right: 1px solid black;
-            border-top: 1px solid black;
+            background-color: teal;
             bottom: 0;
             
         }
@@ -99,9 +91,7 @@
                     .attr('r', 4)
                     .attr('cx', barWidth / 2)
                     .attr('cy', barHeight / 2)
-                    .style('fill', 'black')
-                    .style('stroke', 'black')
-                    .style('stroke-width', 1);
+                    .style('fill', '#ff8d05');
             }
         });
 
