@@ -7,18 +7,42 @@
         #chartholder {
             height: 400px;
             width: 600px;
+            /*outline the left and bottom edges of the chart*/
+            border-left: 1px solid black;
+            border-bottom: 1px solid black;
+            position: relative;
+            display:flex; 
+            justify-content: flex-start; 
+            flex-direction: row; /*(makes a stacked bar chart somehow)*/
+            align-items: flex-end;
+            margin-bottom: 20px;
         }
+
+        #chartholderholder {
+            border: 1px solid red;
+        }
+
         .bar {
             display: inline-block;
             width: 15px;
             height: 10px; /* Gets overridden by D3 height below */
-            margin-right: 2px;
-            background-color: teal;
+            margin-left: 2px;
+            background-color: white;
+            /*make outline black*/
+            border-left: 1px solid black;
+            border-right: 1px solid black;
+            border-top: 1px solid black;
+            bottom: 0;
+            
         }
+
+
     </style>
 </head>
 <body>
+    <div id="chartholderholder">
 <div id="chartholder"></div>
+</div>
 
 <script type="text/javascript">
     // Random Dataset Method 1 (Manual Random Number Generation)
@@ -40,6 +64,16 @@
     var data = data1.concat(data2, data2);
     console.log(data);
 
+    data = data2;
+
+    // Generate two unique random indices
+    let index1 = Math.floor(Math.random() * data.length);
+    let index2 = Math.floor(Math.random() * data.length);
+
+    while(index1 === index2) {
+        index2 = Math.floor(Math.random() * data.length);
+    }
+
     // Display a simple Column Chart using the above Random Data
     var svg = d3.select('#chartholder').selectAll('div')
         .data(data)
@@ -49,7 +83,28 @@
         .style('fill', '#ffffff')
         .style('height', function (d) {
             return d * 400 + 'px';
+        })
+        .each(function(d, i) {
+        // Append circles to the randomly chosen bars
+            if (i === index1 || i === index2) {
+                let bar = d3.select(this);
+                let barWidth = parseInt(bar.style('width'));
+                let barHeight = parseInt(bar.style('height'));
+
+                bar.append('svg')
+                    .attr('width', barWidth)
+                    .attr('height', barHeight)
+                    .append('circle')
+                    .attr('class', 'circle')
+                    .attr('r', 4)
+                    .attr('cx', barWidth / 2)
+                    .attr('cy', barHeight / 2)
+                    .style('fill', 'black')
+                    .style('stroke', 'black')
+                    .style('stroke-width', 1);
+            }
         });
+
 
 </script>
 </body>
