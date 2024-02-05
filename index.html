@@ -35,8 +35,19 @@
                 For example, if the smaller section appears to be 50% of the larger section, enter "50" in the text box.
             </p>
             <div id="visualization"></div>
-            <input type="text" value="0"></input>
+            <input id="answer" type="text" value=""></input>
             <button id="submit" onclick="return recordResult()">Submit</button>
+        </div>
+
+        <div id="results" style="display:none">
+            <h1>
+                Data Visualization (CS4804) Experiment
+            </h1>
+            <p>
+                Thank you for participating! See your results printed below, and hit the button to export the data to a .csv file.
+            </p>
+            <h5>Export to .csv</h5>
+            <button id="export" onclick="return exportResults()">Export</button>
         </div>
 
         <script>
@@ -46,11 +57,20 @@
             var results = [];
             var count = 0;
 
+            var visType = "";
+            var correctAnswer = 0;
+
             // change screen from intial screen to visualization screen
             function showExperiment() {
                 document.getElementById('initial').style.display='none';
                 document.getElementById('experiment').style.display='block';
                 startExperiment();
+            }
+
+            function showResults() {
+                document.getElementById('experiment').style.display='none';
+                document.getElementById('results').style.display='block';
+                printAllResults();
             }
 
             function makeDataset() {
@@ -71,7 +91,7 @@
 
                 // create the struct to use as the dataset for each graph
                 var dataSet = {
-                    data : data,
+                    data: data,
                     markOne: markOne,
                     markTwo: markTwo
                 }
@@ -146,15 +166,59 @@
 
             }
 
-            // TODO (finish)
             function createTrial(num) {
                 count++;
                 let dataSet = makeDataset();
+
+                // TODO: figure out what the correct answer is for ratio of marked sections
+
+                // TODO: reset svg
+
+                if (visOrder[num] == 1) {
+                    visType = "Bar Chart";
+                    createBarChart(dataSet);
+                }
+
+                else if (visOrder[num] == 2) {
+                    visType = "Pie Chart";
+                    createPieChart(dataSet);
+                }
+
+                else if (visOrder[num] == 3) {
+                    visType = "Bubble Chart";
+                    createBubbleChart(dataSet);
+                }   
+
+                else {
+                    visType = "Voronoi Tree Map";
+                    createVoronoiTreeMap(dataSet);
+                }
             }
 
-            // TODO
+            // TODO (finish)
             function recordResult() {
+                // do some stuff to record result
+                console.log(count);
 
+                let result = {
+                    trialNum: count,
+                    visType: visType,
+                    answer: parseInt(document.getElementById('answer').value),
+                    correctAnswer: correctAnswer
+                }
+
+                console.log(result);
+                results.push(result);
+                
+                if (count == 80) {
+                    showResults();
+                }
+
+                else {
+                    // then clear the input box and create the next trial
+                    document.getElementById("answer").value="";
+                    createTrial(count);
+                }
             }
 
             // TODO
@@ -184,7 +248,12 @@
 
             function startExperiment() {
                 visOrder = createTrialOrder();
-                createTrial(0);
+                createTrial(count);
+            }
+
+            // TODO
+            function exportResults() {
+
             }
 
         </script>
