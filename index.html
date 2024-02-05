@@ -19,13 +19,11 @@
         }
 
         .bar {
-            display: inline-block;
-            width: 15px;
-            height: 10px; /* Gets overridden by D3 height below */
-            margin-left: 2px;
-            background-color: teal;
+            width: 25px;
+            margin-left: 3px;
+            background-color: white; /* White fill for D3 bars */
+            border: 3px solid black; /* Black outline for D3 bars */
             bottom: 0;
-            
         }
 
 
@@ -33,8 +31,8 @@
 </head>
 <body>
     <div id="chartholderholder">
-<div id="chartholder"></div>
-</div>
+        <div id="chartholder"></div>
+    </div>
 
 <script type="text/javascript">
     // Random Dataset Method 1 (Manual Random Number Generation)
@@ -76,6 +74,7 @@
         .style('height', function (d) {
             return d * 400 + 'px';
         })
+    
         .each(function(d, i) {
         // Append circles to the randomly chosen bars
             if (i === index1 || i === index2) {
@@ -90,8 +89,8 @@
                     .attr('class', 'circle')
                     .attr('r', 4)
                     .attr('cx', barWidth / 2)
-                    .attr('cy', barHeight / 2)
-                    .style('fill', '#ff8d05');
+                    .attr('cy', barHeight - 15)
+                    .style('fill', 'black');
             }
         });
 
