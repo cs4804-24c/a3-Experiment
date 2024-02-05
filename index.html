@@ -15,6 +15,17 @@
   
   <div id="svgcontainer"></div>
 
+  <form 
+  method="POST"
+  action="https://script.google.com/macros/s/AKfycbzVUg7hS88GXI6CggvJ2f_cj3kdq_tzW_SeqkfA1Mr_NyFan9dE3YbdXJZpy4l2FSOR/exec"
+  onsubmit="handleSubmit(this.vol.value);">
+    <label for="vol">Volume (between 0 and 100):</label>
+    <input name="Guess" type="range" id="vol" name="vol" min="0" max="100" onchange="updateTextInput(this.value);">
+    <input name="Guess" type="number" id="textInput" value=50 onchange="updateSlider(this.value);">
+    <input type="submit">
+  </form>
+</body>
+
   <script>
 
     /* initial svg set up */
@@ -260,19 +271,47 @@
 
 
 
+    var inputs = {}
+    function updateTextInput(val) {
+      document.getElementById('textInput').value=val; 
+    }
+
+    function updateSlider(val) {
+      document.getElementById('vol').value=val
+    }
+
+    function handleSubmit(val) {
+      //inputs.push(["input", val])
+      console.log(val)
+    }
+
+    /*window.addEventListener("load", function() {
+      const form = document.getElementById('my-form');
+      form.addEventListener("submit", function(e) {
+        e.preventDefault();
+        const data = new FormData(form);
+        const action = e.target.action;
+        fetch(action, {
+          method: 'POST',
+          body: data,
+        })
+        .then(() => {
+          alert("Success!");
+        })
+      });
+    });*/
 
 
-
-        
-
+    //Calculate error between the real and reported percentage scales
+    function calculateError(real, input) {
+      return Math.log2(Math.abs(input-real) + (1/8))
+    }
 
     /*
-
 
     function to help run expirement will have to be changed
 
     */
-      
 
     function runExperiment() {
         var results = [];
@@ -284,6 +323,7 @@
         for (let i = 0; i < data.length; i++) {
           setTimeout(function () {
             const currentData = data[i];
+            
       
             if (currentData.type === 1) {
               drawBarChart(currentData.values);
