@@ -120,3 +120,6 @@ a3-FirstLastnameMember1-FirstLastnameMember2-FirstLastnameMember3-...
 - https://academo.org/demos/rotation-about-point/
 - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
 -https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/join
+-https://d3js.org/d3-shape/arc
+-https://d3js.org/d3-shape/pie 
+-https://d3-graph-gallery.com/graph/pie_annotation.html

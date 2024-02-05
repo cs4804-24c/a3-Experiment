@@ -41,6 +41,8 @@
       var data = [];
       //randomize the chart order
       chartArray = chartArray.sort(() => Math.random() - 0.5);
+      chartArray = chartArray.sort(() => Math.random() - 0.5);
+      chartArray = chartArray.sort(() => Math.random() - 0.5);
 
 
       //for each chart we generate data
@@ -55,7 +57,7 @@
         //for filling the data array
         for (let j = 0; j < numPoints; j++) {
           singleChartData.push({
-            value: Math.floor(Math.random() * 101),
+            value: Math.floor(Math.random() * 100)+1,
             selected: j < 2, //set the first two grapghs to selected
           });
         }
@@ -95,6 +97,7 @@
     /*
 
     function for drawing the bar chart
+    returns difference in percentage of the selected bars
 
     */ 
 
@@ -107,6 +110,7 @@
         svg.selectAll("text").remove();
         svg.selectAll('polygon').remove();
         svg.selectAll('g').remove();
+        svg.selectAll('path').remove();
         
         
         // make rectangle for each data point
@@ -132,6 +136,17 @@
 
         svg.append("g")
       .call(d3.axisLeft(y).tickValues([0, 100]));// add axis with single label
+
+      selectedSize =[];// size of the selected
+          for (let i = 0; i < data.length; i++) {
+
+            if(data[i].selected){
+              selectedSize.push(data[i].value)
+            }
+          }
+
+          return Math.abs(selectedSize[0]-selectedSize[1])
+
     }
 
 
@@ -144,10 +159,11 @@
     /*
 
     function for drawing the radar chart
+    returns difference in percentage of the selected peaks
 
     */ 
 
-    function radarChart(data) {
+    function drawRadarChart(data) {
 
 
       var centerX = 200;//radar location
@@ -161,6 +177,7 @@
       svg.selectAll("text").remove();
       svg.selectAll('polygon').remove();
       svg.selectAll('g').remove();
+      svg.selectAll('path').remove();
 
       var points = [] // for dat points
         
@@ -237,25 +254,84 @@
           .style("fill", d => d.selected ? "black" : "white");
 
 
+          selectedSize =[];// size of the selected
+          for (let i = 0; i < data.length; i++) {
+
+            if(data[i].selected){
+              selectedSize.push(data[i].value)
+            }
+          }
+
+          return Math.abs(selectedSize[0]-selectedSize[1])
+
   
 }
 
 
 
         
- /* third chart section*/
+ /* pie chart section*/
 
     
     /*
 
-    function for drawing the third chart
+    function for drawing pie chart returns difference in percentage of the selected slices
 
     */ 
 
-    function third(data) {
+    function drawPieChart(data) {
 
-      //not yet implemented
 
+      var centerX = 200;//pie location
+      var centerY = 200;
+
+      svg.selectAll("circle").remove();
+      svg.selectAll("rect").remove();
+      svg.selectAll("line").remove();
+      svg.selectAll("text").remove();
+      svg.selectAll('polygon').remove();
+      svg.selectAll('g').remove();
+      svg.selectAll('path').remove();
+
+
+      var pie = d3.pie()
+      .value(function(d) {return d.value; })
+      
+      
+
+      var slices= svg.selectAll('pie')
+      .data(pie(data))
+      .enter()
+      .append('path')
+        .attr('d', d3.arc().innerRadius(0).outerRadius(200))
+        .attr('fill', "none")
+        .attr("stroke", "black")
+        .attr("transform", "translate(" + centerX + "," + centerY + ")");
+        
+        selectedSize =[];// size of the selected
+        for (let i = 0; i < slices._groups[0].length; i++) {
+          
+          if(slices._groups[0][i].__data__.data.selected){
+
+
+            sliceData = slices._groups[0][i].__data__;
+
+            selectedSize.push(((sliceData.endAngle - sliceData.startAngle) / (2 * Math.PI)) * 100); // percent of cirlce that the slice is
+
+            
+            
+            svg.append('circle')
+            .attr('cx',d3.arc().innerRadius(0).outerRadius(200).centroid(sliceData)[0] )//based on sliceData
+            .attr('cy',d3.arc().innerRadius(0).outerRadius(200).centroid(sliceData)[1] )// based on sliceDate
+            .attr('r', 4)
+            .attr('fill', 'black')
+            .attr("transform", "translate(" + centerX + "," + centerY + ")");
+        }
+            
+          
+        }
+
+        return Math.abs(selectedSize[0]-selectedSize[1])
     }
 
 
@@ -286,14 +362,20 @@
             const currentData = data[i];
       
             if (currentData.type === 1) {
-              drawBarChart(currentData.values);
+              var actualDifference=drawBarChart(currentData.values);
+              console.log(currentData);
+              console.log(actualDifference);
             } else if (currentData.type === 2) {
-              radarChart(currentData.values);
+              var actualDifference=drawRadarChart(currentData.values);
+              console.log(currentData);
+              console.log(actualDifference);
             } else if (currentData.type === 3) {
-              third(); 
+              var actualDifference= drawPieChart(currentData.values); 
+              console.log(currentData);
+              console.log(actualDifference);
             }
       
-          }, 2000 * i); // just delaaying as i loop through
+          }, 2000 * i); 
         }
       }
       
