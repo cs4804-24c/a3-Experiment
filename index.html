@@ -170,7 +170,18 @@
                 count++;
                 let dataSet = makeDataset();
 
-                // TODO: figure out what the correct answer is for ratio of marked sections
+                // figure out what the correct answer is for ratio of marked sections
+                if (dataSet.data[dataSet.markOne] < dataSet.data[dataSet.markTwo]) {
+                    correctAnswer = Math.floor(dataSet.data[dataSet.markOne] / ((dataSet.data[dataSet.markTwo])/100));
+                }
+
+                else if (dataSet.data[dataSet.markOne] > dataSet.data[dataSet.markTwo]) {
+                    correctAnswer = Math.floor(dataSet.data[dataSet.markTwo] / ((dataSet.data[dataSet.markOne])/100));
+                }
+
+                else {
+                    correctAnswer = 100;
+                }
 
                 // TODO: reset svg
 
