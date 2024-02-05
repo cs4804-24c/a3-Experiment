@@ -9,6 +9,8 @@
             display: block;
             text-align: center;
             margin-top: 50px;
+            font-size: 12px;
+            font-family: Arial;
         }
 
         /* Style for the screen if user does not agree to do the experiment*/
@@ -16,12 +18,15 @@
             display: block;
             text-align: center;
             margin-top: 50px;
+            font-size: 12px;
+            font-family: Arial;
         }
 
         /* Style the "Agree" button */
         #agreeButton {
             padding: 10px 20px;
             font-size: 16px;
+            font-family: Arial;
             background-color: #0277d0;
             color: #fff;
             border: none;
@@ -41,10 +46,10 @@
         /* Style for the page displaying the graph */
         #chartholder {
             height: 400px;
-            width: 600px;
+            width: 400px;
             /*outline the left and bottom edges of the chart*/
-            border-left: 1px solid black;
-            border-bottom: 1px solid black;
+            border-left: 3px solid black;
+            border-bottom: 3px solid black;
             position: relative;
             display:flex; 
             justify-content: flex-start; 
@@ -67,7 +72,7 @@
 <body>
      <!-- Start Screen (always shown) -->
      <div id="startScreen">
-        <h2>In this experiment, you are asked to judge what is the percet of a smaller value to a larger value in several charts.<br> We won't record any other information from you except the answers. <br>Click the "agree" button to begin. <br>Thank you! </h2>
+        <h2>In this experiment, you are asked to judge what is the percent of a smaller value to a larger value in several charts.<br><br> We won't record any other information from you except the answers. <br>Click the "Agree" button to begin. <br><br>Thank you! </h2>
         <button id="agreeButton">Agree</button>
         <button id="disagreeButton">Disagree</button>
     </div>
