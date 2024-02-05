@@ -4,6 +4,41 @@
     <title>D3 : Random Number Generation - Column Chart</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
     <style type="text/css">
+         /* Style for starting screen */
+         #startScreen {
+            display: block;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        /* Style for the screen if user does not agree to do the experiment*/
+        #disagreeScreen {
+            display: block;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        /* Style the "Agree" button */
+        #agreeButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #0277d0;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Style for the "Disagree" button */
+        #disagreeButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #0277d0;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Style for the page displaying the graph */
         #chartholder {
             height: 400px;
             width: 600px;
@@ -30,11 +65,25 @@
     </style>
 </head>
 <body>
-    <div id="chartholderholder">
+     <!-- Start Screen (always shown) -->
+     <div id="startScreen">
+        <h2>In this experiment, you are asked to judge what is the percet of a smaller value to a larger value in several charts.<br> We won't record any other information from you except the answers. <br>Click the "agree" button to begin. <br>Thank you! </h2>
+        <button id="agreeButton">Agree</button>
+        <button id="disagreeButton">Disagree</button>
+    </div>
+
+    <!-- Disagree Screen (shown when user hits "Disagree") -->
+    <div id="disagreeScreen" style="display: none;">
+        <h2>Thank you for your consideration. You may close out of this window. </h2>
+    </div>
+
+    <!-- Chart Screen (only shown if the user hits "Agree") -->
+    <div id="chartholderholder" style="display: none;">
         <div id="chartholder"></div>
     </div>
 
 <script type="text/javascript">
+    
     // Random Dataset Method 1 (Manual Random Number Generation)
     var data1 = [0.27, 0.5, 0.1, 0.15, 0.3, 0.21, 0.25, 0.94, 0.04, 1.00];
 
@@ -93,6 +142,21 @@
                     .style('fill', 'black');
             }
         });
+        
+    // Listener for when "Agree" button is clicked (only show chart screen)
+    document.getElementById("agreeButton").addEventListener("click", function() {
+        document.getElementById("startScreen").style.display = "none";
+        document.getElementById("disagreeScreen").style.display = "none";
+        document.getElementById("chartholderholder").style.display = "block";
+    });
+
+    // Listener for when "Disagree" button is clicked (only show disagree screen)
+    document.getElementById("disagreeButton").addEventListener("click", function() {
+        document.getElementById("startScreen").style.display = "none";
+        document.getElementById("disagreeScreen").style.display = "block";
+        document.getElementById("chartholderholder").style.display = "none";
+    });
+    
 
 
 </script>
