@@ -16,9 +16,9 @@
   <div id="svgcontainer"></div>
 
   <form 
+  id="result-form"
   method="POST"
-  action="https://script.google.com/macros/s/AKfycbzVUg7hS88GXI6CggvJ2f_cj3kdq_tzW_SeqkfA1Mr_NyFan9dE3YbdXJZpy4l2FSOR/exec"
-  onsubmit="handleSubmit(this.vol.value);">
+  action="https://script.google.com/macros/s/AKfycbzVUg7hS88GXI6CggvJ2f_cj3kdq_tzW_SeqkfA1Mr_NyFan9dE3YbdXJZpy4l2FSOR/exec">
     <label for="vol">Volume (between 0 and 100):</label>
     <input name="Guess" type="range" id="vol" name="vol" min="0" max="100" onchange="updateTextInput(this.value);">
     <input name="Guess" type="number" id="textInput" value=50 onchange="updateSlider(this.value);">
@@ -40,6 +40,8 @@
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+
+    var currentChart
 
     /* Function For generateing the random data foor the charts*
     
@@ -285,11 +287,13 @@
       console.log(val)
     }
 
-    /*window.addEventListener("load", function() {
-      const form = document.getElementById('my-form');
+    window.addEventListener("load", function() {
+      const form = document.getElementById('result-form');
       form.addEventListener("submit", function(e) {
         e.preventDefault();
         const data = new FormData(form);
+        console.log(currentChart.type)
+        data.append("Type", currentChart.type.toString())
         const action = e.target.action;
         fetch(action, {
           method: 'POST',
@@ -299,7 +303,7 @@
           alert("Success!");
         })
       });
-    });*/
+    });
 
 
     //Calculate error between the real and reported percentage scales
@@ -324,6 +328,7 @@
           setTimeout(function () {
             const currentData = data[i];
             
+            currentChart = data[i]
       
             if (currentData.type === 1) {
               drawBarChart(currentData.values);
