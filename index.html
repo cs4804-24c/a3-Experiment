@@ -19,9 +19,15 @@
   id="result-form"
   method="POST"
   action="https://script.google.com/macros/s/AKfycbzVUg7hS88GXI6CggvJ2f_cj3kdq_tzW_SeqkfA1Mr_NyFan9dE3YbdXJZpy4l2FSOR/exec">
-    <label for="vol">Volume (between 0 and 100):</label>
-    <input name="Guess" type="range" id="vol" name="vol" min="0" max="100" onchange="updateTextInput(this.value);">
-    <input name="Guess" type="number" id="textInput" value=50 onchange="updateSlider(this.value);">
+    <label for="vol">What percentage is the smaller of the larger? (between 0 and 100):</label>
+    <input name="Id" type="hidden" id="idString">
+    <input type="range" id="percent" name="vol" min="0" max="100" onchange="syncInputs(this.value);">
+    <input name="GuessValue" type="number" id="guessValue" value=50 onchange="syncInputs(this.value);">
+    <input name="Type" type="hidden" id="type" value="Bar">
+    <input name="TrueValue" type="hidden" id="trueValue" value="0">
+    <input name="Point1" type="hidden" id="point1" value="0">
+    <input name="Point2" type="hidden" id="point2" value="0">
+    <input name="Error" type="hidden" id="error", value="0">
     <input type="submit">
   </form>
 </body>
@@ -48,6 +54,11 @@
     Returns array of sets of random data and what chart it goes too
     */
     function generateData() {
+
+      //generate random key to show which user made this guess
+      const r = (Math.random() + 1).toString(36).substring(7);
+      console.log("random", r);
+      document.getElementById("idString").value = r
 
       //charts array for random chart order 1,2,3 correlates to the chart
       var chartArray = Array(29).fill(1).concat(Array(29).fill(2), Array(29).fill(3));
@@ -256,7 +267,7 @@
 
 
         
- /* third chart section*/
+    /* third chart section*/
 
     
     /*
@@ -271,15 +282,17 @@
 
     }
 
+    function syncInputs(val) {
+      var values = findSelected(currentChart) 
+      console.log(values[1], values[0])
+      const percentage = (values[0].value/values[1].value)*100 
 
-
-    var inputs = {}
-    function updateTextInput(val) {
-      document.getElementById('textInput').value=val; 
-    }
-
-    function updateSlider(val) {
-      document.getElementById('vol').value=val
+      document.getElementById("percent").value = val
+      document.getElementById("guessValue").value = val; 
+      document.getElementById("point1").value = values[0].value
+      document.getElementById("point2").value = values[1].value
+      document.getElementById("trueValue").value = percentage.toFixed(0)
+      document.getElementById("error").value = calculateError(percentage, val).toFixed(2)
     }
 
     function handleSubmit(val) {
@@ -292,8 +305,9 @@
       form.addEventListener("submit", function(e) {
         e.preventDefault();
         const data = new FormData(form);
-        console.log(currentChart.type)
-        data.append("Type", currentChart.type.toString())
+
+        
+
         const action = e.target.action;
         fetch(action, {
           method: 'POST',
@@ -311,6 +325,10 @@
       return Math.log2(Math.abs(input-real) + (1/8))
     }
 
+    function findSelected(data) {
+      return data.values.filter(x => x.selected).sort( (a,b) => a.value - b.value)
+    }
+
     /*
 
     function to help run expirement will have to be changed
@@ -321,20 +339,23 @@
         var results = [];
         const data = generateData();
         console.log(data);
+
         
 
         // just looping through to see if it works
         for (let i = 0; i < data.length; i++) {
           setTimeout(function () {
             const currentData = data[i];
-            
             currentChart = data[i]
-      
+            
             if (currentData.type === 1) {
+              document.getElementById("type").value = "Bar"
               drawBarChart(currentData.values);
             } else if (currentData.type === 2) {
+              document.getElementById("type").value = "Radar"
               radarChart(currentData.values);
             } else if (currentData.type === 3) {
+              document.getElementById("type").value = "Bar"
               third(); 
             }
       
