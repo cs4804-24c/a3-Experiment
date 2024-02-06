@@ -43,17 +43,27 @@
             cursor: pointer;
         }
 
+        /* Style for the "Next" button */
+        #nextButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #0277d0;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
         /* Style for the page displaying the graph */
         #chartholder {
-            height: 400px;
-            width: 400px;
+            height: 600px;
+            width: 600px;
             /*outline the left and bottom edges of the chart*/
             border-left: 3px solid black;
             border-bottom: 3px solid black;
             position: relative;
             display:flex; 
             justify-content: flex-start; 
-            flex-direction: row; /*(makes a stacked bar chart somehow)*/
+            flex-direction: row; /*(column = stacked bar chart)*/
             align-items: flex-end;
             margin-bottom: 20px;
         }
@@ -64,6 +74,13 @@
             background-color: white; /* White fill for D3 bars */
             border: 3px solid black; /* Black outline for D3 bars */
             bottom: 0;
+        }
+
+        /*controls positioned horizontally at the bottom of the chart*/
+        #controlsholder {
+            display: flex;
+            justify-content: left;
+            align-items: left;
         }
 
 
@@ -85,68 +102,131 @@
     <!-- Chart Screen (only shown if the user hits "Agree") -->
     <div id="chartholderholder" style="display: none;">
         <div id="chartholder"></div>
+        <div id="controlsholder">
+            <!-- text input -->
+            <input type="text" id="percentInput" placeholder="Enter the percent here">
+            <button id="nextButton">Next</button>
+        </div>
     </div>
 
 <script type="text/javascript">
-    
-    // Random Dataset Method 1 (Manual Random Number Generation)
-    var data1 = [0.27, 0.5, 0.1, 0.15, 0.3, 0.21, 0.25, 0.94, 0.04, 1.00];
 
-    // Random Dataset Method 2 (JavaScript Random Number Generation)
-    var data2 = [];
-    for (var i = 0; i < 10; i++) {
-        var newNumber = Math.random();
-        data2.push(newNumber);
-    }
-
-    // Random Dataset Method 3 (D3 Random Number Generation)
-    var data3 = d3.range(10).map(function() {
-        return Math.random();
-    });
-
-    // Concatinate the 3 Random Datasets
-    var data = data1.concat(data2, data2);
-    console.log(data);
-
-    data = data2;
-
-    // Generate two unique random indices
-    let index1 = Math.floor(Math.random() * data.length);
-    let index2 = Math.floor(Math.random() * data.length);
-
-    while(index1 === index2) {
-        index2 = Math.floor(Math.random() * data.length);
-    }
-
-    // Display a simple Column Chart using the above Random Data
-    var svg = d3.select('#chartholder').selectAll('div')
-        .data(data)
-        .enter()
-        .append('div')
-        .attr('class', 'bar')
-        .style('fill', '#ffffff')
-        .style('height', function (d) {
-            return d * 400 + 'px';
-        })
-    
-        .each(function(d, i) {
-        // Append circles to the randomly chosen bars
-            if (i === index1 || i === index2) {
-                let bar = d3.select(this);
-                let barWidth = parseInt(bar.style('width'));
-                let barHeight = parseInt(bar.style('height'));
-
-                bar.append('svg')
-                    .attr('width', barWidth)
-                    .attr('height', barHeight)
-                    .append('circle')
-                    .attr('class', 'circle')
-                    .attr('r', 4)
-                    .attr('cx', barWidth / 2)
-                    .attr('cy', barHeight - 15)
-                    .style('fill', 'black');
-            }
+    function generateChart() {
+        // Generate new random data
+        data = d3.range(10).map(function() {
+            return Math.random();
         });
+        
+        let stackedBarChart = Math.random() < 0.5;
+        let minimumBarHeight = stackedBarChart? 31 : 40;
+        let multiplier = stackedBarChart? 50 : 400;
+        // Generate two unique random indices
+        index1 = Math.floor(Math.random() * data.length);
+        index2 = Math.floor(Math.random() * data.length);
+
+        while(index1 === index2) {
+            index2 = Math.floor(Math.random() * data.length);
+        }
+
+        // Remove all old circles and circle containers
+        d3.select('.circleContainer').remove();
+        d3.select('.circle').remove();
+        for(let i = 0; i < data.length; i++) {
+            d3.select('.circleContainer' + i).remove();
+            d3.select('.circle' + i).remove();
+        }
+        
+        // Remove the old chart
+        d3.select('#chartholder').selectAll('*').remove();
+
+        // Display a simple Column Chart using the above Random Data
+        var svg = d3.select('#chartholder').selectAll('div')
+            .data(data)
+            .enter()
+            .append('div')
+            .attr('class', 'bar')
+            .style('fill', '#ffffff')
+            .style('height', function (d) {
+                let result = (d*multiplier + minimumBarHeight) + 'px';
+                
+                return result;
+            })
+            .style('width', stackedBarChart? '100px' : '25px')
+            .each(function(d, i) {
+            // Append circles to the randomly chosen bars
+                if (i === index1 || i === index2) {
+                    let bar = d3.select(this);
+                    let barWidth = parseInt(bar.style('width'));
+                    let barHeight = parseInt(bar.style('height'));
+                    console.log(bar);
+                    if(stackedBarChart) {
+                        bar.append('svg')
+                            .attr('width', barWidth)
+                            .attr('height', barHeight)
+                            .attr('class', 'circleContainer' + i)
+                            .append('circle')
+                            .attr('class', 'circle' + i)
+                            .attr('r', 4)
+                            .attr('cx', barWidth / 2)
+                            .attr('cy', barHeight / 2)
+                            .style('fill', 'black');
+                    } else {
+                        bar.append('svg')
+                            .attr('width', barWidth)
+                            .attr('height', '100%')
+                            .attr('class', 'circleContainer' + i)
+                            .append('circle')
+                            .attr('class', 'circle' + i)
+                            .attr('r', 4)
+                            .attr('cx', barWidth / 2)
+                            .style('fill', 'black');
+
+                        let y =d*multiplier + minimumBarHeight;
+                        console.log("d:", d*multiplier + minimumBarHeight);
+
+                        d3.select('.circle' + i).attr('cy', y - 15);
+                    }
+                }
+            });
+        
+        if (stackedBarChart) {
+            d3.select('#chartholder').style('flex-direction', 'column');
+            d3.select('#chartholder').style('transform', 'rotate(0deg)');
+            d3.select('#chartholder').style('align-items', 'center');
+            d3.select('#chartholder').style('justify-content', 'flex-end');
+            
+            d3.selectAll('.bar').style('display', 'flex');
+            d3.selectAll('.bar').style('justify-content', 'center');
+            d3.selectAll('.bar').style('align-items', 'center');
+
+            // set the circles to be in the middle of the bars
+            for(let i = 0; i < data.length; i++) {
+                d3.selectAll('.circleContainer' + i).style('display', 'flex');
+                d3.selectAll('.circleContainer' + i).style('justify-content', 'center');
+                d3.selectAll('.circleContainer' + i).style('align-items', 'center');
+            }
+
+        } else {
+            d3.select('#chartholder').style('align-items', 'flex-end');
+            d3.select('#chartholder').style('justify-content', 'flex-start');
+            d3.select('#chartholder').style('flex-direction', 'row');
+        }
+
+
+        // Only rotate it if it's not a stacked bar chart
+        if(!stackedBarChart) {
+            // Randomly choose to rotate the chart or not
+            let rotate = Math.random() < 0.5;
+            if (rotate) {
+                d3.select('#chartholder').style('transform', 'rotate(90deg)');
+            } else {
+                d3.select('#chartholder').style('transform', 'rotate(0deg)');
+            }
+        }
+    }
+
+    // Generate the first chart
+    generateChart();
         
     // Listener for when "Agree" button is clicked (only show chart screen)
     document.getElementById("agreeButton").addEventListener("click", function() {
@@ -161,6 +241,8 @@
         document.getElementById("disagreeScreen").style.display = "block";
         document.getElementById("chartholderholder").style.display = "none";
     });
+
+    document.getElementById("nextButton").addEventListener("click", generateChart);
     
 
 
