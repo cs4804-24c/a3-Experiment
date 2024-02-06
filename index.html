@@ -4,8 +4,8 @@
     <title>D3 : Random Number Generation - Column Chart</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
     <style type="text/css">
-         /* Style for starting screen */
-         #startScreen {
+        /* Style for starting screen */
+        #startScreen {
             display: block;
             text-align: center;
             margin-top: 50px;
@@ -61,8 +61,8 @@
             border-left: 3px solid black;
             border-bottom: 3px solid black;
             position: relative;
-            display:flex; 
-            justify-content: flex-start; 
+            display:flex;
+            justify-content: flex-start;
             flex-direction: row; /*(column = stacked bar chart)*/
             align-items: flex-end;
             margin-bottom: 20px;
@@ -87,37 +87,57 @@
     </style>
 </head>
 <body>
-     <!-- Start Screen (always shown) -->
-     <div id="startScreen">
-        <h2>In this experiment, you are asked to judge what is the percent of a smaller value to a larger value in several charts.<br><br> We won't record any other information from you except the answers. <br>Click the "Agree" button to begin. <br><br>Thank you! </h2>
-        <button id="agreeButton">Agree</button>
-        <button id="disagreeButton">Disagree</button>
-    </div>
+<!-- Start Screen (always shown) -->
+<div id="startScreen">
+    <h2>In this experiment, you are asked to judge what is the percent of a smaller value to a larger value in several charts.<br><br> We won't record any other information from you except the answers. <br>Click the "Agree" button to begin. <br><br>Thank you! </h2>
+    <button id="agreeButton">Agree</button>
+    <button id="disagreeButton">Disagree</button>
+</div>
 
-    <!-- Disagree Screen (shown when user hits "Disagree") -->
-    <div id="disagreeScreen" style="display: none;">
-        <h2>Thank you for your consideration. You may close out of this window. </h2>
-    </div>
+<!-- Disagree Screen (shown when user hits "Disagree") -->
+<div id="disagreeScreen" style="display: none;">
+    <h2>Thank you for your consideration. You may close out of this window. </h2>
+</div>
 
-    <!-- Chart Screen (only shown if the user hits "Agree") -->
-    <div id="chartholderholder" style="display: none;">
-        <div id="chartholder"></div>
-        <div id="controlsholder">
-            <!-- text input -->
-            <input type="text" id="percentInput" placeholder="Enter the percent here">
-            <button id="nextButton">Next</button>
-        </div>
+<!-- Chart Screen (only shown if the user hits "Agree") -->
+<div id="chartholderholder" style="display: none;">
+    <div id="chartholder"></div>
+    <div id="controlsholder">
+        <!-- text input -->
+        <input type="text" id="percentInput" placeholder="Enter the percent here">
+        <button id="nextButton">Next</button>
     </div>
+</div>
+
+<div id="doneScreen" style="display: none;">
+    <h2>Thank you for participating. Here are your results: </h2>
+</div>
 
 <script type="text/javascript">
 
+    let normalBarCount = 0;
+    let rotateBarCount = 0;
+    let stackedCount = 0;
+
+    function finishedTest(){
+        document.getElementById("doneScreen").style.display = "block";
+        document.getElementById("chartholderholder").style.display = "none";
+    }
+
     function generateChart() {
+
+        if(normalBarCount >= 20 && rotateBarCount >= 20 && stackedCount >= 20)
+        {
+            finishedTest();
+        }
+
         // Generate new random data
         data = d3.range(10).map(function() {
             return Math.random();
         });
-        
-        let stackedBarChart = Math.random() < 0.5;
+
+        let stackedBarChart = Math.random() < 1/3;
+        if(stackedCount >= 20){stackedBarChart = false;}
         let minimumBarHeight = stackedBarChart? 31 : 40;
         let multiplier = stackedBarChart? 50 : 400;
         // Generate two unique random indices
@@ -135,7 +155,7 @@
             d3.select('.circleContainer' + i).remove();
             d3.select('.circle' + i).remove();
         }
-        
+
         // Remove the old chart
         d3.select('#chartholder').selectAll('*').remove();
 
@@ -148,12 +168,12 @@
             .style('fill', '#ffffff')
             .style('height', function (d) {
                 let result = (d*multiplier + minimumBarHeight) + 'px';
-                
+
                 return result;
             })
             .style('width', stackedBarChart? '100px' : '25px')
             .each(function(d, i) {
-            // Append circles to the randomly chosen bars
+                // Append circles to the randomly chosen bars
                 if (i === index1 || i === index2) {
                     let bar = d3.select(this);
                     let barWidth = parseInt(bar.style('width'));
@@ -188,13 +208,14 @@
                     }
                 }
             });
-        
+
         if (stackedBarChart) {
+            stackedCount++;
             d3.select('#chartholder').style('flex-direction', 'column');
             d3.select('#chartholder').style('transform', 'rotate(0deg)');
             d3.select('#chartholder').style('align-items', 'center');
             d3.select('#chartholder').style('justify-content', 'flex-end');
-            
+
             d3.selectAll('.bar').style('display', 'flex');
             d3.selectAll('.bar').style('justify-content', 'center');
             d3.selectAll('.bar').style('align-items', 'center');
@@ -217,17 +238,23 @@
         if(!stackedBarChart) {
             // Randomly choose to rotate the chart or not
             let rotate = Math.random() < 0.5;
+            if(rotateBarCount >= 20){rotate = false;}
             if (rotate) {
+                rotateBarCount++
                 d3.select('#chartholder').style('transform', 'rotate(90deg)');
             } else {
-                d3.select('#chartholder').style('transform', 'rotate(0deg)');
+                if(normalBarCount >= 20){generateChart();}
+                else {
+                    normalBarCount++
+                    d3.select('#chartholder').style('transform', 'rotate(0deg)');
+                }
             }
         }
     }
 
     // Generate the first chart
     generateChart();
-        
+
     // Listener for when "Agree" button is clicked (only show chart screen)
     document.getElementById("agreeButton").addEventListener("click", function() {
         document.getElementById("startScreen").style.display = "none";
@@ -243,7 +270,7 @@
     });
 
     document.getElementById("nextButton").addEventListener("click", generateChart);
-    
+
 
 
 </script>
