@@ -13,7 +13,14 @@
 
 <body>
   
+  <h3 id="chartNumber">0</h3>
   <div id="svgcontainer"></div>
+  <div id="controls">
+    <button id="first">First</button>
+    <button id="back">Previous</button>
+    <button id="next">Next</button>
+    <button id="last">Last</button>
+  </div>
 
   <form 
   id="result-form"
@@ -47,7 +54,37 @@
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
-    var currentChart
+    var chartIndex = 0
+    var data
+
+    document.getElementById("back").onclick = () => {
+      if (chartIndex > 0) {
+        chartIndex = chartIndex-1
+        swapPlots()
+        document.getElementById("chartNumber").innerHTML = chartIndex.toFixed(0)
+      }
+    }
+
+    document.getElementById("first").onclick = () => {
+      chartIndex = 0
+      swapPlots()
+      document.getElementById("chartNumber").innerHTML = chartIndex.toFixed(0)
+    }
+
+    document.getElementById("next").onclick = () => {
+      if (chartIndex < data.length-1) {
+        chartIndex = chartIndex+1
+        swapPlots()
+        document.getElementById("chartNumber").innerHTML = chartIndex.toFixed(0)
+      }
+    }
+
+    document.getElementById("last").onclick = () => {
+      chartIndex = data.length-1
+      swapPlots()
+      document.getElementById("chartNumber").innerHTML = chartIndex.toFixed(0)
+    }
+
 
     /* Function For generateing the random data foor the charts*
     
@@ -416,45 +453,43 @@
     function to help run expirement will have to be changed
 
     */
+    function swapPlots() {
+      const currentData = data[chartIndex];
+      if (currentData.type === 1) {
+        document.getElementById("type").value = "Bar"
+        var selectedPoints=drawBarChart(currentData.values);
+        updatePoints(selectedPoints)
+        console.log(currentData);
+        console.log(selectedPoints);
+      } else if (currentData.type === 2) {
+        document.getElementById("type").value = "Radar"
+        var selectedPoints=drawRadarChart(currentData.values);
+        updatePoints(selectedPoints)
+        console.log(currentData);
+        console.log(selectedPoints);
+      } else if (currentData.type === 3) {
+        document.getElementById("type").value = "Pie"
+        var selectedPoints = drawPieChart(currentData.values);
+        updatePoints(selectedPoints)
+        console.log(currentData);
+        console.log(selectedPoints)
+      }
+    }
 
     function runExperiment() {
-        var results = [];
-        const data = generateData();
-        console.log(data);
+      var results = [];
+      data = generateData();
+      console.log(data);
 
-        
-
-        // just looping through to see if it works
-        for (let i = 0; i < data.length; i++) {
-          setTimeout(function () {
-            const currentData = data[i];
-            currentChart = data[i]
-            
-            if (currentData.type === 1) {
-              document.getElementById("type").value = "Bar"
-              var selectedPoints=drawBarChart(currentData.values);
-              updatePoints(selectedPoints)
-              console.log(currentData);
-              console.log(selectedPoints);
-            } else if (currentData.type === 2) {
-              document.getElementById("type").value = "Radar"
-              var selectedPoints=drawRadarChart(currentData.values);
-              updatePoints(selectedPoints)
-              console.log(currentData);
-              console.log(selectedPoints);
-            } else if (currentData.type === 3) {
-              document.getElementById("type").value = "Pie"
-              var selectedPoints = drawPieChart(currentData.values);
-              updatePoints(selectedPoints)
-              console.log(currentData);
-              console.log(selectedPoints);
-            }
+      swapPlots()
+      // just looping through to see if it works
+      // for (let i = 0; i < data.length; i++) {
+      //   setTimeout(function () {
+      //     
+    
+        // }, 2000 * i); 
+    }
       
-          }, 2000 * i); 
-        }
-      }
-      
-
     runExperiment();
   </script>
 </body>
