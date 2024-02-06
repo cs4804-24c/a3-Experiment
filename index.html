@@ -53,6 +53,15 @@
             cursor: pointer;
         }
 
+        #downloadButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #0277d0;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
         /* Style for the page displaying the graph */
         #chartholder {
             height: 600px;
@@ -111,22 +120,58 @@
 
 <div id="doneScreen" style="display: none;">
     <h2>Thank you for participating. Here are your results: </h2>
+    <button id="downloadButton">Download</button>
 </div>
 
 <script type="text/javascript">
-
+    //used to make sure we are getting 20 trials for each type of chart
     let normalBarCount = 0;
     let rotateBarCount = 0;
     let stackedCount = 0;
+
+    //keeping track of the two heights we are comparing for each round
+    let index1height = 0;
+    let index2height = 0;
+
+    //what the correct answers are
+    let actualPercents = new Array(60);
+    //what the user input for each
+    let inputPercents = new Array(60);
+
+    //for setting each of the array values
+    let totalCount = 0;
+    let totalArray = new Array(60);
+    for(let i = 0; i< 60; i++)
+    {
+        totalArray[i] = i+1;
+    }
+
+    //saves the type of chart the trial is on
+    let typeArray = new Array(60);
+
+    function toCsv(data) {
+        const arrays = Object.values(data);
+        return [Object.keys(data).join(","), ...arrays[0].map((row, i) =>
+            arrays.map(column => column[i]).join(",")
+        )].join("\n");
+    }
 
     function finishedTest(){
         document.getElementById("doneScreen").style.display = "block";
         document.getElementById("chartholderholder").style.display = "none";
     }
 
+    function download()
+    {
+        const data = {totalArray, typeArray, inputPercents, actualPercents}
+        const csv = toCsv(data);
+        console.log(csv);
+    }
+
     function generateChart() {
 
-        if(normalBarCount >= 20 && rotateBarCount >= 20 && stackedCount >= 20)
+        //changed to 1 for testing - need to be changed back to 20
+        if(normalBarCount >= 1 && rotateBarCount >= 1 && stackedCount >= 1)
         {
             finishedTest();
         }
@@ -190,6 +235,9 @@
                             .attr('cx', barWidth / 2)
                             .attr('cy', barHeight / 2)
                             .style('fill', 'black');
+                            if(index1){index1height = barHeight;}
+                            if(index2){index2height = barHeight;}
+                            typeArray[totalCount] = "Stacked Bar Chart";
                     } else {
                         bar.append('svg')
                             .attr('width', barWidth)
@@ -204,8 +252,12 @@
                         let y =d*multiplier + minimumBarHeight;
                         console.log("d:", d*multiplier + minimumBarHeight);
 
+
                         d3.select('.circle' + i).attr('cy', y - 15);
                     }
+                    //save the heights of the bars with the dots
+                    if(index1){index1height = barHeight;}
+                    if(index2){index2height = barHeight;}
                 }
             });
 
@@ -242,14 +294,27 @@
             if (rotate) {
                 rotateBarCount++
                 d3.select('#chartholder').style('transform', 'rotate(90deg)');
+                typeArray[totalCount] = "Horizontal Bar Chart";
             } else {
                 if(normalBarCount >= 20){generateChart();}
                 else {
                     normalBarCount++
                     d3.select('#chartholder').style('transform', 'rotate(0deg)');
+                    typeArray[totalCount] = "Bar Chart";
                 }
             }
         }
+        //calculate the percentage
+        if(index1height < index2height)
+        {
+            let percent = (index1height/index2height) * 100;
+            actualPercents[totalCount] = percent;
+        }
+        else {
+            let percent = (index2height/index1height) * 100;
+            actualPercents[totalCount] = percent;
+        }
+
     }
 
     // Generate the first chart
@@ -269,8 +334,21 @@
         document.getElementById("chartholderholder").style.display = "none";
     });
 
-    document.getElementById("nextButton").addEventListener("click", generateChart);
+    document.getElementById("nextButton").addEventListener("click", function()
+    {
+        //set user input for that chart in array
+        inputPercents[totalCount] = document.getElementById("percentInput").value;
+        //clear text box value
+        document.getElementById("percentInput").value = "";
+        //increment array counter
+        totalCount++;
+        generateChart();
+    });
 
+    document.getElementById("downloadButton").addEventListener("click", function()
+    {
+        download();
+    })
 
 
 </script>
