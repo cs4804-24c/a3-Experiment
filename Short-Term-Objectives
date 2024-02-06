@@ -13,3 +13,5 @@ Generate data from a distrobution through python
 Display 7 graphs. 1 must have the dinosour from https://www.dropbox.com/sh/xaxpz3pm5r5awes/AADUbGVagF9i4RmM9JkPtviEa?dl=0 depicted in green circles. Randomly choose which graph that is? Bias against the first graph?
 
 Display graph for 1 sec or 2.5 sec (have option to choose), remove graph from screen, then after a 0.25 sec delay show the next graph.
+
+Use Revisit
