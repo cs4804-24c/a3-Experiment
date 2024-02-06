@@ -145,7 +145,7 @@
             }
           }
 
-          return Math.abs(selectedSize[0]-selectedSize[1])
+          return selectedSize
 
     }
 
@@ -262,7 +262,7 @@
             }
           }
 
-          return Math.abs(selectedSize[0]-selectedSize[1])
+          return selectedSize
 
   
 }
@@ -331,7 +331,7 @@
           
         }
 
-        return Math.abs(selectedSize[0]-selectedSize[1])
+        return selectedSize
     }
 
 
@@ -362,17 +362,17 @@
             const currentData = data[i];
       
             if (currentData.type === 1) {
-              var actualDifference=drawBarChart(currentData.values);
+              var selectedPoints=drawBarChart(currentData.values);
               console.log(currentData);
-              console.log(actualDifference);
+              console.log(selectedPoints);
             } else if (currentData.type === 2) {
               var actualDifference=drawRadarChart(currentData.values);
               console.log(currentData);
-              console.log(actualDifference);
+              console.log(selectedPoints);
             } else if (currentData.type === 3) {
               var actualDifference= drawPieChart(currentData.values); 
               console.log(currentData);
-              console.log(actualDifference);
+              console.log(selectedPoints);
             }
       
           }, 2000 * i); 
