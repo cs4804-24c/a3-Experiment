@@ -1,8 +1,8 @@
 Requirements:
 Graphs have 3 symbols
-- Blue circles
+- Blue circles / Scatter Points
 - Blue X
-- Green circles
+- Green circles / Scatter Points
 
 Default data for blue data set to blue circles, then in 1-3 quadrants instead plot the blue data as X's?
 
