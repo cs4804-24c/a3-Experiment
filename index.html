@@ -222,7 +222,7 @@
                 if (i === index1 || i === index2) {
                     let bar = d3.select(this);
                     let barWidth = parseInt(bar.style('width'));
-                    let barHeight = parseInt(bar.style('height'));
+                    let barHeight = d*multiplier + minimumBarHeight;
                     console.log(bar);
                     if(stackedBarChart) {
                         bar.append('svg')
@@ -235,8 +235,8 @@
                             .attr('cx', barWidth / 2)
                             .attr('cy', barHeight / 2)
                             .style('fill', 'black');
-                            if(index1){index1height = barHeight;}
-                            if(index2){index2height = barHeight;}
+                            // if(index1){index1height = barHeight;}
+                            // if(index2){index2height = barHeight;}
                             typeArray[totalCount] = "Stacked Bar Chart";
                     } else {
                         bar.append('svg')
@@ -256,8 +256,14 @@
                         d3.select('.circle' + i).attr('cy', y - 15);
                     }
                     //save the heights of the bars with the dots
-                    if(index1){index1height = barHeight;}
-                    if(index2){index2height = barHeight;}
+                    if(i === index1){
+                        index1height = barHeight;
+                        console.log("index1height:", index1height);
+                    }
+                    if(i === index2){
+                        index2height = barHeight;
+                        console.log("index2height:", index2height);
+                    }
                 }
             });
 
@@ -314,6 +320,8 @@
             let percent = (index2height/index1height) * 100;
             actualPercents[totalCount] = percent;
         }
+
+        console.log(actualPercents);
 
     }
 
