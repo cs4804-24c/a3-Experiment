@@ -46,6 +46,7 @@
             <p>
                 Thank you for participating! See your results printed below, and hit the button to export the data to a .csv file.
             </p>
+            <div id="printedResults"></div>
             <h5>Export to .csv</h5>
             <button id="export" onclick="return exportResults()">Export</button>
         </div>
@@ -70,7 +71,7 @@
             function showResults() {
                 document.getElementById('experiment').style.display='none';
                 document.getElementById('results').style.display='block';
-                printAllResults();
+                //printAllResults();
             }
 
             function makeDataset() {
@@ -206,7 +207,6 @@
                 }
             }
 
-            // TODO (finish)
             function recordResult() {
                 // do some stuff to record result
                 console.log(count);
@@ -221,7 +221,7 @@
                 console.log(result);
                 results.push(result);
                 
-                if (count == 80) {
+                if (count == 5) {
                     showResults();
                 }
 
@@ -230,11 +230,6 @@
                     document.getElementById("answer").value="";
                     createTrial(count);
                 }
-            }
-
-            // TODO
-            function printAllResults() {
-
             }
 
             // TODO
@@ -259,12 +254,30 @@
 
             function startExperiment() {
                 visOrder = createTrialOrder();
+                
+                csvHeadings = {
+                    trialNum: "Trial Number",
+                    visType: "Visualization Type",
+                    answer: "Guessed Percentage",
+                    correctAnswer: "Correct Percentage"
+                }
+
+                results.push(csvHeadings);
                 createTrial(count);
             }
 
-            // TODO
             function exportResults() {
+                csvData = "";
 
+                results.forEach(function(row) {
+                    csvData += row.trialNum + ',' + row.visType + ',' + row.answer + ',' + row.correctAnswer + '\n';
+                });
+
+                let anchor = document.createElement('a');
+                anchor.href = 'data:text/csv;charset=utf-8,' + encodeURI(csvData);
+                anchor.target = '_blank';
+                anchor.download = 'data.csv';
+                anchor.click();
             }
 
         </script>
