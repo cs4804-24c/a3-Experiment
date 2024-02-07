@@ -9,44 +9,37 @@
 </head>
 <body>
 <canvas id="bubbleChart" width="900" height="450"></canvas>
+<script src = "bubbleChart.html"></script>
+</body>
+</html>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var canvas = document.getElementById('bubbleChart');
     var context = canvas.getContext('2d');
 
     var bubbles = [
-        { x: 100, y: 200, r: 20 },
-        { x: 185, y: 227, r: 30 },
-        { x: 190, y: 182, r: 15 },
-        { x: 240, y: 215, r: 25 },
-        { x: 232, y: 155, r: 35 }, // Bubble with a dot inside
-        { x: 400, y: 100, r: 40 },
-        { x: 450, y: 300, r: 45 },
-        { x: 500, y: 150, r: 50 }, // Bubble with a dot inside
-        { x: 550, y: 250, r: 60},
-        { x: 600, y: 70, r: 70 },
-        { x: 240, y: 300, r: 60 },
-        { x: 100, y: 300, r: 80 },
+        // Each bubble is defined by an x position, a y position, and a radius
+        { x: 100, y: 200, r: 20 }, //1
+        { x: 185, y: 227, r: 30 }, //2
+        { x: 190, y: 182, r: 15 }, //3
+        { x: 240, y: 215, r: 25 }, //4
+        { x: 232, y: 155, r: 35 }, //5
+        { x: 400, y: 100, r: 40 }, //6
+        { x: 450, y: 300, r: 45 }, //7
+        { x: 500, y: 150, r: 50 }, //8
+        { x: 550, y: 250, r: 60}, //9
+        { x: 600, y: 70, r: 70 }, //10
+        { x: 240, y: 300, r: 60 }, //11
+        { x: 100, y: 300, r: 80 }, //12
     ];
 
-    function drawBubble(bubble, index) {
+    function drawBubble(bubble) {
         context.beginPath();
         context.arc(bubble.x, bubble.y, bubble.r, 0, Math.PI * 2, false);
         context.stroke();
-
-        // Check if the bubble is one of those that should have a dot inside
-        if (index === 4 || index === 7) {
-            context.beginPath();
-            // Draw a dot at the center of the bubble
-            // You can adjust the size of the dot by changing the radius (e.g., 5)
-            context.arc(bubble.x, bubble.y, 5, 0, Math.PI * 2, false);
-            context.fill();
-        }
     }
 
-    // Pass the index of the bubble to the drawBubble function
-    bubbles.forEach((bubble, index) => drawBubble(bubble, index));
+    bubbles.forEach(drawBubble);
 });
 </script>
-</body>
-</html>
