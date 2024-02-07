@@ -4,13 +4,39 @@
     <title>D3 : Random Number Generation - Column Chart</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
     <style type="text/css">
+    
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
         /* Style for starting screen */
         #startScreen {
             display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             text-align: center;
-            margin-top: 50px;
-            font-size: 12px;
-            font-family: Arial;
+            font-size: 16px;
+            font-family: Times New Roman;
+            background-color: #c7dfe2;
+            border: 30px solid #207d89;
+        }
+
+        #startScreen h1 {
+        font-size: 40px;
+        font-family: Times New Roman;
+        color: #207d89;
+        }
+
+        #startScreen h2 {
+        font-size: 24px;
+        font-family: Times New Roman;
+        color: #11535c;
         }
 
         /* Style for the screen if user does not agree to do the experiment*/
@@ -25,9 +51,9 @@
         /* Style the "Agree" button */
         #agreeButton {
             padding: 10px 20px;
-            font-size: 16px;
-            font-family: Arial;
-            background-color: #0277d0;
+            font-size:24px;
+            font-family: Times New Roman;
+            background-color: #207d89;
             color: #fff;
             border: none;
             cursor: pointer;
@@ -36,8 +62,9 @@
         /* Style for the "Disagree" button */
         #disagreeButton {
             padding: 10px 20px;
-            font-size: 16px;
-            background-color: #0277d0;
+            font-size: 24px;
+            font-family: Times New Roman;
+            background-color: #207d89;
             color: #fff;
             border: none;
             cursor: pointer;
@@ -98,7 +125,9 @@
 <body>
 <!-- Start Screen (always shown) -->
 <div id="startScreen">
-    <h2>In this experiment, you are asked to judge what is the percent of a smaller value to a larger value in several charts.<br><br> We won't record any other information from you except the answers. <br>Click the "Agree" button to begin. <br><br>Thank you! </h2>
+    <h1>Welcome to our assignment 3 experiment!</h1>
+    <h2>Creators: Audrey Mongillo, Connor Ehrensperger, and Alysha Creelman<br></h2>
+    <h3><br>In this experiment, you are asked to judge what is the percent of a smaller value to a larger value in several charts.<br><br> We won't record any other information from you except the answers. <br>Click the "Agree" button to begin. <br><br>Thank you! </h3>
     <button id="agreeButton">Agree</button>
     <button id="disagreeButton">Disagree</button>
 </div>
