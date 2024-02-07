@@ -1,10 +1,285 @@
 <!DOCTYPE html>
-<div id="container"></div>
-<script type="module">
+<html>
+    <head>
+        <script src="https://d3js.org/d3.v6.min.js"></script>
+        <style>
 
-import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+        </style>
+    </head>
 
-console.log('hi');
-console.log('change #2');
+    <body>
+        <div id="initial">
+            <h1>
+                Data Visualization (CS4804) Experiment
+            </h1>
+            <h3>
+                Group Members: Ryan Dillon, Alessandra Giovenco, Pegah Emdad
+            </h3>
+            <p>
+                Thank you for participating! <br>
+                In this study, you will be shown a series of visualizations. <br>
+                In each visualization, two sections of the graph will be marked with a dot. <br>
+                In the text box, please enter the percentage that represents the fraction of the smaller marked section to the larger marked section. <br>
+                For example, if the smaller section appears to be 50% of the larger section, enter "50" in the text box.
+            </p>
+            <h5>Ready to start?</h5>
+            <button id ="begin" onclick="return showExperiment()">Begin</button>
+        </div>
 
-</script>
+        <div id="experiment" style="display:none">
+            <h1>
+                Data Visualization (CS4804) Experiment
+            </h1>
+            <p>
+                In the text box, please enter the percentage that represents the fraction of the smaller marked section to the larger marked section. <br>
+                For example, if the smaller section appears to be 50% of the larger section, enter "50" in the text box.
+            </p>
+            <div id="visualization"></div>
+            <input id="answer" type="text" value=""></input>
+            <button id="submit" onclick="return recordResult()">Submit</button>
+        </div>
+
+        <div id="results" style="display:none">
+            <h1>
+                Data Visualization (CS4804) Experiment
+            </h1>
+            <p>
+                Thank you for participating! See your results printed below, and hit the button to export the data to a .csv file.
+            </p>
+            <div id="printedResults"></div>
+            <h5>Export to .csv</h5>
+            <button id="export" onclick="return exportResults()">Export</button>
+        </div>
+
+        <script>
+            console.log(d3); // test if d3 is loaded
+
+            var visOrder = [];
+            var results = [];
+            var count = 0;
+
+            var visType = "";
+            var correctAnswer = 0;
+
+            // change screen from intial screen to visualization screen
+            function showExperiment() {
+                document.getElementById('initial').style.display='none';
+                document.getElementById('experiment').style.display='block';
+                startExperiment();
+            }
+
+            function showResults() {
+                document.getElementById('experiment').style.display='none';
+                document.getElementById('results').style.display='block';
+                //printAllResults();
+            }
+
+            function makeDataset() {
+                // create and fill an array of 5 data points (values 0-100)
+                var data = [];
+                for (i=0; i<5; i++) {
+                    data.push(Math.floor(Math.random()*101));
+                }
+
+                // randomly choose two indices in the data point array to mark
+                let markOne = Math.floor(Math.random()*5)
+                let markTwo = Math.floor(Math.random()*5);
+                
+                // if the indices are the same, reassign the second one until they no longer match
+                while (markOne == markTwo) {
+                    markTwo = Math.floor(Math.random()*5);
+                }
+
+                // create the struct to use as the dataset for each graph
+                var dataSet = {
+                    data: data,
+                    markOne: markOne,
+                    markTwo: markTwo
+                }
+
+                console.log(data)
+                console.log(markOne);
+                console.log(markTwo);
+
+                return dataSet;
+            }
+
+            // creates an array containing a random order of visualizations (20 per vis type, 80 total)
+            function createTrialOrder() {
+                var barCount = 0;
+                var pieCount = 0;
+                var bubbleCount = 0;
+                var treeCount = 0;
+
+                var order = [];
+
+                while (barCount < 20 || pieCount < 20 || bubbleCount < 20 || treeCount < 20) {
+                    // generate a number 1-4
+                    let num = Math.floor(Math.random()*4) + 1;
+
+                    // num = 1 corresponds to bar chart
+                    if (num == 1) {
+                        if (barCount < 20) {
+                            order.push(num);
+                            barCount++;
+                        }
+                        else {
+                            continue;
+                        }
+                    }
+
+                    // num = 2 corresponds to pie chart
+                    else if (num == 2) {
+                        if (pieCount < 20) {
+                            order.push(num);
+                            pieCount++;
+                        }
+                        else {
+                            continue;
+                        }
+                    }
+
+                    // num = 3 corresponds to bubble chart
+                    else if (num == 3) {
+                        if (bubbleCount < 20) {
+                            order.push(num);
+                            bubbleCount++;
+                        }
+                        else {
+                            continue;
+                        }
+                    }
+
+                    // num = 4 corresponds to voronoi tree map
+                    else {
+                        if (treeCount < 20) {
+                            order.push(num);
+                            treeCount++;
+                        }
+                        else {
+                            continue;
+                        }
+                    }
+                }
+
+                console.log(order);
+                return order;
+
+            }
+
+            function createTrial(num) {
+                count++;
+                let dataSet = makeDataset();
+
+                // figure out what the correct answer is for ratio of marked sections
+                if (dataSet.data[dataSet.markOne] < dataSet.data[dataSet.markTwo]) {
+                    correctAnswer = Math.floor(dataSet.data[dataSet.markOne] / ((dataSet.data[dataSet.markTwo])/100));
+                }
+
+                else if (dataSet.data[dataSet.markOne] > dataSet.data[dataSet.markTwo]) {
+                    correctAnswer = Math.floor(dataSet.data[dataSet.markTwo] / ((dataSet.data[dataSet.markOne])/100));
+                }
+
+                else {
+                    correctAnswer = 100;
+                }
+
+                // TODO: reset svg
+
+                if (visOrder[num] == 1) {
+                    visType = "Bar Chart";
+                    createBarChart(dataSet);
+                }
+
+                else if (visOrder[num] == 2) {
+                    visType = "Pie Chart";
+                    createPieChart(dataSet);
+                }
+
+                else if (visOrder[num] == 3) {
+                    visType = "Bubble Chart";
+                    createBubbleChart(dataSet);
+                }   
+
+                else {
+                    visType = "Voronoi Tree Map";
+                    createVoronoiTreeMap(dataSet);
+                }
+            }
+
+            function recordResult() {
+                // do some stuff to record result
+                console.log(count);
+
+                let result = {
+                    trialNum: count,
+                    visType: visType,
+                    answer: parseInt(document.getElementById('answer').value),
+                    correctAnswer: correctAnswer
+                }
+
+                console.log(result);
+                results.push(result);
+                
+                if (count == 5) {
+                    showResults();
+                }
+
+                else {
+                    // then clear the input box and create the next trial
+                    document.getElementById("answer").value="";
+                    createTrial(count);
+                }
+            }
+
+            // TODO
+            function createBarChart(dataSet) {
+
+            }
+
+            // TODO
+            function createPieChart(dataSet) {
+
+            }
+
+            // TODO
+            function createBubbleChart(dataSet) {
+
+            }
+
+            // TODO
+            function createVoronoiTreeMap(dataSet) {
+
+            }
+
+            function startExperiment() {
+                visOrder = createTrialOrder();
+                
+                csvHeadings = {
+                    trialNum: "Trial Number",
+                    visType: "Visualization Type",
+                    answer: "Guessed Percentage",
+                    correctAnswer: "Correct Percentage"
+                }
+
+                results.push(csvHeadings);
+                createTrial(count);
+            }
+
+            function exportResults() {
+                csvData = "";
+
+                results.forEach(function(row) {
+                    csvData += row.trialNum + ',' + row.visType + ',' + row.answer + ',' + row.correctAnswer + '\n';
+                });
+
+                let anchor = document.createElement('a');
+                anchor.href = 'data:text/csv;charset=utf-8,' + encodeURI(csvData);
+                anchor.target = '_blank';
+                anchor.download = 'data.csv';
+                anchor.click();
+            }
+
+        </script>
+    </body>
+</html>
