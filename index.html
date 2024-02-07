@@ -11,6 +11,9 @@
             width: 100%;
             height: 100%;
         }
+        .hidden {
+            display: none;
+        }
         
         /* Style for starting screen */
         #startScreen {
@@ -24,15 +27,43 @@
             font-size: 16px;
             font-family: Times New Roman;
             background-color: #c7dfe2;
-            border: 30px solid #207d89;
+        }
+        /* Style for the tab bar on the top of the screen */
+        .top-bar {
+            display: flex;
+            justify-content: flex-end;
+            background-color: #207d89;
+            color: white;
+            padding: 16px;
         }
 
+        /* Style for the tab with "Background" and "experiment" */
+        .tab {
+            display: inline-block;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        /* Adding a line between the words in the top bar because it was hard to read */
+        .tab:not(:last-child) {
+            border-right: 1px solid white;
+        }
+
+        /* Changing the color of the tabs when you hover over it */
+        .tab:hover {
+            background-color: #fff; 
+            color: #207d89;
+            border-radius: 15px;
+        }
+
+        /* Adding my font preferences for the Welcome font */
         #startScreen h1 {
         font-size: 40px;
         font-family: Times New Roman;
         color: #207d89;
         }
 
+        /* Adding my font preferences for the creators font */
         #startScreen h2 {
         font-size: 24px;
         font-family: Times New Roman;
@@ -125,11 +156,21 @@
 <body>
 <!-- Start Screen (always shown) -->
 <div id="startScreen">
-    <h1>Welcome to our assignment 3 experiment!</h1>
+    <div class="top-bar">
+        <div class="tab" id="backgroundTab">Background</div>
+        <div class="tab" id="experimentTab">Try Experiment</div>
+    </div>
+    <div id="backgroundContent" class="content hidden">
+        <h2>Background on this assignment</h2>
+        <p>In 1984, William Cleveland and Robert McGill published the results of several controlled experiments that pitted bar charts against pies and stacked-bar variants. Their paper (http://www.cs.ubc.ca/~tmm/courses/cpsc533c-04-spr/readings/cleveland.pdf) (http://info.slis.indiana.edu/~katy/S637-S11/cleveland84.pdf) is considered a key paper in data visualization.</p>
+    </div>
+    <div id="experimentContent" class="content">
+        <h1>Welcome to our assignment 3 experiment!</h1>
     <h2>Creators: Audrey Mongillo, Connor Ehrensperger, and Alysha Creelman<br></h2>
     <h3><br>In this experiment, you are asked to judge what is the percent of a smaller value to a larger value in several charts.<br><br> We won't record any other information from you except the answers. <br>Click the "Agree" button to begin. <br><br>Thank you! </h3>
     <button id="agreeButton">Agree</button>
     <button id="disagreeButton">Disagree</button>
+    </div>
 </div>
 
 <!-- Disagree Screen (shown when user hits "Disagree") -->
@@ -386,6 +427,26 @@
     {
         download();
     })
+
+    document.addEventListener("DOMContentLoaded", function() {
+    const backgroundTab = document.getElementById("backgroundTab");
+    const backgroundContent = document.getElementById("backgroundContent");
+    const experimentTab = document.getElementById("experimentTab");
+    const experimentContent = document.getElementById("experimentContent");
+
+    // Listener for when 'Background' is hit in the top bar
+    backgroundTab.addEventListener("click", function() {
+        // Hide the experiment content
+        document.getElementById("experimentContent").classList.add("hidden");
+        backgroundContent.classList.remove("hidden");
+    });
+
+    // Listener for when 'experiment' is hit in the tob bar
+    experimentTab.addEventListener("click", function() {
+        document.getElementById("backgroundContent").classList.add("hidden");
+        experimentContent.classList.remove("hidden");
+    });
+});
 
 
 </script>
