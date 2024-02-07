@@ -4,4 +4,4 @@ The 02_margin_data.json contains the data for 50 graphs with statistical paramet
 
 If you want to manipulate or change how the graph are generated, go to the bottom of jarassic_graph.py
 
-jarassic_graph should be the only file needed, though the names of the .json data files will have to be put through its functions.
+jarassic_graph should be the only file needed for our experiment, though the names of the .json data files will have to be put through its functions.
