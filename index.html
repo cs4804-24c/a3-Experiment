@@ -87,6 +87,12 @@
             background-color: #c7dfe2;
         }
 
+        #nameInput{
+            width: 200px;
+            height: 20px;
+        }
+
+
         /* Style for the screen if user does not agree to do the experiment*/
         #disagreeScreen {
             display: block;
@@ -99,6 +105,7 @@
         /* Style the "Agree" button */
         #agreeButton {
             padding: 10px 20px;
+            width: 150px;
             font-size:24px;
             font-family: Times New Roman;
             background-color: #207d89;
@@ -110,6 +117,7 @@
         /* Style for the "Disagree" button */
         #disagreeButton {
             padding: 10px 20px;
+            width: 150px;
             font-size: 24px;
             font-family: Times New Roman;
             background-color: #207d89;
@@ -184,8 +192,9 @@
     <div id="experimentContent" class="content">
         <h1>Welcome to our assignment 3 experiment!</h1>
     <h2>Creators: Audrey Mongillo, Connor Ehrensperger, and Alysha Creelman<br></h2>
-    <h3><br>In this experiment, you are asked to judge what is the percent of a smaller value to a larger value in several charts.<br><br> We won't record any other information from you except the answers. <br>Click the "Agree" button to begin. <br><br>Thank you! </h3>
-    <button id="agreeButton">Agree</button>
+    <h3><br>In this experiment, you are asked to judge what is the percent of a smaller value to a larger value in several charts.<br><br> Please enter your name below and then click "Agree" to begin.<br>Thank you! <br></h3>
+        <input type="text" id="nameInput" placeholder="First Name"> <br><br>
+        <button id="agreeButton">Agree</button>
     <button id="disagreeButton">Disagree</button>
     </div>
 </div>
@@ -227,11 +236,7 @@
 
     //for setting each of the array values
     let totalCount = 0;
-    let totalArray = new Array(60);
-    for(let i = 0; i< 60; i++)
-    {
-        totalArray[i] = i+1;
-    }
+    let userID = ""
 
     //saves the type of chart the trial is on
     let typeArray = new Array(60);
@@ -446,6 +451,7 @@
         document.getElementById("startScreen").style.display = "none";
         document.getElementById("disagreeScreen").style.display = "none";
         document.getElementById("chartholderholder").style.display = "block";
+        userID = document.getElementById("nameInput").value;
     });
 
     // Listener for when "Disagree" button is clicked (only show disagree screen)
@@ -460,6 +466,7 @@
         //set user input for that chart in array
         inputPercents[totalCount] = document.getElementById("percentInput").value;
         var trial = {
+            "Participant": userID,
             "Trial Number": totalCount + 1,
             "Graph Type": typeArray[totalCount],
             "Input Percent": inputPercents[totalCount],
