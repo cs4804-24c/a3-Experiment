@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content=
+            "width=device-width, initial-scale=1.0">
     <title>D3 : Random Number Generation - Column Chart</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
     <style type="text/css">
-    
+
         html, body {
             margin: 0;
             padding: 0;
@@ -68,6 +72,19 @@
         font-size: 24px;
         font-family: Times New Roman;
         color: #11535c;
+        }
+
+        #doneScreen {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            font-size: 16px;
+            font-family: Times New Roman;
+            background-color: #c7dfe2;
         }
 
         /* Style for the screen if user does not agree to do the experiment*/
@@ -219,30 +236,57 @@
     //saves the type of chart the trial is on
     let typeArray = new Array(60);
 
-    function toCsv(data) {
-        const arrays = Object.values(data);
-        return [Object.keys(data).join(","), ...arrays[0].map((row, i) =>
-            arrays.map(column => column[i]).join(",")
-        )].join("\n");
-    }
+    let trials = [];
 
     function finishedTest(){
         document.getElementById("doneScreen").style.display = "block";
         document.getElementById("chartholderholder").style.display = "none";
     }
 
-    function download()
-    {
-        const data = {totalArray, typeArray, inputPercents, actualPercents}
-        const csv = toCsv(data);
-        console.log(csv);
+   const download = function (data) {
+
+        const blob = new Blob([data], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.setAttribute('href', url)
+        a.setAttribute('download', 'download.csv');
+        a.click()
     }
+
+    const csvmaker = function (data) {
+
+        const csvRows = [];
+
+        const headers = Object.keys(data[0]);
+
+        csvRows.push(headers.join(','));
+
+        for (const row of data) {
+            const values = headers.map(header => {
+                const val = row[header]
+                return `"${val}"`;
+            });
+
+            csvRows.push(values.join(','));
+        }
+
+        return csvRows.join('\n');
+    }
+
+    const get = async function () {
+        const data = trials
+        const csvdata = csvmaker(data);
+        download(csvdata);
+    }
+
+    const btn = document.getElementById('downloadButton');
+    btn.addEventListener('click', get);
+
 
     function generateChart() {
 
         //changed to 1 for testing - need to be changed back to 20
-        if(normalBarCount >= 1 && rotateBarCount >= 1 && stackedCount >= 1)
-        {
+        if(normalBarCount >= 1 && rotateBarCount >= 1 && stackedCount >= 1){
             finishedTest();
         }
 
@@ -391,7 +435,6 @@
             actualPercents[totalCount] = percent;
         }
 
-        console.log(actualPercents);
 
     }
 
@@ -416,17 +459,20 @@
     {
         //set user input for that chart in array
         inputPercents[totalCount] = document.getElementById("percentInput").value;
+        var trial = {
+            "Trial Number": totalCount + 1,
+            "Graph Type": typeArray[totalCount],
+            "Input Percent": inputPercents[totalCount],
+            "Actual Percent": actualPercents[totalCount]
+        };
+        trials.push(trial);
         //clear text box value
         document.getElementById("percentInput").value = "";
         //increment array counter
         totalCount++;
         generateChart();
-    });
 
-    document.getElementById("downloadButton").addEventListener("click", function()
-    {
-        download();
-    })
+    });
 
     document.addEventListener("DOMContentLoaded", function() {
     const backgroundTab = document.getElementById("backgroundTab");
