@@ -13,7 +13,31 @@
 
 <body>
   
+  <h3 id="chartNumber">0</h3>
   <div id="svgcontainer"></div>
+  <div id="controls">
+    <button id="first">First</button>
+    <button id="back">Previous</button>
+    <button id="next">Next</button>
+    <button id="last">Last</button>
+  </div>
+
+  <form 
+  id="result-form"
+  method="POST"
+  action="https://script.google.com/macros/s/AKfycbzVUg7hS88GXI6CggvJ2f_cj3kdq_tzW_SeqkfA1Mr_NyFan9dE3YbdXJZpy4l2FSOR/exec">
+    <label for="vol">What percentage is the smaller of the larger? (between 0 and 100):</label>
+    <input name="Id" type="hidden" id="idString">
+    <input type="range" id="percent" name="vol" min="0" max="100" onchange="syncInputs(this.value);">
+    <input name="GuessValue" type="number" id="guessValue" value=50 onchange="syncInputs(this.value);">
+    <input name="Type" type="hidden" id="type" value="Bar">
+    <input name="TrueValue" type="hidden" id="trueValue" value="0">
+    <input name="Point1" type="hidden" id="point1" value="0">
+    <input name="Point2" type="hidden" id="point2" value="0">
+    <input name="Error" type="hidden" id="error", value="0">
+    <input type="submit">
+  </form>
+</body>
 
   <script>
 
@@ -30,11 +54,48 @@
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
+    var chartIndex = 0
+    var data
+
+    document.getElementById("back").onclick = () => {
+      if (chartIndex > 0) {
+        chartIndex = chartIndex-1
+        swapPlots()
+        document.getElementById("chartNumber").innerHTML = chartIndex.toFixed(0)
+      }
+    }
+
+    document.getElementById("first").onclick = () => {
+      chartIndex = 0
+      swapPlots()
+      document.getElementById("chartNumber").innerHTML = chartIndex.toFixed(0)
+    }
+
+    document.getElementById("next").onclick = () => {
+      if (chartIndex < data.length-1) {
+        chartIndex = chartIndex+1
+        swapPlots()
+        document.getElementById("chartNumber").innerHTML = chartIndex.toFixed(0)
+      }
+    }
+
+    document.getElementById("last").onclick = () => {
+      chartIndex = data.length-1
+      swapPlots()
+      document.getElementById("chartNumber").innerHTML = chartIndex.toFixed(0)
+    }
+
+
     /* Function For generateing the random data foor the charts*
     
     Returns array of sets of random data and what chart it goes too
     */
     function generateData() {
+
+      //generate random key to show which user made this guess
+      const r = (Math.random() + 1).toString(36).substring(7);
+      console.log("random", r);
+      document.getElementById("idString").value = r
 
       //charts array for random chart order 1,2,3 correlates to the chart
       var chartArray = Array(29).fill(1).concat(Array(29).fill(2), Array(29).fill(3));
@@ -144,7 +205,6 @@
               selectedSize.push(data[i].value)
             }
           }
-
           return selectedSize
 
     }
@@ -339,8 +399,53 @@
 
 
 
+    function syncInputs(val) {
+      //const percentage = (values[0].value/values[1].value)*100 
+
+      document.getElementById("percent").value = val
+      document.getElementById("guessValue").value = val; 
+      document.getElementById("error").value = calculateError(document.getElementById("trueValue").value, val).toFixed(2)
+    }
+
+    function handleSubmit(val) {
+      //inputs.push(["input", val])
+      console.log(val)
+    }
+
+    window.addEventListener("load", function() {
+      const form = document.getElementById('result-form');
+      form.addEventListener("submit", function(e) {
+        e.preventDefault();
+        const data = new FormData(form);
+        const action = e.target.action;
+        fetch(action, {
+          method: 'POST',
+          body: data,
+        })
+        .then(() => {
+          alert("Success!");
+        })
+      });
+    });
+
+
+    //Calculate error between the real and reported percentage scales
+    function calculateError(real, input) {
+      return Math.log2(Math.abs(input-real) + (1/8))
+    }
+
+    function findSelected(data) {
+      return data.values.filter(x => x.selected).sort( (a,b) => a.value - b.value)
+    }
         
 
+    function updatePoints(selected) {
+      const smaller = Math.min(selected[0], selected[1])
+      const larger = Math.max(selected[0], selected[1])
+      document.getElementById("point1").value = smaller
+      document.getElementById("point2").value = larger
+      document.getElementById("trueValue").value = (smaller/larger)*100
+    }
 
     /*
 
@@ -348,38 +453,43 @@
     function to help run expirement will have to be changed
 
     */
-      
+    function swapPlots() {
+      const currentData = data[chartIndex];
+      if (currentData.type === 1) {
+        document.getElementById("type").value = "Bar"
+        var selectedPoints=drawBarChart(currentData.values);
+        updatePoints(selectedPoints)
+        console.log(currentData);
+        console.log(selectedPoints);
+      } else if (currentData.type === 2) {
+        document.getElementById("type").value = "Radar"
+        var selectedPoints=drawRadarChart(currentData.values);
+        updatePoints(selectedPoints)
+        console.log(currentData);
+        console.log(selectedPoints);
+      } else if (currentData.type === 3) {
+        document.getElementById("type").value = "Pie"
+        var selectedPoints = drawPieChart(currentData.values);
+        updatePoints(selectedPoints)
+        console.log(currentData);
+        console.log(selectedPoints)
+      }
+    }
 
     function runExperiment() {
-        var results = [];
-        const data = generateData();
-        console.log(data);
-        
+      var results = [];
+      data = generateData();
+      console.log(data);
 
-        // just looping through to see if it works
-        for (let i = 0; i < data.length; i++) {
-          setTimeout(function () {
-            const currentData = data[i];
+      swapPlots()
+      // just looping through to see if it works
+      // for (let i = 0; i < data.length; i++) {
+      //   setTimeout(function () {
+      //     
+    
+        // }, 2000 * i); 
+    }
       
-            if (currentData.type === 1) {
-              var selectedPoints=drawBarChart(currentData.values);
-              console.log(currentData);
-              console.log(selectedPoints);
-            } else if (currentData.type === 2) {
-              var selectedPoints=drawRadarChart(currentData.values);
-              console.log(currentData);
-              console.log(selectedPoints);
-            } else if (currentData.type === 3) {
-              var selectedPoints= drawPieChart(currentData.values); 
-              console.log(currentData);
-              console.log(selectedPoints);
-            }
-      
-          }, 2000 * i); 
-        }
-      }
-      
-
     runExperiment();
   </script>
 </body>
