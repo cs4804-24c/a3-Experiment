@@ -216,7 +216,7 @@
 
 <div id="doneScreen" style="display: none;">
     <h2>Thank you for participating. Here are your results: </h2>
-    <button id="downloadButton">Download</button>
+    <button id="downloadButton">Download CSV</button>
 </div>
 
 <script type="text/javascript">
@@ -254,7 +254,7 @@
         const url = window.URL.createObjectURL(blob)
         const a = document.createElement('a')
         a.setAttribute('href', url)
-        a.setAttribute('download', 'download.csv');
+        a.setAttribute('download', userID + '.csv');
         a.click()
     }
 
