@@ -433,11 +433,11 @@
         if(index1height < index2height)
         {
             let percent = (index1height/index2height) * 100;
-            actualPercents[totalCount] = percent;
+            actualPercents[totalCount] = Math.round(percent);
         }
         else {
             let percent = (index2height/index1height) * 100;
-            actualPercents[totalCount] = percent;
+            actualPercents[totalCount] = Math.round(percent);
         }
 
 
