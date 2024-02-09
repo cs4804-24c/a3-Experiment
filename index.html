@@ -80,7 +80,7 @@
                 var data = d3.range(1, 6).map(function (d) {
                     return{
                         idx: d.toString(),
-                        val: Math.floor(Math.random()*101)
+                        val: Math.floor(Math.random()*100 + 1)
                     };
                 });
 
@@ -329,15 +329,31 @@
 
                 console.log(dataVals);
 
+                var count = 0;
+
                 // Append the pie slices to the svg
-                svg.selectAll("path")
+                const slices = svg.selectAll("path")
                     .data(pie(dataVals))
                     .enter()
                     .append("path")
                     .attr("d", arc)
                     .attr("fill", "grey");
+                    
+                slices.append("circle")
+                    .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+                    .attr("text-anchor", "middle")
+                    .attr("r", function(d) {
+                        console.log(d);
+                        if (dataSet.data[dataSet.markOne].val == d.data || dataSet.data[dataSet.markTwo] == d.data) {
+                            return 2.5;
+                        }
+                        else {
+                            return 0;
+                        }
+                    } )
+                    .attr("fill", "black");
 
-                // Add circles on two pie slices
+                /* // Add circles on two pie slices
                 var circleData = [
                     { startAngle: dataSet.data[dataSet.markOne].val, endAngle: 1.2 },  
                     { startAngle: dataSet.data[dataSet.markTwo].val, endAngle: -5.2 }
@@ -350,11 +366,56 @@
                     .attr("cx", function (d) { return arc.centroid(d)[0]; })
                     .attr("cy", function (d) { return arc.centroid(d)[1]; })
                     .attr("r", 2.5)
-                    .style("fill", "black");
+                    .style("fill", "black"); */
             }
 
-            // TODO
             function createBubbleChart(dataSet) {
+                var width = 460; 
+                var height = 400; 
+                var padding = 50;
+
+                // Create the pack layout
+                const pack = d3.pack()
+                .size([width - padding, height - padding])
+                .padding(5);
+
+                // Create the hierarchy from the data
+                const hierarchy = d3.hierarchy({children: dataSet.data})
+                .sum(d => d.val);
+
+                // Compute the pack layout
+                const root = pack(hierarchy);
+
+                // Create the SVG element
+                const svg = d3.select("div#visualization")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height+70);
+
+                // Create the bubbles
+                const bubbles = svg.selectAll(".bubble")
+                .data(root.descendants().slice(1))
+                .enter()
+                .append("g")
+                .attr("class", "bubble")
+                .attr("transform", d => `translate(${d.x + padding}, ${d.y + padding})`);
+
+                // Add the circles to the bubbles
+                bubbles.append("circle")
+                .attr("r", d => d.r)
+                .attr("fill", "grey");
+                
+                bubbles.append("circle")
+                .attr("r", function(d) {
+                    //console.log(d);
+                    if (d.data.idx == dataSet.markOne+1 || d.data.idx == dataSet.markTwo+1) {
+                        return 2.5;
+                    }
+                    else {
+                        return 0;
+                    }
+                })
+                .attr("fill", "black");
 
             }
 
