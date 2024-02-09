@@ -4,47 +4,51 @@
 <head>
   <script src="https://d3js.org/d3.v6.min.js"></script>
 
-  <style>
-
-    /*for style later on*/
-
-  </style>
+  <link rel ="stylesheet" type = "text/css" href = "style.css">
 </head>
 
 <body>
-  
-  <h3 id="chartNumber">0</h3>
-  <div id="svgcontainer"></div>
-  <div id="controls">
-    <button id="first">First</button>
-    <button id="back">Previous</button>
-    <button id="next">Next</button>
-    <button id="last">Last</button>
+  <div id="directions">
+     <p> In this experiment, you are asked to judge what is the percent of a smaller value to a larger value in several charts. 
+      We won’t record any other information from you except your answers and the time it takes you to answer. 
+      Click the “agree” button to begin. Thank you!<button id="agree">Agree</button></p>
   </div>
+  <div id="svgcontainer"></div>
+  <div class="ui">
+    <div id="controls">
+      <button id="first">First</button>
+      <button id="back">Previous</button>
+      <h3 id="chartNumber">0</h3>
+      <button id="next">Next</button>
+      <button id="last">Last</button>
+    </div>
 
-  <form 
-  id="result-form"
-  method="POST"
-  action="https://script.google.com/macros/s/AKfycbzVUg7hS88GXI6CggvJ2f_cj3kdq_tzW_SeqkfA1Mr_NyFan9dE3YbdXJZpy4l2FSOR/exec">
-    <label for="vol">What percentage is the smaller of the larger? (between 0 and 100):</label>
-    <input name="Id" type="hidden" id="idString">
-    <input type="range" id="percent" name="vol" min="0" max="100" onchange="syncInputs(this.value);">
-    <input name="GuessValue" type="number" id="guessValue" value=50 onchange="syncInputs(this.value);">
-    <input name="Type" type="hidden" id="type" value="Bar">
-    <input name="TrueValue" type="hidden" id="trueValue" value="0">
-    <input name="Point1" type="hidden" id="point1" value="0">
-    <input name="Point2" type="hidden" id="point2" value="0">
-    <input name="Error" type="hidden" id="error", value="0">
-    <input type="submit">
-  </form>
+    <p>What percentage is the smaller of the larger? (between 0 and 100):</p>
+    <form 
+    id="result-form"
+    method="POST"
+    action="https://script.google.com/macros/s/AKfycbzVUg7hS88GXI6CggvJ2f_cj3kdq_tzW_SeqkfA1Mr_NyFan9dE3YbdXJZpy4l2FSOR/exec"
+    onsubmit="next.click()">
+      
+      <input name="Id" type="hidden" id="idString">
+      <input type="range" id="percent" name="vol" min="0" max="100" oninput="syncInputs(this.value);">
+      <input name="GuessValue" type="number" id="guessValue" value=50 oninput="syncInputs(this.value);">
+      <input name="Type" type="hidden" id="type" value="Bar">
+      <input name="TrueValue" type="hidden" id="trueValue" value="0">
+      <input name="Point1" type="hidden" id="point1" value="0">
+      <input name="Point2" type="hidden" id="point2" value="0">
+      <input name="Error" type="hidden" id="error", value="0">
+      <input type="submit">
+    </form>
+  </div>
 </body>
 
   <script>
 
     /* initial svg set up */
-    var margin = { top: 75, right: 150, bottom: 150, left: 150 },
+    var margin = { top: 70, right: 150, bottom: 30, left: 50 },
       width = 800 - margin.left - margin.right,
-      height = 700 - margin.top - margin.bottom;
+      height = 500 - margin.top - margin.bottom;
 
     var svg = d3.select("#svgcontainer")
       .append("svg")
@@ -56,6 +60,12 @@
 
     var chartIndex = 0
     var data
+
+    /* event listeners */
+
+    document.getElementById("agree").onclick = () => {
+      document.getElementById("directions").style.display = "none"
+    }
 
     document.getElementById("back").onclick = () => {
       if (chartIndex > 0) {
@@ -422,9 +432,9 @@
           method: 'POST',
           body: data,
         })
-        .then(() => {
+        /*.then(() => {
           alert("Success!");
-        })
+        })*/
       });
     });
 
@@ -449,26 +459,27 @@
 
     /*
 
-
     function to help run expirement will have to be changed
 
     */
+
     function swapPlots() {
+      const type = document.getElementById("type")
       const currentData = data[chartIndex];
       if (currentData.type === 1) {
-        document.getElementById("type").value = "Bar"
+        type.value = "Bar"
         var selectedPoints=drawBarChart(currentData.values);
         updatePoints(selectedPoints)
         console.log(currentData);
         console.log(selectedPoints);
       } else if (currentData.type === 2) {
-        document.getElementById("type").value = "Radar"
+        type.value = "Radar"
         var selectedPoints=drawRadarChart(currentData.values);
         updatePoints(selectedPoints)
         console.log(currentData);
         console.log(selectedPoints);
       } else if (currentData.type === 3) {
-        document.getElementById("type").value = "Pie"
+        type.value = "Pie"
         var selectedPoints = drawPieChart(currentData.values);
         updatePoints(selectedPoints)
         console.log(currentData);
