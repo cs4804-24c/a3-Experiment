@@ -8,19 +8,28 @@
 </head>
 
 <body>
+  <div id="loader"></div>
   <div id="directions">
+    <div id="intro">
      <p> In this experiment, you are asked to judge what is the percent of a smaller value to a larger value in several charts. 
       We won’t record any other information from you except your answers and the time it takes you to answer. 
-      Click the “agree” button to begin. Thank you!<button id="agree">Agree</button></p>
+      Click the “agree” button to begin. Thank you!</p>
+      <button id="agree">Agree</button>
+      <button id="disagree">Disagree</button>
+    </div>
+  </div>
+  <div id="ending">
+    <div id="end">
+     <p> Thank You For Participating!</p>
+      <button id="exit">Exit</button>
+    </div>
   </div>
   <div id="svgcontainer"></div>
   <div class="ui">
     <div id="controls">
-      <button id="first">First</button>
-      <button id="back">Previous</button>
+      
       <h3 id="chartNumber">0</h3>
       <button id="next">Next</button>
-      <button id="last">Last</button>
     </div>
 
     <p>What percentage is the smaller of the larger? (between 0 and 100):</p>
@@ -28,7 +37,7 @@
     id="result-form"
     method="POST"
     action="https://script.google.com/macros/s/AKfycbzVUg7hS88GXI6CggvJ2f_cj3kdq_tzW_SeqkfA1Mr_NyFan9dE3YbdXJZpy4l2FSOR/exec"
-    onsubmit="next.click()">
+    onsubmit="">
       
       <input name="Id" type="hidden" id="idString">
       <input type="range" id="percent" name="vol" min="0" max="100" oninput="syncInputs(this.value);">
@@ -38,7 +47,7 @@
       <input name="Point1" type="hidden" id="point1" value="0">
       <input name="Point2" type="hidden" id="point2" value="0">
       <input name="Error" type="hidden" id="error", value="0">
-      <input type="submit">
+      <input type="submit" id="submit">
     </form>
   </div>
 </body>
@@ -60,40 +69,54 @@
 
     var chartIndex = 0
     var data
+    document.getElementById("next").style.display = "none";
+    document.getElementById("chartNumber").innerHTML = (chartIndex+1).toFixed(0)+"/60";
+    document.getElementById("ending").style.display = "none";
 
     /* event listeners */
 
     document.getElementById("agree").onclick = () => {
       document.getElementById("directions").style.display = "none"
+
+      const loader = document.getElementById("loader")
+      const form = document.getElementById('result-form');
+      document.body.style.pointerEvents="none"
+      const data = new FormData(form);
+    
+      const action = form.action;
+      loader.style.display = "block"
+      fetch(action, {
+        method: 'POST',
+        body: data,
+      })
+      .then(() => {
+        document.body.style.pointerEvents="auto"
+        loader.style.display = "none"
+      })
     }
 
-    document.getElementById("back").onclick = () => {
-      if (chartIndex > 0) {
-        chartIndex = chartIndex-1
-        swapPlots()
-        document.getElementById("chartNumber").innerHTML = chartIndex.toFixed(0)
-      }
+    document.getElementById("disagree").onclick = () => {
+      exitExperiment();
+    }
+    document.getElementById("exit").onclick = () => {
+      exitExperiment();
     }
 
-    document.getElementById("first").onclick = () => {
-      chartIndex = 0
-      swapPlots()
-      document.getElementById("chartNumber").innerHTML = chartIndex.toFixed(0)
-    }
+    
+
+  
 
     document.getElementById("next").onclick = () => {
       if (chartIndex < data.length-1) {
         chartIndex = chartIndex+1
         swapPlots()
-        document.getElementById("chartNumber").innerHTML = chartIndex.toFixed(0)
+        document.getElementById("chartNumber").innerHTML = (chartIndex+1).toFixed(0)+"/60"
+      }else{
+        endScreen()
       }
     }
 
-    document.getElementById("last").onclick = () => {
-      chartIndex = data.length-1
-      swapPlots()
-      document.getElementById("chartNumber").innerHTML = chartIndex.toFixed(0)
-    }
+    
 
 
     /* Function For generateing the random data foor the charts*
@@ -108,7 +131,7 @@
       document.getElementById("idString").value = r
 
       //charts array for random chart order 1,2,3 correlates to the chart
-      var chartArray = Array(29).fill(1).concat(Array(29).fill(2), Array(29).fill(3));
+      var chartArray = Array(20).fill(1).concat(Array(20).fill(2), Array(20).fill(3));
       var data = [];
       //randomize the chart order
       chartArray = chartArray.sort(() => Math.random() - 0.5);
@@ -125,10 +148,31 @@
         //data array forr single chart
         var singleChartData = [];
 
+        var remainingValue = 100;
+
+        if (chartArray[i] == 3) {
+          for (let j = 0; j < numPoints; j++) {
+              if (j < numPoints - 1) {
+                  
+                  value = Math.floor(Math.random() * (remainingValue - (numPoints - 1 - j)) + 1);
+              } else {
+                  
+                  value = remainingValue;
+              }
+      
+              singleChartData.push({
+                  value: value,
+                  selected: j < 2,
+              });
+      
+              remainingValue -= value;
+          }
+      }else
         //for filling the data array
         for (let j = 0; j < numPoints; j++) {
+
           singleChartData.push({
-            value: Math.floor(Math.random() * 100)+1,
+            value: Math.floor(Math.random() * 100) + 1,
             selected: j < 2, //set the first two grapghs to selected
           });
         }
@@ -146,10 +190,6 @@
       }
       return data;
     }
-
-
-
-
 
 
 
@@ -386,9 +426,6 @@
 
             sliceData = slices._groups[0][i].__data__;
 
-            selectedSize.push(((sliceData.endAngle - sliceData.startAngle) / (2 * Math.PI)) * 100); // percent of cirlce that the slice is
-
-            
             
             svg.append('circle')
             .attr('cx',d3.arc().innerRadius(0).outerRadius(200).centroid(sliceData)[0] )//based on sliceData
@@ -400,6 +437,14 @@
             
           
         }
+
+        selectedSize =[];// size of the selected
+          for (let i = 0; i < data.length; i++) {
+
+            if(data[i].selected){
+              selectedSize.push(data[i].value)
+            }
+          }
 
         return selectedSize
     }
@@ -423,18 +468,27 @@
     }
 
     window.addEventListener("load", function() {
+      
+      const loader = document.getElementById("loader")
       const form = document.getElementById('result-form');
       form.addEventListener("submit", function(e) {
+        
+        syncInputs(document.getElementById("guessValue").value);
         e.preventDefault();
+        document.body.style.pointerEvents="none"
         const data = new FormData(form);
         const action = e.target.action;
+        form.ge
+        loader.style.display = "block"
         fetch(action, {
           method: 'POST',
           body: data,
         })
-        /*.then(() => {
-          alert("Success!");
-        })*/
+        .then(() => {
+          document.body.style.pointerEvents="auto"
+          loader.style.display = "none"
+          next.click()
+        })
       });
     });
 
@@ -487,19 +541,23 @@
       }
     }
 
+    function exitExperiment() {
+      window.location.href = "about:blank";
+    }
+
     function runExperiment() {
       var results = [];
       data = generateData();
       console.log(data);
 
       swapPlots()
-      // just looping through to see if it works
-      // for (let i = 0; i < data.length; i++) {
-      //   setTimeout(function () {
-      //     
-    
-        // }, 2000 * i); 
+      
     }
+
+    function endScreen() {
+      document.getElementById("result-form").style.display = "none";
+      document.getElementById("ending").style.display = "block";
+    } 
       
     runExperiment();
   </script>
