@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="background-color: #c7dfe2; font-family: Arial, Helvetica, sans-serif">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content=
             "width=device-width, initial-scale=1.0">
     <title>D3 : Random Number Generation - Column Chart</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js" charset="utf-8"></script>
     <style type="text/css">
 
         html, body {
@@ -17,6 +17,11 @@
         }
         .hidden {
             display: none;
+        }
+
+        button {
+            /*set border radius*/
+            border-radius: 15px;
         }
         
         /* Style for starting screen */
@@ -29,7 +34,7 @@
             height: 100%;
             text-align: center;
             font-size: 16px;
-            font-family: Times New Roman;
+            /* font-family: Times New Roman; */
             background-color: #c7dfe2;
         }
         /* Style for the tab bar on the top of the screen */
@@ -63,14 +68,14 @@
         /* Adding my font preferences for the Welcome font */
         #startScreen h1 {
         font-size: 40px;
-        font-family: Times New Roman;
+        /* font-family: Times New Roman; */
         color: #207d89;
         }
 
         /* Adding my font preferences for the creators font */
         #startScreen h2 {
         font-size: 24px;
-        font-family: Times New Roman;
+        /* font-family: Times New Roman; */
         color: #11535c;
         }
 
@@ -83,7 +88,7 @@
             height: 100%;
             text-align: center;
             font-size: 16px;
-            font-family: Times New Roman;
+            /* font-family: Times New Roman; */
             background-color: #c7dfe2;
         }
 
@@ -104,10 +109,11 @@
 
         /* Style the "Agree" button */
         #agreeButton {
+            margin-top: 2rem;
             padding: 10px 20px;
             width: 150px;
             font-size:24px;
-            font-family: Times New Roman;
+            /* font-family: Times New Roman; */
             background-color: #207d89;
             color: #fff;
             border: none;
@@ -116,10 +122,11 @@
 
         /* Style for the "Disagree" button */
         #disagreeButton {
+            margin-top: 2rem;
             padding: 10px 20px;
             width: 150px;
             font-size: 24px;
-            font-family: Times New Roman;
+            /* font-family: Times New Roman; */
             background-color: #207d89;
             color: #fff;
             border: none;
@@ -130,7 +137,7 @@
         #nextButton {
             padding: 10px 20px;
             font-size: 16px;
-            background-color: #0277d0;
+            background-color: #207d89;
             color: #fff;
             border: none;
             cursor: pointer;
@@ -176,6 +183,61 @@
         }
 
 
+
+
+
+
+        @import url('https://fonts.googleapis.com/css?family=Noto+Sans:400,400i,700,700i&subset=greek-ext');
+
+    /* Taken from: https://codepen.io/nikstech/pen/xmMxpr for the styling of the name input*/
+    /*-------------------------------------------------------------------------------------*/
+    .text-center{
+        color:#fff;	
+        text-transform:uppercase;
+        font-size: 23px;
+        /* margin: -50px 0 80px 0; */
+        display: block;
+        text-align: center;
+    }
+
+    .input-container{
+        position:relative;
+        margin-bottom:25px;
+        width: 200px;
+        /*center*/
+        margin: 0 auto;
+    }
+    .input-container label{
+        position:absolute;
+        top:0px;
+        left:0px;
+        font-size:16px;
+        color:#207d89;	
+        pointer-event: none;
+        transition: all 0.5s ease-in-out;
+    }
+    .input-container input{ 
+    border:0;
+    border-bottom:1px solid #555;  
+    background:transparent;
+    width:100%;
+    padding:8px 0 5px 0;
+    font-size:16px;
+    color:#207d89;
+    }
+    .input-container input:focus{ 
+    border:none;	
+    outline:none;
+    border-bottom:1px solid #000000;	
+    }
+    .input-container input:focus ~ label,
+    .input-container input:valid ~ label{
+        top:-12px;
+        font-size:12px;
+        
+    }
+    /*-------------------------------------------------------------------------------------*/
+
     </style>
 </head>
 <body>
@@ -193,8 +255,16 @@
         <h1>Welcome to our assignment 3 experiment!</h1>
     <h2>Creators: Audrey Mongillo, Connor Ehrensperger, and Alysha Creelman<br></h2>
     <h3><br>In this experiment, you are asked to judge what is the percent of a smaller value to a larger value in several charts.<br><br> Please enter your name below and then click "Agree" to begin.<br>Thank you! <br></h3>
-        <input type="text" id="nameInput" placeholder="First Name"> <br><br>
-        <button id="agreeButton">Agree</button>
+        
+                
+                    <div class="input-container">
+                        <input type="text" required=""/>
+                        <label>First Name</label>		
+                    </div>
+                    
+
+
+        <button id="agreeButton" style="margin-right: 1rem;">Agree</button>
     <button id="disagreeButton">Disagree</button>
     </div>
 </div>
@@ -205,25 +275,28 @@
 </div>
 
 <!-- Chart Screen (only shown if the user hits "Agree") -->
-<div id="chartholderholder" style="display: none;">
-    <div id="chartholder"></div>
-    <div id="controlsholder">
+<div id="chartholderholder" style="display: none; flex-direction: column; align-items: center; margin-top: 2rem; background-color: #c7dfe2;">
+    <div id="chartholder" sylte="background-color: #c7dfe2"></div>
+    <div id="controlsholder" style="padding-left: 1rem; background-color: #c7dfe2;">
         <!-- text input -->
-        <input type="text" id="percentInput" placeholder="Enter the percent here">
+        <input type="text" id="percentInput" placeholder="Enter the percent here" style="margin-right: 1rem; border-radius: 10px;">
         <button id="nextButton">Next</button>
     </div>
 </div>
 
 <div id="doneScreen" style="display: none;">
     <h2>Thank you for participating. Here are your results: </h2>
-    <button id="downloadButton">Download CSV</button>
+    <button id="downloadButton" style="background-color: #207d89;">Download CSV</button>
 </div>
 
 <script type="text/javascript">
     //used to make sure we are getting 20 trials for each type of chart
     let normalBarCount = 0;
-    let rotateBarCount = 0;
     let stackedCount = 0;
+    let rotateBarCount = 0;
+    let packedCirclesCount = 0;
+
+    let maxTrialsPerChartType = 1;
 
     //keeping track of the two heights we are comparing for each round
     let index1height = 0;
@@ -289,21 +362,71 @@
 
 
     function generateChart() {
+        // let stackedBarChart = Math.random() < 1/3;
+        // let packedCircles = Math.random() < 1/3;
+
+        // randomly pick one from stacked, regular, rotated, or packed circles
+        let chartType = Math.random();
+        let packedCircles = chartType < 0.25;
+        let stackedBarChart = chartType < 0.5 && chartType >= 0.25;
+        let rotatedBarChart = chartType < 0.75 && chartType >= 0.5;
+        let normalBarChart = chartType < 1 && chartType >= 0.75;
+        
 
         //changed to 1 for testing - need to be changed back to 20
-        if(normalBarCount >= 1 && rotateBarCount >= 1 && stackedCount >= 1){
+        console.log("BEFORE");
+        console.log("packedCirclesCount:", packedCirclesCount);
+        console.log("stackedCount:", stackedCount);
+        console.log("rotateBarCount:", rotateBarCount);
+        console.log("normalBarCount:", normalBarCount);
+        console.log("totalCount:", maxTrialsPerChartType);
+        if(normalBarCount >= maxTrialsPerChartType && 
+        packedCirclesCount >= maxTrialsPerChartType && 
+        stackedCount >= maxTrialsPerChartType && 
+        rotateBarCount >= maxTrialsPerChartType){
+            console.log("Finished!");
             finishedTest();
+            return;
         }
+
+        // If the chart chosen already has 20 trials, choose a new one
+        while(  (packedCircles && packedCirclesCount >= maxTrialsPerChartType) || 
+                (stackedBarChart && stackedCount >= maxTrialsPerChartType)     || 
+                (rotatedBarChart && rotateBarCount >= maxTrialsPerChartType)   || 
+                (normalBarChart && normalBarCount >= maxTrialsPerChartType)      ) {
+                    console.log("Choosing a new chart type");
+            chartType = Math.random();
+            packedCircles = chartType < 0.25;
+            stackedBarChart = chartType < 0.5 && chartType >= 0.25;
+            rotatedBarChart = chartType < 0.75 && chartType >= 0.5;
+            normalBarChart = chartType < 1 && chartType >= 0.75;
+            console.log("packedCircles:", packedCircles);
+            console.log("stackedBarChart:", stackedBarChart);
+            console.log("rotatedBarChart:", rotatedBarChart);
+            console.log("normalBarChart:", normalBarChart);
+            console.log("packedCirclesCount:", packedCirclesCount);
+            console.log("stackedCount:", stackedCount);
+            console.log("rotateBarCount:", rotateBarCount);
+            console.log("normalBarCount:", normalBarCount);
+
+        
+        }
+
+        let minimumBarHeight = stackedBarChart? 31 : 40;
+        let multiplier = stackedBarChart? 50 : 400;
+        
 
         // Generate new random data
         data = d3.range(10).map(function() {
             return Math.random();
         });
 
-        let stackedBarChart = Math.random() < 1/3;
-        if(stackedCount >= 20){stackedBarChart = false;}
-        let minimumBarHeight = stackedBarChart? 31 : 40;
-        let multiplier = stackedBarChart? 50 : 400;
+
+        let width = 600;
+        let height = 600;
+        console.log("width:", width);
+        console.log("height:", height);
+        
         // Generate two unique random indices
         index1 = Math.floor(Math.random() * data.length);
         index2 = Math.floor(Math.random() * data.length);
@@ -323,112 +446,194 @@
         // Remove the old chart
         d3.select('#chartholder').selectAll('*').remove();
 
-        // Display a simple Column Chart using the above Random Data
-        var svg = d3.select('#chartholder').selectAll('div')
-            .data(data)
+        if(packedCircles) {
+            //Packed circles
+            //Adapted from: https://d3-graph-gallery.com/graph/circularpacking_basic.html
+
+            typeArray[totalCount] = "Packed Circles";
+
+            let minimumCircleRadius = 10;
+            let circleRadiusMultiplier = 50;
+            let dummyData = [];
+            
+            // Format the data for how the force simulation expects it
+            for(let i = 0; i < data.length; i++) {
+                dummyData.push({name: "i", size: data[i]});
+
+            }
+
+            let svg = d3.select('#chartholder')
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+            let node = svg.append('g')
+            .selectAll('g') // Select groups, not circles directly
+            .data(dummyData)
             .enter()
-            .append('div')
-            .attr('class', 'bar')
-            .style('fill', '#ffffff')
-            .style('height', function (d) {
-                let result = (d*multiplier + minimumBarHeight) + 'px';
+            .append('g') // Append groups
+            .attr('transform', function(d) {
+                return 'translate(' + (width / 2) + ',' + (height / 2) + ')';
+            });
 
-                return result;
-            })
-            .style('width', stackedBarChart? '100px' : '25px')
-            .each(function(d, i) {
-                // Append circles to the randomly chosen bars
+            // Append data circles to each group
+            node.append('circle')
+                .attr('r', function(d) {
+                    return d.size * circleRadiusMultiplier + minimumCircleRadius;
+                })
+                .style('fill', '#ffffff')
+                .attr('stroke', '#000000')
+                .style('stroke-width', 4);
+
+            // Append black circles to selected groups
+            node.each(function(d, i) {
+                // Append black circles to the randomly chosen bars
                 if (i === index1 || i === index2) {
-                    let bar = d3.select(this);
-                    let barWidth = parseInt(bar.style('width'));
-                    let barHeight = d*multiplier + minimumBarHeight;
-                    console.log(bar);
-                    if(stackedBarChart) {
-                        bar.append('svg')
-                            .attr('width', barWidth)
-                            .attr('height', barHeight)
-                            .attr('class', 'circleContainer' + i)
-                            .append('circle')
-                            .attr('class', 'circle' + i)
-                            .attr('r', 4)
-                            .attr('cx', barWidth / 2)
-                            .attr('cy', barHeight / 2)
-                            .style('fill', 'black');
-                            // if(index1){index1height = barHeight;}
-                            // if(index2){index2height = barHeight;}
-                            typeArray[totalCount] = "Stacked Bar Chart";
-                    } else {
-                        bar.append('svg')
-                            .attr('width', barWidth)
-                            .attr('height', '100%')
-                            .attr('class', 'circleContainer' + i)
-                            .append('circle')
-                            .attr('class', 'circle' + i)
-                            .attr('r', 4)
-                            .attr('cx', barWidth / 2)
-                            .style('fill', 'black');
-
-                        let y =d*multiplier + minimumBarHeight;
-                        console.log("d:", d*multiplier + minimumBarHeight);
-
-
-                        d3.select('.circle' + i).attr('cy', y - 15);
-                    }
-                    //save the heights of the bars with the dots
+                    d3.select(this) // Select the current group
+                        .append('circle') // Append a circle to it
+                        .attr('r', 4) // Set the radius
+                        .style('fill', 'black'); // Set the fill color
                     if(i === index1){
-                        index1height = barHeight;
-                        console.log("index1height:", index1height);
+                        index1height = d.size * circleRadiusMultiplier + minimumCircleRadius;
                     }
                     if(i === index2){
-                        index2height = barHeight;
-                        console.log("index2height:", index2height);
+                        index2height = d.size * circleRadiusMultiplier + minimumCircleRadius;
                     }
                 }
             });
 
-        if (stackedBarChart) {
-            stackedCount++;
-            d3.select('#chartholder').style('flex-direction', 'column');
-            d3.select('#chartholder').style('transform', 'rotate(0deg)');
-            d3.select('#chartholder').style('align-items', 'center');
-            d3.select('#chartholder').style('justify-content', 'flex-end');
 
-            d3.selectAll('.bar').style('display', 'flex');
-            d3.selectAll('.bar').style('justify-content', 'center');
-            d3.selectAll('.bar').style('align-items', 'center');
 
-            // set the circles to be in the middle of the bars
-            for(let i = 0; i < data.length; i++) {
-                d3.selectAll('.circleContainer' + i).style('display', 'flex');
-                d3.selectAll('.circleContainer' + i).style('justify-content', 'center');
-                d3.selectAll('.circleContainer' + i).style('align-items', 'center');
+
+            // Features of the forces applied to the nodes:
+            let simulation = d3.forceSimulation()
+                .force("center", d3.forceCenter().x(width / 2).y(height / 2)) // Attraction to the center of the svg area
+                .force("charge", d3.forceManyBody().strength(-20)) // Nodes are attracted one each other of value is > 0
+                .force("collide", d3.forceCollide().strength(1).radius(30).iterations(1)) // Force that avoids circle overlapping
+
+            // Apply these forces to the nodes and update their positions.
+            // Once the force algorithm is happy with positions ('alpha' value is low enough), simulations will stop.
+            simulation
+            .nodes(dummyData)
+            .on("tick", function() {
+                // Update the positions of the groups
+                node.attr("transform", function(d) {
+                    return "translate(" + d.x + "," + d.y + ")";
+                });
+            });
+
+            packedCirclesCount ++;
+        } else {
+
+            // Display a simple Column Chart using the above Random Data
+            var svg = d3.select('#chartholder').selectAll('div')
+                .data(data)
+                .enter()
+                .append('div')
+                .attr('class', 'bar')
+                .style('fill', '#ffffff')
+                .style('height', function (d) {
+                    let result = (d*multiplier + minimumBarHeight) + 'px';
+
+                    return result;
+                })
+                .style('width', stackedBarChart? '100px' : '25px')
+                .each(function(d, i) {
+                    // Append circles to the randomly chosen bars
+                    if (i === index1 || i === index2) {
+                        let bar = d3.select(this);
+                        let barWidth = parseInt(bar.style('width'));
+                        let barHeight = d*multiplier + minimumBarHeight;
+                        console.log(bar);
+                        if(stackedBarChart) {
+                            bar.append('svg')
+                                .attr('width', barWidth)
+                                .attr('height', barHeight)
+                                .attr('class', 'circleContainer' + i)
+                                .append('circle')
+                                .attr('class', 'circle' + i)
+                                .attr('r', 4)
+                                .attr('cx', barWidth / 2)
+                                .attr('cy', barHeight / 2)
+                                .style('fill', 'black');
+                                typeArray[totalCount] = "Stacked Bar Chart";
+                        } else {
+                            bar.append('svg')
+                                .attr('width', barWidth)
+                                .attr('height', '100%')
+                                .attr('class', 'circleContainer' + i)
+                                .append('circle')
+                                .attr('class', 'circle' + i)
+                                .attr('r', 4)
+                                .attr('cx', barWidth / 2)
+                                .style('fill', 'black');
+
+                            let y =d*multiplier + minimumBarHeight;
+                            console.log("d:", d*multiplier + minimumBarHeight);
+
+
+                            d3.select('.circle' + i).attr('cy', y - 15);
+                        }
+                        //save the heights of the bars with the dots
+                        if(i === index1){
+                            index1height = barHeight;
+                            console.log("index1height:", index1height);
+                        }
+                        if(i === index2){
+                            index2height = barHeight;
+                            console.log("index2height:", index2height);
+                        }
+                    }
+                });
+            
+            
+            if (stackedBarChart) {
+                stackedCount++;
+                d3.select('#chartholder').style('flex-direction', 'column');
+                d3.select('#chartholder').style('transform', 'rotate(0deg)');
+                d3.select('#chartholder').style('align-items', 'center');
+                d3.select('#chartholder').style('justify-content', 'flex-end');
+
+                d3.selectAll('.bar').style('display', 'flex');
+                d3.selectAll('.bar').style('justify-content', 'center');
+                d3.selectAll('.bar').style('align-items', 'center');
+
+                // set the circles to be in the middle of the bars
+                for(let i = 0; i < data.length; i++) {
+                    d3.selectAll('.circleContainer' + i).style('display', 'flex');
+                    d3.selectAll('.circleContainer' + i).style('justify-content', 'center');
+                    d3.selectAll('.circleContainer' + i).style('align-items', 'center');
+                }
+
+            } else {
+
+                typeArray[totalCount] = "Bar Chart";
+                d3.select('#chartholder').style('align-items', 'flex-end');
+                d3.select('#chartholder').style('justify-content', 'flex-start');
+                d3.select('#chartholder').style('flex-direction', 'row');
             }
 
-        } else {
-            d3.select('#chartholder').style('align-items', 'flex-end');
-            d3.select('#chartholder').style('justify-content', 'flex-start');
-            d3.select('#chartholder').style('flex-direction', 'row');
-        }
 
-
-        // Only rotate it if it's not a stacked bar chart
-        if(!stackedBarChart) {
-            // Randomly choose to rotate the chart or not
-            let rotate = Math.random() < 0.5;
-            if(rotateBarCount >= 20){rotate = false;}
-            if (rotate) {
-                rotateBarCount++
-                d3.select('#chartholder').style('transform', 'rotate(90deg)');
-                typeArray[totalCount] = "Horizontal Bar Chart";
-            } else {
-                if(normalBarCount >= 20){generateChart();}
-                else {
-                    normalBarCount++
-                    d3.select('#chartholder').style('transform', 'rotate(0deg)');
-                    typeArray[totalCount] = "Bar Chart";
+            // Only rotate it if it's not a stacked bar chart
+            if(!stackedBarChart) {
+                if(rotateBarCount >= 20){rotate = false;}
+                if (rotatedBarChart) {
+                    rotateBarCount++
+                    d3.select('#chartholder').style('transform', 'rotate(90deg)');
+                    typeArray[totalCount] = "Horizontal Bar Chart";
+                } else {
+                    if(normalBarCount >= 20){generateChart();}
+                    else {
+                        normalBarCount++
+                        d3.select('#chartholder').style('transform', 'rotate(0deg)');
+                        typeArray[totalCount] = "Bar Chart";
+                    }
                 }
             }
+
+
         }
+        
         //calculate the percentage
         if(index1height < index2height)
         {
@@ -440,7 +645,6 @@
             actualPercents[totalCount] = Math.round(percent);
         }
 
-
     }
 
     // Generate the first chart
@@ -450,7 +654,7 @@
     document.getElementById("agreeButton").addEventListener("click", function() {
         document.getElementById("startScreen").style.display = "none";
         document.getElementById("disagreeScreen").style.display = "none";
-        document.getElementById("chartholderholder").style.display = "block";
+        document.getElementById("chartholderholder").style.display = "flex";
         userID = document.getElementById("nameInput").value;
     });
 
@@ -477,6 +681,10 @@
         document.getElementById("percentInput").value = "";
         //increment array counter
         totalCount++;
+
+        console.log(actualPercents);
+        console.log(inputPercents);
+        console.log(typeArray);
         generateChart();
 
     });
