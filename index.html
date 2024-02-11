@@ -19,7 +19,7 @@
                 Thank you for participating! <br>
                 In this study, you will be shown a series of visualizations. <br>
                 In each visualization, two sections of the graph will be marked with a dot. <br>
-                In the text box, please enter the percentage that represents the fraction of the smaller marked section to the larger marked section. <br>
+                In the text box, please enter the percentage of the smaller marked section in comparison to the larger marked section. <br>
                 For example, if the smaller section appears to be 50% of the larger section, enter "50" in the text box.
             </p>
             <h5>Ready to start?</h5>
@@ -31,9 +31,10 @@
                 Data Visualization (CS4804) Experiment
             </h1>
             <p>
-                In the text box, please enter the percentage that represents the fraction of the smaller marked section to the larger marked section. <br>
+                In the text box, please enter the percentage of the smaller marked section in comparison to the larger marked section. <br>
                 For example, if the smaller section appears to be 50% of the larger section, enter "50" in the text box.
             </p>
+            <h3 id="count"></h3>
             <div id="visualization"></div>
             <input id="answer" type="text" value=""></input>
             <button id="submit" onclick="return recordResult()">Submit</button>
@@ -68,6 +69,7 @@
                 startExperiment();
             }
 
+             // change screen from visualization screen to results screen
             function showResults() {
                 document.getElementById('experiment').style.display='none';
                 document.getElementById('results').style.display='block';
@@ -187,8 +189,12 @@
                     correctAnswer = 100;
                 }
 
+                // remove current visualization
                 var currSvg = d3.select("div#visualization").select('svg')
-                currSvg.remove()
+                currSvg.remove();
+
+                // let the user know how many questions they have to go
+                document.getElementById('count').innerHTML = "Question " + (count) + "/80"
 
                 if (visOrder[num] == 1) {
                     visType = "Bar Chart";
@@ -213,7 +219,6 @@
 
             function recordResult() {
                 // do some stuff to record result
-                console.log(count);
 
                 let result = {
                     trialNum: count,
@@ -238,7 +243,6 @@
 
             
             function createBarChart(dataSet) {
-                console.log(dataSet);
                 // set the dimensions and margins of the graph
                 var margin = { top: 30, right: 30, bottom: 40, left: 60 },
                     width = 460 - margin.left - margin.right,
@@ -281,15 +285,16 @@
                     .attr("y", function (d) { return y(d.val); })
                     .attr("width", x.bandwidth())
                     .attr("height", function (d) { return height - y(d.val); })
-                    .attr("fill", "gray");
+                    .attr("stroke", "black" )
+                    .attr("fill", "white" );
 
-                    // Add circles on two bars
-                    var circlesData = [
-                        { idx: dataSet.markOne, val: /* dataSet.data[dataSet.markOne].val / */ 2 },
-                        { idx: dataSet.markTwo, val: /* dataSet.data[dataSet.markTwo].val / */ 2 }
-                    ];
+                // Add circles on two bars
+                var circlesData = [
+                    { idx: dataSet.markOne, val: 2 },
+                    { idx: dataSet.markTwo, val: 2 }
+                ];
 
-                    svg.selectAll("circle")
+                svg.selectAll("circle")
                     .data(circlesData)
                     .enter()
                     .append("circle")
@@ -321,42 +326,40 @@
                     .innerRadius(0)
                     .outerRadius(radius);
 
+                // do some moving around of data to make calculation of slices and dots easier
                 let dataVals = [];
 
                 dataSet.data.forEach(function (row) {
                     dataVals.push(row.val);
                 })
 
-                console.log(dataVals);
+                var tempData = pie(dataVals);
+                let data = [];
+                let index = 1;
 
-                var count = 0;
+                tempData.forEach(function (row) {
+                    d = {
+                        index: index,
+                        pieData: row
+                    };
+
+                    data.push(d);
+                    index++;
+                })
 
                 // Append the pie slices to the svg
                 const slices = svg.selectAll("path")
-                    .data(pie(dataVals))
+                    .data(tempData)
                     .enter()
                     .append("path")
                     .attr("d", arc)
-                    .attr("fill", "grey");
-                    
-                slices.append("circle")
-                    .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
-                    .attr("text-anchor", "middle")
-                    .attr("r", function(d) {
-                        console.log(d);
-                        if (dataSet.data[dataSet.markOne].val == d.data || dataSet.data[dataSet.markTwo] == d.data) {
-                            return 2.5;
-                        }
-                        else {
-                            return 0;
-                        }
-                    } )
-                    .attr("fill", "black");
+                    .attr("stroke", "black" )
+                    .attr("fill", "white" );
 
-                /* // Add circles on two pie slices
+                 // Add circles on two pie slices
                 var circleData = [
-                    { startAngle: dataSet.data[dataSet.markOne].val, endAngle: 1.2 },  
-                    { startAngle: dataSet.data[dataSet.markTwo].val, endAngle: -5.2 }
+                    { startAngle: data[dataSet.markOne].pieData.startAngle, endAngle: data[dataSet.markOne].pieData.endAngle},  
+                    { startAngle: data[dataSet.markTwo].pieData.startAngle, endAngle: data[dataSet.markTwo].pieData.endAngle}
                 ];
 
                 svg.selectAll("circle")
@@ -366,7 +369,7 @@
                     .attr("cx", function (d) { return arc.centroid(d)[0]; })
                     .attr("cy", function (d) { return arc.centroid(d)[1]; })
                     .attr("r", 2.5)
-                    .style("fill", "black"); */
+                    .style("fill", "black"); 
             }
 
             function createBubbleChart(dataSet) {
@@ -403,11 +406,11 @@
                 // Add the circles to the bubbles
                 bubbles.append("circle")
                 .attr("r", d => d.r)
-                .attr("fill", "grey");
+                .attr("stroke", "black" )
+                .attr("fill", "white" );
                 
                 bubbles.append("circle")
                 .attr("r", function(d) {
-                    //console.log(d);
                     if (d.data.idx == dataSet.markOne+1 || d.data.idx == dataSet.markTwo+1) {
                         return 2.5;
                     }
@@ -424,6 +427,7 @@
 
             }
 
+            // starts experiment by creating the visualiation order and then creating the first trial
             function startExperiment() {
                 visOrder = createTrialOrder();
                 
@@ -438,6 +442,7 @@
                 createTrial(count);
             }
 
+            // creates a link to export results to a csv file
             function exportResults() {
                 csvData = "";
 
