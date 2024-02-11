@@ -296,6 +296,7 @@
     let rotateBarCount = 0;
     let packedCirclesCount = 0;
 
+    //changed to 1 for testing - need to be changed back to 20
     let maxTrialsPerChartType = 1;
 
     //keeping track of the two heights we are comparing for each round
@@ -303,18 +304,18 @@
     let index2height = 0;
 
     //what the correct answers are
-    let actualPercents = new Array(60);
+    let actualPercents = new Array(80);
     //what the user input for each
-    let inputPercents = new Array(60);
+    let inputPercents = new Array(80);
 
-    let error = new Array(60);
+    let error = new Array(80);
 
     //for setting each of the array values
     let totalCount = 0;
     let userID = ""
 
     //saves the type of chart the trial is on
-    let typeArray = new Array(60);
+    let typeArray = new Array(80);
 
     let trials = [];
 
@@ -374,8 +375,6 @@
 
 
     function generateChart() {
-        // let stackedBarChart = Math.random() < 1/3;
-        // let packedCircles = Math.random() < 1/3;
 
         // randomly pick one from stacked, regular, rotated, or packed circles
         let chartType = Math.random();
@@ -385,13 +384,6 @@
         let normalBarChart = chartType < 1 && chartType >= 0.75;
         
 
-        //changed to 1 for testing - need to be changed back to 20
-        console.log("BEFORE");
-        console.log("packedCirclesCount:", packedCirclesCount);
-        console.log("stackedCount:", stackedCount);
-        console.log("rotateBarCount:", rotateBarCount);
-        console.log("normalBarCount:", normalBarCount);
-        console.log("totalCount:", maxTrialsPerChartType);
         if(normalBarCount >= maxTrialsPerChartType && 
         packedCirclesCount >= maxTrialsPerChartType && 
         stackedCount >= maxTrialsPerChartType && 
@@ -412,16 +404,6 @@
             stackedBarChart = chartType < 0.5 && chartType >= 0.25;
             rotatedBarChart = chartType < 0.75 && chartType >= 0.5;
             normalBarChart = chartType < 1 && chartType >= 0.75;
-            console.log("packedCircles:", packedCircles);
-            console.log("stackedBarChart:", stackedBarChart);
-            console.log("rotatedBarChart:", rotatedBarChart);
-            console.log("normalBarChart:", normalBarChart);
-            console.log("packedCirclesCount:", packedCirclesCount);
-            console.log("stackedCount:", stackedCount);
-            console.log("rotateBarCount:", rotateBarCount);
-            console.log("normalBarCount:", normalBarCount);
-
-        
         }
 
         let minimumBarHeight = stackedBarChart? 31 : 40;
@@ -506,10 +488,10 @@
                         .attr('r', 4) // Set the radius
                         .style('fill', 'black'); // Set the fill color
                     if(i === index1){
-                        index1height = d.size * circleRadiusMultiplier + minimumCircleRadius;
+                        index1height = Math.PI * Math.pow(d.size * circleRadiusMultiplier + minimumCircleRadius, 2);
                     }
                     if(i === index2){
-                        index2height = d.size * circleRadiusMultiplier + minimumCircleRadius;
+                        index2height = Math.PI * Math.pow(d.size * circleRadiusMultiplier + minimumCircleRadius, 2);
                     }
                 }
             });
@@ -551,6 +533,7 @@
                 })
                 .style('width', stackedBarChart? '100px' : '25px')
                 .each(function(d, i) {
+
                     // Append circles to the randomly chosen bars
                     if (i === index1 || i === index2) {
                         let bar = d3.select(this);
@@ -586,6 +569,7 @@
 
                             d3.select('.circle' + i).attr('cy', y - 15);
                         }
+
                         //save the heights of the bars with the dots
                         if(i === index1){
                             index1height = barHeight;
