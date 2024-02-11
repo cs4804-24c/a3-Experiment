@@ -18,5 +18,7 @@ Design:
 Resources
 ---
 Download CSV Files: https://www.tutorialspoint.com/how-to-create-and-download-csv-file-in-javascript
+
 Creating a Bubble Chart in D3: https://medium.com/@jhren/d3-data-visualization-in-javascript-use-d3-js-to-create-a-bubble-chart-3fba181faacd 
+
 Creating a Voronoi Tree Map in D3: https://observablehq.com/@will-r-chase/voronoi-treemap
