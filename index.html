@@ -683,8 +683,17 @@
         console.log(actualPercents);
         console.log(inputPercents);
         console.log(typeArray);
+        //put focus on the text input
+        document.getElementById("percentInput").focus();
         generateChart();
 
+    });
+
+    document.getElementById("percentInput").addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            document.getElementById("nextButton").click();
+        }
     });
 
     document.addEventListener("DOMContentLoaded", function() {
