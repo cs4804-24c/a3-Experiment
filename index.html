@@ -307,6 +307,8 @@
     //what the user input for each
     let inputPercents = new Array(60);
 
+    let error = new Array(60);
+
     //for setting each of the array values
     let totalCount = 0;
     let userID = ""
@@ -359,6 +361,16 @@
 
     const btn = document.getElementById('downloadButton');
     btn.addEventListener('click', get);
+
+    //calculate the error for that trial
+    function calculateError(){
+        let errorHold = Math.log2(Math.abs(inputPercents[totalCount]-actualPercents[totalCount]) + (1/8));
+        if(errorHold == -3)
+        {
+            errorHold = 0;
+        }
+        error[totalCount] = errorHold;
+    }
 
 
     function generateChart() {
@@ -669,12 +681,14 @@
     {
         //set user input for that chart in array
         inputPercents[totalCount] = document.getElementById("percentInput").value;
+        calculateError();
         var trial = {
             "Participant": userID,
             "Trial Number": totalCount + 1,
             "Graph Type": typeArray[totalCount],
             "Input Percent": inputPercents[totalCount],
-            "Actual Percent": actualPercents[totalCount]
+            "Actual Percent": actualPercents[totalCount],
+            "Error": error[totalCount]
         };
         trials.push(trial);
         //clear text box value
