@@ -2,6 +2,7 @@ Assignment 3 - Replicating a Classic Experiment
 ===
 
 https://www.tutorialspoint.com/how-to-create-and-download-csv-file-in-javascript
+https://medium.com/@jhren/d3-data-visualization-in-javascript-use-d3-js-to-create-a-bubble-chart-3fba181faacd 
 
 GitHub Details
 ---
