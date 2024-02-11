@@ -92,11 +92,6 @@
             background-color: #c7dfe2;
         }
 
-        #nameInput{
-            width: 200px;
-            height: 20px;
-        }
-
 
         /* Style for the screen if user does not agree to do the experiment*/
         #disagreeScreen {
@@ -255,13 +250,12 @@
         <h1>Welcome to our assignment 3 experiment!</h1>
     <h2>Creators: Audrey Mongillo, Connor Ehrensperger, and Alysha Creelman<br></h2>
     <h3><br>In this experiment, you are asked to judge what is the percent of a smaller value to a larger value in several charts.<br><br> Please enter your name below and then click "Agree" to begin.<br>Thank you! <br></h3>
-        
-                
-                    <div class="input-container">
-                        <input type="text" required=""/>
-                        <label>First Name</label>		
+
+
+        <div type = "text" class="input-container">
+            <input type="text" id="nameInput" > <br><br>
+                        <label>First Name</label>
                     </div>
-                    
 
 
         <button id="agreeButton" style="margin-right: 1rem;">Agree</button>
@@ -297,7 +291,7 @@
     let packedCirclesCount = 0;
 
     //changed to 1 for testing - need to be changed back to 20
-    let maxTrialsPerChartType = 1;
+    let maxTrialsPerChartType = 20;
 
     //keeping track of the two heights we are comparing for each round
     let index1height = 0;
@@ -495,8 +489,6 @@
                     }
                 }
             });
-
-
 
 
             // Features of the forces applied to the nodes:
