@@ -58,11 +58,14 @@
     // The coordinates are added to the root object above
     d3.treemap().size([width, height]).padding(4)(root);
 
-    // Randomly select two data points
-    const randomIndexes = [
-      Math.floor(Math.random() * root.leaves().length),
-      Math.floor(Math.random() * root.leaves().length),
-    ];
+    // Generate two unique random indexes
+    const randomIndexes = [];
+    while (randomIndexes.length < 2) {
+      const index = Math.floor(Math.random() * root.leaves().length);
+      if (!randomIndexes.includes(index)) {
+        randomIndexes.push(index);
+      }
+    }
 
     // Store data of the randomly selected rectangles
     const selectedRectangles = root
