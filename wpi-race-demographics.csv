@@ -1,10 +1,10 @@
-Race,Population
-American Indian or Alaska Native,3
-Asian,783
-Black or African American,206
-Hispanic or Latino,536
-Native Hawaiian or Other Pacific Islanders ,4
-Two or more races,229
-White,4212
-Unknown,282
-U.S. Nonresident,1098
+Race,College,Population
+American Indian or Alaska Native,WPI,3
+Asian,WPI,783
+Black or African American,WPI,206
+Hispanic or Latino,WPI,536
+Native Hawaiian or Other Pacific Islanders ,WPI,4
+Two or more races,WPI,229
+White,WPI,4212
+Unknown,WPI,282
+U.S. Nonresident,WPI,1098

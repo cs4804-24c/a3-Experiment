@@ -24,22 +24,22 @@
 
   // Read data
   d3.csv(
-    "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_hierarchy_1level.csv",
+    "https://github.com/randyer/a3-Experiment/blob/3e917ee177bdd329cc29240e698f76a98f52c29b/wpi-race-demographics.csv",
     function (data) {
       // stratify the data: reformatting for d3.js
       var root = d3
         .stratify()
         .id(function (d) {
-          return d.name;
+          return d.race;
         }) // Name of the entity (column name is name in csv)
         .parentId(function (d) {
-          return d.parent;
+          return d.population;
         })(
         // Name of the parent (column name is parent in csv)
         data
       );
       root.sum(function (d) {
-        return +d.value;
+        return +d.population;
       }); // Compute the numeric value for each entity
 
       // Then d3.treemap computes the position of each element of the hierarchy
