@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v6.js"></script>
+
+<!-- Create a div where the graph will take place -->
+<div id="my_dataviz"></div>
+
+<!-- Form for user input -->
+<form id="percentageForm">
+  <label for="percentage"
+    >Enter percentage of smaller square compared to the bigger square:</label
+  >
+  <input
+    type="number"
+    id="percentage"
+    name="percentage"
+    min="0"
+    max="100"
+    step="any"
+    required
+  />
+  <input type="submit" value="Submit" />
+</form>
+
+<script>
+  // set the dimensions and margins of the graph
+  const margin = { top: 10, right: 10, bottom: 10, left: 10 },
+    width = 445 - margin.left - margin.right,
+    height = 445 - margin.top - margin.bottom;
+
+  // append the svg object to the body of the page
+  const svg = d3
+    .select("#my_dataviz")
+    .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+  // Read data
+  d3.csv("/wpi-race-demographics.csv").then(function (data) {
+    // stratify the data: reformatting for d3.js
+    const root = d3
+      .stratify()
+      .id(function (d) {
+        return d.Race;
+      }) // Name of the entity (column name is name in csv)
+      .parentId(function (d) {
+        return d.College;
+      })(data); // Name of the parent (column name is parent in csv)
+    root.sum(function (d) {
+      return +d.Population;
+    }); // Compute the numeric value for each entity
+
+    // Then d3.treemap computes the position of each element of the hierarchy
+    // The coordinates are added to the root object above
+    d3.treemap().size([width, height]).padding(4)(root);
+
+    // Randomly select two data points
+    const randomIndexes = [
+      Math.floor(Math.random() * root.leaves().length),
+      Math.floor(Math.random() * root.leaves().length),
+    ];
+
+    // Store data of the randomly selected rectangles
+    const selectedRectangles = root
+      .leaves()
+      .filter((d, i) => randomIndexes.includes(i));
+
+    // use this information to add rectangles:
+    svg
+      .selectAll("rect")
+      .data(root.leaves())
+      .join("rect")
+      .attr("x", function (d) {
+        return d.x0;
+      })
+      .attr("y", function (d) {
+        return d.y0;
+      })
+      .attr("width", function (d) {
+        return d.x1 - d.x0;
+      })
+      .attr("height", function (d) {
+        return d.y1 - d.y0;
+      })
+      .style("stroke", "black")
+      .style("fill", function (d, i) {
+        // Change color for randomly selected data points
+        if (randomIndexes.includes(i)) {
+          return "red";
+        } else {
+          return "#69b3a2"; // Default color
+        }
+      });
+
+    // Event listener for form submission
+    document
+      .getElementById("percentageForm")
+      .addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent default form submission
+
+        const percentage = parseFloat(
+          document.getElementById("percentage").value
+        );
+        if (!isNaN(percentage)) {
+          // If a valid number is entered
+
+          // Calculate the areas of the two red rectangles
+          const area1 =
+            (selectedRectangles[0].x1 - selectedRectangles[0].x0) *
+            (selectedRectangles[0].y1 - selectedRectangles[0].y0);
+          const area2 =
+            (selectedRectangles[1].x1 - selectedRectangles[1].x0) *
+            (selectedRectangles[1].y1 - selectedRectangles[1].y0);
+
+          // Determine which rectangle is smaller and which one is larger
+          const smallerArea = Math.min(area1, area2);
+          const largerArea = Math.max(area1, area2);
+
+          // Calculate the area of the smaller rectangle based on the percentage provided
+          const calculatedSmallerArea = largerArea * (percentage / 100);
+
+          // Calculate the absolute difference between the calculated area and the actual area of the smaller rectangle
+          const difference = Math.abs(calculatedSmallerArea - smallerArea);
+
+          alert(
+            "You were off by " +
+              difference.toFixed(2) +
+              " square units from the actual size of the smaller rectangle."
+          );
+        } else {
+          alert("Please enter a valid percentage.");
+        }
+      });
+  });
+</script>
