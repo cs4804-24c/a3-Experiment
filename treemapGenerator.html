@@ -4,6 +4,8 @@
 <!-- Load d3.js -->
 <script src="https://d3js.org/d3.v6.js"></script>
 
+<h1 id="trialNum">Trial 1</h1>
+
 <!-- Create a div where the graph will take place -->
 <div id="my_dataviz"></div>
 
@@ -31,6 +33,7 @@
     height = 445 - margin.top - margin.bottom;
 
   let trialNumber = 1;
+  let truePercentage = 0;
 
   // append the svg object to the body of the page
   const svg = d3
@@ -51,43 +54,44 @@
         document.getElementById("percentage").value
       );
       if (!isNaN(percentage) && trialNumber <= 6) {
-        // If a valid number is entered
-        alert("trial " + trialNumber + " submitted");
-        // Handle submission logic here
+        const accuracy = Math.log2(
+          Math.abs(percentage - truePercentage) + 0.125
+        );
+        console.log("percentage: " + percentage);
+        console.log("true percentage: " + truePercentage);
+        console.log("accuracy: " + accuracy);
+        if (trialNumber >= 6) {
+          // load results
+          return;
+        }
         trialNumber++;
+        document.getElementById("trialNum").innerHTML = "Trial " + trialNumber;
         loadTrial(trialNumber);
-      } else if (trialNumber > 6) {
-        console.log("All trials have been completed.");
       } else {
         alert("Please enter a valid percentage.");
       }
     });
 
-  // Function to load data for a trial
   function loadTrial(trialNumber) {
     if (trialNumber > 6) {
       return;
     }
     d3.csv("/CSV/csv" + trialNumber + ".csv")
       .then(function (data) {
-        // stratify the data: reformatting for d3.js
         const root = d3
           .stratify()
           .id(function (d) {
             return d.Section;
-          }) // Name of the entity (column name is name in csv)
+          })
           .parentId(function (d) {
             return d.Group;
-          })(data); // Name of the parent (column name is parent in csv)
+          })(data);
         root.sum(function (d) {
           return +d.Number;
-        }); // Compute the numeric value for each entity
+        });
 
-        // Then d3.treemap computes the position of each element of the hierarchy
-        // The coordinates are added to the root object above
         d3.treemap().size([width, height]).padding(4)(root);
 
-        // Generate two unique random indexes
         const randomIndexes = [];
         while (randomIndexes.length < 2) {
           const index = Math.floor(Math.random() * root.leaves().length);
@@ -96,12 +100,26 @@
           }
         }
 
-        // Store data of the randomly selected rectangles
         const selectedRectangles = root
           .leaves()
           .filter((d, i) => randomIndexes.includes(i));
 
-        // use this information to add rectangles:
+        let largerDataPointArea, smallerDataPointArea;
+
+        selectedRectangles.forEach(function (d) {
+          const area = (d.x1 - d.x0) * (d.y1 - d.y0);
+          if (!largerDataPointArea || area > largerDataPointArea) {
+            // Update areas based on the larger rectangle
+            smallerDataPointArea = largerDataPointArea;
+            largerDataPointArea = area;
+          } else if (!smallerDataPointArea || area > smallerDataPointArea) {
+            // Update area of smaller rectangle
+            smallerDataPointArea = area;
+          }
+        });
+        // Calculate true percentage
+        truePercentage = (smallerDataPointArea / largerDataPointArea) * 100;
+
         svg
           .selectAll("rect")
           .data(root.leaves())
@@ -120,11 +138,10 @@
           })
           .style("stroke", "black")
           .style("fill", function (d, i) {
-            // Change color for randomly selected data points
             if (randomIndexes.includes(i)) {
               return "red";
             } else {
-              return "#69b3a2"; // Default color
+              return "#69b3a2";
             }
           });
       })
@@ -133,6 +150,5 @@
       });
   }
 
-  // Load the first trial
   loadTrial(1);
 </script>
