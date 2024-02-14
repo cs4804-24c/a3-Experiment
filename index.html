@@ -34,7 +34,6 @@
             height: 100%;
             text-align: center;
             font-size: 16px;
-            /* font-family: Times New Roman; */
             background-color: #c7dfe2;
         }
         /* Style for the tab bar on the top of the screen */
@@ -64,20 +63,46 @@
             color: #207d89;
             border-radius: 15px;
         }
-
+ 
         /* Adding my font preferences for the Welcome font */
         #startScreen h1 {
         font-size: 40px;
-        /* font-family: Times New Roman; */
         color: #207d89;
         }
 
         /* Adding my font preferences for the creators font */
         #startScreen h2 {
         font-size: 24px;
-        /* font-family: Times New Roman; */
         color: #11535c;
         }
+
+        /* Adding my font preferences for the generic body font */
+        #startScreen h3 {
+        font-size: 16px;
+        color: black;
+        max-width: calc(100% - 2in);
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 1in;
+        padding-right: 1in;
+    }
+
+        /* Adding my font preferences for the generic body font */
+        #startScreen h4 {
+        font-size: 18px;
+        color: #1d0281;
+        max-width: calc(100% - 2in);
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 1in;
+        padding-right: 1in;
+    }
+
+    #startScreen img {
+        max-width: 25%; /* Set the maximum width of the image to be 50% of its container */
+        height: auto; /* Maintain the aspect ratio of the image */
+        margin-top: 20px; /* Add some space between the text and the image */
+    }
 
         #doneScreen {
             display: block;
@@ -138,6 +163,7 @@
             cursor: pointer;
         }
 
+        /* Style for the download button */
         #downloadButton {
             padding: 10px 20px;
             font-size: 16px;
@@ -243,8 +269,12 @@
         <div class="tab" id="experimentTab">Try Experiment</div>
     </div>
     <div id="backgroundContent" class="content hidden">
-        <h2>Background on this assignment</h2>
-        <p>In 1984, William Cleveland and Robert McGill published the results of several controlled experiments that pitted bar charts against pies and stacked-bar variants. Their paper (http://www.cs.ubc.ca/~tmm/courses/cpsc533c-04-spr/readings/cleveland.pdf) (http://info.slis.indiana.edu/~katy/S637-S11/cleveland84.pdf) is considered a key paper in data visualization.</p>
+        <h1>Background on this assignment</h1>
+        <a href="https://oa.mg/work/10.1080/01621459.1984.10478080">
+            <img src="https://og.oa.mg/Graphical%20Perception%3A%20Theory%2C%20Experimentation%2C%20and%20Application%20to%20the%20Development%20of%20Graphical%20Methods.png?author=%20William%20S.%20Cleveland,%20Robert%20McGill" alt="Cleveland McGill Paper">
+        </a>
+        <h4>William Cleveland and Robert McGill conducted several controlled experiments with the goal of understanding the effectiveness
+            of various graphs and visualizations at conveying data in a way that the reader can understand. In 1984, the results of their experiments were published in a paper titled "Graphical Perception: Theory, Experimentation, and Application to the Development of Graphical Methods." This paper appeared in the Journal of the American Statistical Association and became a key paper in the field of data visualization.<br><br> In this assignment, we are implementing a simple controlled experiment similar to those conducted by Cleveland and McGill. The four visualizations being tested are a vertical bar chart, a horizontal bar chart, a stacked bar chart, and a packed circle chart (adapted from https://d3-graph-gallery.com/graph/circularpacking_basic.html). The role of each volunteer will be to read the visuals as best they can! <br><br> Using various error metrics, we will be reporting our finding on which graphical representations are easiest for readers to interpret.</h4>
     </div>
     <div id="experimentContent" class="content">
         <h1>Welcome to our assignment 3 experiment!</h1>
