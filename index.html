@@ -797,7 +797,7 @@ function createResultChart (typeArray, error) {
     }
 
     // Dimensions for chart
-    const margin = { top: 20, right: 20, bottom: 30, left: 50 };
+    const margin = { top: 20, right: 20, bottom: 180, left: 50 };
     const width = 400;
     const height = 300;
 
@@ -855,7 +855,47 @@ function createResultChart (typeArray, error) {
         .attr("dy", "1em")
         .style("text-anchor", "middle")
         .style("font-size", "16px")
-        .text("Error Score");
+        .text("Error Score");  
+
+    svg.append("text")
+        .attr("x", 70)
+        .attr("y", 400)
+        .text("Visualization")
+        .attr("fill", "#207d89")
+        .style("font-weight", "bold")
+        .style("font-size", "20px");
+
+
+    svg.append("text")
+        .attr("x", 270)
+        .attr("y", 400)
+        .text("Error")
+        .attr("fill", "#207d89")
+        .style("font-weight", "bold")
+        .style("font-size", "20px");
+
+    let y_pos = 410;
+
+        for (let index = 0; index < averagePerType.length; index++) {
+        let category = averagePerType[index].category;
+        let avg_error = averagePerType[index].average;
+        y_pos = y_pos + 20;
+        
+        svg.append("text")
+        .attr("x", 70)
+        .attr("y", y_pos)
+        .text(category)
+        .attr("fill", "#207d89")
+        .style("font-size", "16px");
+
+        svg.append("text")
+        .attr("x", 270)
+        .attr("y", y_pos)
+        .text(avg_error.toFixed(2))
+        .attr("fill", "#207d89")
+        .style("font-size", "16px");
+    }
+
 }
     
 </script>
