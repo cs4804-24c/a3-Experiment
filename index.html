@@ -127,6 +127,15 @@
             font-family: Arial;
         }
 
+        /* Style for the screen if user does not agree to do the experiment*/
+        #resultsScreen {
+            display: block;
+            text-align: center;
+            margin-top: 50px;
+            font-size: 12px;
+            font-family: Arial;
+        }
+
         /* Style the "Agree" button */
         #agreeButton {
             margin-top: 2rem;
@@ -165,6 +174,16 @@
 
         /* Style for the download button */
         #downloadButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #0277d0;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Style for the results button */
+        #resultsButton {
             padding: 10px 20px;
             font-size: 16px;
             background-color: #0277d0;
@@ -311,7 +330,14 @@
 <div id="doneScreen" style="display: none;">
     <h2>Thank you for participating. Here are your results: </h2>
     <button id="downloadButton" style="background-color: #207d89;">Download CSV</button>
+    <button id="resultsButton" style="background-color: #207d89;">View Results</button>
 </div>
+
+<div id="resultsScreen" style="display: none;">
+    <h2>Results of this experiment: </h2>
+    <div id="resultChart"></div>
+</div>
+
 
 <script type="text/javascript">
     //used to make sure we are getting 20 trials for each type of chart
@@ -321,7 +347,7 @@
     let packedCirclesCount = 0;
 
     //changed to 1 for testing - need to be changed back to 20
-    let maxTrialsPerChartType = 20;
+    let maxTrialsPerChartType = 2;
 
     //keeping track of the two heights we are comparing for each round
     let index1height = 0;
@@ -711,6 +737,16 @@
 
     });
 
+    // Listener for when "View Results" button is clicked
+    document.getElementById("resultsButton").addEventListener("click", function() {
+        document.getElementById("startScreen").style.display = "none";
+        document.getElementById("disagreeScreen").style.display = "none";
+        document.getElementById("chartholderholder").style.display = "none";
+        document.getElementById("doneScreen").style.display = "none";
+        document.getElementById('resultsScreen').style.display = "block";
+        createResultChart(typeArray, error)
+    });
+
     document.getElementById("percentInput").addEventListener("keyup", function(event) {
         if (event.keyCode === 13) {
             event.preventDefault();
@@ -731,14 +767,97 @@
         backgroundContent.classList.remove("hidden");
     });
 
-    // Listener for when 'experiment' is hit in the tob bar
+    // Listener for when 'Experiment' is hit in the tob bar
     experimentTab.addEventListener("click", function() {
         document.getElementById("backgroundContent").classList.add("hidden");
         experimentContent.classList.remove("hidden");
     });
 });
 
+function createResultChart (typeArray, error) {
+    
+    // Creating an array of all the category sums (also need the count to calculate average later)
+    const sumPerType = {};
+    for (let index = 0; index < typeArray.length; index++) {
+        const category = typeArray[index];
+        if (!sumPerType[category]) {
+            sumPerType[category] = { sum: 0, count: 0 };
+        }
+        sumPerType[category].sum += error[index];
+        sumPerType[category].count++;
+    }
 
+    // creating an array of all the category averages
+    const averagePerType = [];
+    for (const category in sumPerType) {
+        if (category != 'undefined') {
+            const average = sumPerType[category].sum / sumPerType[category].count;
+            averagePerType.push({ category: category, average: average });
+        }
+    }
+
+    // Dimensions for chart
+    const margin = { top: 20, right: 20, bottom: 30, left: 50 };
+    const width = 400;
+    const height = 300;
+
+    // Appenging the SVG
+    const svg = d3.select("#resultChart")
+                  .append("svg")
+                  .attr("width", width + margin.left + margin.right + 20)
+                  .attr("height", height + margin.top + margin.bottom + 20)
+                  .append("g")
+                  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // X scale
+    const x = d3.scaleBand()
+                .domain(averagePerType.map(d => d.category))
+                .range([0, width]);
+
+    // Y scale
+    const y = d3.scaleLinear()
+                .domain([0, d3.max(averagePerType, d => d.average)])
+                .range([height, 0]);
+
+    // X axis
+    svg.append("g")
+       .attr("transform", "translate(0," + height + ")")
+       .call(d3.axisBottom(x));
+
+    // Y-axis
+    svg.append("g")
+       .call(d3.axisLeft(y));
+
+    // Append bars to the SVG
+    svg.selectAll(".bar")
+       .data(averagePerType)
+       .enter().append("rect")
+       .attr("class", "bar")
+       .attr("x", d => x(d.category) + 38)
+       .attr("y", d => y(d.average))
+       .attr("width", 30)
+       .attr("height", d => height - y(d.average))
+       .attr("fill", "#207d89");
+
+    // Append x-axis title
+    svg.append("text")
+        .attr("x", width / 2)
+        .attr("y", height + margin.top + 20)
+        .style("text-anchor", "middle")
+        .style("font-size", "16px")
+        .text("Type of Visualization");
+
+    // Append y-axis title
+    svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("x", -height / 2)
+        .attr("y", -margin.left)
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .style("font-size", "16px")
+        .text("Error Score");
+}
+    
 </script>
 </body>
 </html>
