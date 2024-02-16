@@ -8,11 +8,14 @@ const legendSize = 100;
 const plotWidth = window.innerWidth * 0.8 - margin.left - margin.right - legendSize;
 const plotHeight = 600 - margin.top - margin.bottom;
 
-fetch('player_index.csv')
-    .then(response => response.text())
-    .then(csvData => {
-        const rows = csvData.split('\n').slice(1);
-        playerIDs = getRandomPlayerIDs(rows, 5);
+fetch('/api/playerindex?LeagueID=00&Season=2023-24')
+    .then(response => response.json())
+    .then(res => {
+        let players = [];
+        res['PlayerIndex'].forEach( e => {
+            players.push(e);
+        });
+        playerIDs = getRandomPlayerIDs(players, 5);
         console.log('Randomly selected player IDs:', playerIDs);
         
         // Ensure all player data gets fetched first
@@ -114,7 +117,10 @@ fetch('player_index.csv')
 // Helper function to pick X random NBA players
 function getRandomPlayerIDs(data, count) {
     const randomPlayerIDs = [];
-    const personIds = data.map(row => row.split(',')[0]);
+    let personIds = [];
+    for (let i = 0; i < data.length; i++) {
+        personIds.push(data[i]['PERSON_ID'])
+    }
     for (let i = 0; i < count; i++) {
         const randomIndex = Math.floor(Math.random() * personIds.length);
         randomPlayerIDs.push(personIds[randomIndex]);
