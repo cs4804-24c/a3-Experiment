@@ -148,6 +148,14 @@
             border: none;
             cursor: pointer;
         }
+        #backButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #0277d0;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
 
         /* Style for the "Disagree" button */
         #disagreeButton {
@@ -336,10 +344,13 @@
 <div id="resultsScreen" style="display: none;">
     <h2>Results of this experiment: </h2>
     <div id="resultChart"></div>
+    <br><br>
+    <button id="backButton" style="background-color: #207d89;">Back</button>
 </div>
 
 
 <script type="text/javascript">
+    let madeChart = false;
     //used to make sure we are getting 20 trials for each type of chart
     let normalBarCount = 0;
     let stackedCount = 0;
@@ -744,7 +755,20 @@
         document.getElementById("chartholderholder").style.display = "none";
         document.getElementById("doneScreen").style.display = "none";
         document.getElementById('resultsScreen').style.display = "block";
-        createResultChart(typeArray, error)
+        if(!madeChart)
+        {
+            createResultChart(typeArray, error)
+            madeChart = true;
+        }
+
+    });
+
+    document.getElementById("backButton").addEventListener("click", function() {
+        document.getElementById("startScreen").style.display = "none";
+        document.getElementById("disagreeScreen").style.display = "none";
+        document.getElementById("chartholderholder").style.display = "none";
+        document.getElementById("doneScreen").style.display = "block";
+        document.getElementById('resultsScreen').style.display = "none";
     });
 
     document.getElementById("percentInput").addEventListener("keyup", function(event) {
