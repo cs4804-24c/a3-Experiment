@@ -1,7 +1,9 @@
 const express = require('express')
 const fetch = require("node-fetch");
-const app = express()
-const port = 3000
+const app = express(),
+    fs = require('fs'),
+    port = 3000,
+    bodyparser = require('body-parser')
 
 const cors=require("cors");
 const corsOptions ={
@@ -10,6 +12,7 @@ const corsOptions ={
    optionSuccessStatus:200,
 }
 
+app.use(bodyparser.json())
 app.use(cors(corsOptions))
 app.use(express.static('public'))
 
@@ -70,6 +73,20 @@ app.get('/api/*', (req, res) => {
         });
         res.json(newData)
     }).catch( err => res.json({'Error': 'An error has occured - Remaking JSON'}))
+})
+
+app.post('/submitGuess', (req,res) => {
+    /*
+    body should be:
+    {
+        filename: String,
+        actualVal: Number,
+        guessedVal: Number
+    }
+    */
+   console.log(req.body)
+   fs.appendFileSync(req.body.filename, `${req.body.guessedVal}, ${req.body.actualVal}\n`);
+   res.sendStatus(200);
 })
 
 app.listen(port, () => {
