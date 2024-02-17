@@ -1,6 +1,8 @@
 let playerIDs = [];
 let playerPPGs = [];
 
+let player1PPG, player2PPG = 0;
+
 const colors = d3.scaleOrdinal(d3.schemeCategory10);
 
 const margin = {top: 20, right: 20, bottom: 20, left: 20};
@@ -16,7 +18,7 @@ fetch('/api/playerindex?LeagueID=00&Season=2023-24')
             players.push(e);
         });
         playerIDs = getRandomPlayerIDs(players, 5);
-        console.log('Randomly selected player IDs:', playerIDs);
+        console.log('Randomly selected player IDs:', playerIDs); // TODO: Just for debugging purposes
         
         // Ensure all player data gets fetched first
         Promise.all(playerIDs.map(playerID =>
@@ -33,7 +35,7 @@ fetch('/api/playerindex?LeagueID=00&Season=2023-24')
                 return ppg;
             });
 
-            console.log('Player PPGs:', playerPPGs);
+            console.log('Player PPGs:', playerPPGs); // TODO: Just for debugging purposes
 
             // Merge player data
             const playersCombined = playerGameLogs.flatMap((playerGameLog, index) => {
@@ -109,6 +111,22 @@ fetch('/api/playerindex?LeagueID=00&Season=2023-24')
                     .attr('dy', '0.35em')
                     .text(playerID);
             });
+            
+            // Pick two random players and update question element
+            const index1 = Math.floor(Math.random() * playerIDs.length);
+            let index2 = Math.floor(Math.random() * playerIDs.length);
+            while (index2 === index1) {
+                index2 = Math.floor(Math.random() * playerIDs.length);
+            }
+
+            const player1ID = playerIDs[index1];
+            player1PPG = playerPPGs[index1];
+
+            const player2ID = playerIDs[index2];
+            player2PPG = playerPPGs[index2];
+
+            const questionElement = document.getElementById("ppg-question");
+            questionElement.textContent = `What is the PPG difference between Player ${player1ID} and Player ${player2ID} (rounded to the nearest whole number)?`;
         })
         .catch(error => console.error('playerGameLog error:', error));
     })
@@ -126,4 +144,19 @@ function getRandomPlayerIDs(data, count) {
         randomPlayerIDs.push(personIds[randomIndex]);
     }
     return randomPlayerIDs;
+}
+
+// Helper function to check answer
+function checkAnswer() {
+    const userAnswer = parseFloat(document.getElementById("user-answer").value);
+
+    const actualDiff = Math.abs(player1PPG - player2PPG); 
+    const roundedDiff = Math.round(actualDiff); 
+    const resultElement = document.getElementById("result");
+
+    if (userAnswer === roundedDiff) {
+        resultElement.textContent = `Correct! The actual difference was ${roundedDiff} PPG.`;
+    } else {
+        resultElement.textContent = `Incorrect! The actual difference is ${roundedDiff} PPG.`;
+    }
 }
