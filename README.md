@@ -37,7 +37,9 @@ For our technical achievement we did an extra chart type. We added a packed circ
 yet had much experience implementing. By adding this extra chart, we were able to see how more types of charts compared 
 to each other. We were also able to see how well users can spot the difference in area instead of just height. Using 
 bar graphs tested mostly the users ability to determine how different heights compared to each other, but by using 
-circles, we were able to test area as well. 
+circles, we were able to test area as well. Another technical achievement we added was connecting out next button to the
+enter key on the keyboard. Instead of having to click next after each trial, users are able to just click the enter 
+button to move on to the next one. 
 
 # Design Achievements
 For our design achievement we added a background tab to the start page of our experiment. Users are able to navigate to 
