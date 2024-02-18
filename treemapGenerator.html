@@ -1,154 +1,187 @@
 <!DOCTYPE html>
-<meta charset="utf-8" />
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trial</title>
 
-<!-- Load d3.js -->
-<script src="https://d3js.org/d3.v6.js"></script>
+    <!-- Load d3.js -->
+    <script src="https://d3js.org/d3.v6.js"></script>
 
-<h1 id="trialNum">Trial 1</h1>
+    <h1 id="trialNum">Trial 1</h1>
 
-<!-- Create a div where the graph will take place -->
-<div id="my_dataviz"></div>
+    <!-- Create a div where the graph will take place -->
+    <div id="my_dataviz"></div>
 
-<!-- Form for user input -->
-<form id="percentageForm">
-  <label for="percentage"
-    >Enter percentage of smaller square compared to the bigger square:</label
-  >
-  <input
-    type="number"
-    id="percentage"
-    name="percentage"
-    min="0"
-    max="100"
-    step="any"
-    required
-  />
-  <input type="submit" value="Submit" />
-</form>
+    <!-- Form for user input -->
+    <form id="percentageForm">
+      <label for="percentage"
+        >Enter percentage of smaller square compared to the bigger
+        square:</label
+      >
+      <input
+        type="number"
+        id="percentage"
+        name="percentage"
+        min="0"
+        max="100"
+        step="any"
+        required
+      />
+      <input type="submit" value="Submit" />
+    </form>
 
-<script>
-  // set the dimensions and margins of the graph
-  const margin = { top: 10, right: 10, bottom: 10, left: 10 },
-    width = 445 - margin.left - margin.right,
-    height = 445 - margin.top - margin.bottom;
+    <script>
+      // set the dimensions and margins of the graph
+      const margin = { top: 10, right: 10, bottom: 10, left: 10 },
+        width = 445 - margin.left - margin.right,
+        height = 445 - margin.top - margin.bottom;
 
-  let trialNumber = 1;
-  let truePercentage = 0;
+      let trialNumber = 1;
+      let truePercentage = 0;
+      // Initialize an array to store the results
+      let resultsArray = [];
 
-  // append the svg object to the body of the page
-  const svg = d3
-    .select("#my_dataviz")
-    .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", `translate(${margin.left}, ${margin.top})`);
+      // append the svg object to the body of the page
+      const svg = d3
+        .select("#my_dataviz")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-  // Event listener for form submission
-  document
-    .getElementById("percentageForm")
-    .addEventListener("submit", function (event) {
-      event.preventDefault(); // Prevent default form submission
+      // Function to save results to a text file
+      function saveResults() {
+        let results = resultsArray.join("\n");
+        const blob = new Blob([results], { type: "text/plain" });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "all_trial_results.txt";
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+      }
 
-      const percentage = parseFloat(
-        document.getElementById("percentage").value
-      );
-      if (!isNaN(percentage) && trialNumber <= 6) {
-        const accuracy = Math.log2(
-          Math.abs(percentage - truePercentage) + 0.125
-        );
-        console.log("percentage: " + percentage);
-        console.log("true percentage: " + truePercentage);
-        console.log("accuracy: " + accuracy);
-        if (trialNumber >= 6) {
-          // load results
+      // Event listener for form submission
+      document
+        .getElementById("percentageForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent default form submission
+
+          const percentage = parseFloat(
+            document.getElementById("percentage").value
+          );
+          if (!isNaN(percentage) && trialNumber <= 6) {
+            const accuracy = Math.log2(
+              Math.abs(percentage - truePercentage) + 0.125
+            );
+            console.log("percentage: " + percentage);
+            console.log("true percentage: " + truePercentage);
+            console.log("accuracy: " + accuracy);
+
+            // Add result to the array
+            const result = `Trial ${trialNumber} - True Percentage: ${truePercentage.toFixed(
+              2
+            )}, Your Answer: ${percentage.toFixed(
+              2
+            )}, Accuracy: ${accuracy.toFixed(2)}`;
+            resultsArray.push(result);
+
+            if (trialNumber >= 6) {
+              // load results
+              saveResults();
+              return;
+            }
+            trialNumber++;
+            document.getElementById("trialNum").innerHTML =
+              "Trial " + trialNumber;
+            loadTrial(trialNumber);
+          } else {
+            alert("Please enter a valid percentage.");
+          }
+        });
+
+      function loadTrial(trialNumber) {
+        if (trialNumber > 6) {
           return;
         }
-        trialNumber++;
-        document.getElementById("trialNum").innerHTML = "Trial " + trialNumber;
-        loadTrial(trialNumber);
-      } else {
-        alert("Please enter a valid percentage.");
-      }
-    });
+        d3.csv("/CSV/csv" + trialNumber + ".csv")
+          .then(function (data) {
+            const root = d3
+              .stratify()
+              .id(function (d) {
+                return d.Section;
+              })
+              .parentId(function (d) {
+                return d.Group;
+              })(data);
+            root.sum(function (d) {
+              return +d.Number;
+            });
 
-  function loadTrial(trialNumber) {
-    if (trialNumber > 6) {
-      return;
-    }
-    d3.csv("/CSV/csv" + trialNumber + ".csv")
-      .then(function (data) {
-        const root = d3
-          .stratify()
-          .id(function (d) {
-            return d.Section;
-          })
-          .parentId(function (d) {
-            return d.Group;
-          })(data);
-        root.sum(function (d) {
-          return +d.Number;
-        });
+            d3.treemap().size([width, height]).padding(4)(root);
 
-        d3.treemap().size([width, height]).padding(4)(root);
-
-        const randomIndexes = [];
-        while (randomIndexes.length < 2) {
-          const index = Math.floor(Math.random() * root.leaves().length);
-          if (!randomIndexes.includes(index)) {
-            randomIndexes.push(index);
-          }
-        }
-
-        const selectedRectangles = root
-          .leaves()
-          .filter((d, i) => randomIndexes.includes(i));
-
-        let largerDataPointArea, smallerDataPointArea;
-
-        selectedRectangles.forEach(function (d) {
-          const area = (d.x1 - d.x0) * (d.y1 - d.y0);
-          if (!largerDataPointArea || area > largerDataPointArea) {
-            // Update areas based on the larger rectangle
-            smallerDataPointArea = largerDataPointArea;
-            largerDataPointArea = area;
-          } else if (!smallerDataPointArea || area > smallerDataPointArea) {
-            // Update area of smaller rectangle
-            smallerDataPointArea = area;
-          }
-        });
-        // Calculate true percentage
-        truePercentage = (smallerDataPointArea / largerDataPointArea) * 100;
-
-        svg
-          .selectAll("rect")
-          .data(root.leaves())
-          .join("rect")
-          .attr("x", function (d) {
-            return d.x0;
-          })
-          .attr("y", function (d) {
-            return d.y0;
-          })
-          .attr("width", function (d) {
-            return d.x1 - d.x0;
-          })
-          .attr("height", function (d) {
-            return d.y1 - d.y0;
-          })
-          .style("stroke", "black")
-          .style("fill", function (d, i) {
-            if (randomIndexes.includes(i)) {
-              return "red";
-            } else {
-              return "#69b3a2";
+            const randomIndexes = [];
+            while (randomIndexes.length < 2) {
+              const index = Math.floor(Math.random() * root.leaves().length);
+              if (!randomIndexes.includes(index)) {
+                randomIndexes.push(index);
+              }
             }
-          });
-      })
-      .catch(function (error) {
-        //all trials complete
-      });
-  }
 
-  loadTrial(1);
-</script>
+            const selectedRectangles = root
+              .leaves()
+              .filter((d, i) => randomIndexes.includes(i));
+
+            let largerDataPointArea, smallerDataPointArea;
+
+            selectedRectangles.forEach(function (d) {
+              const area = (d.x1 - d.x0) * (d.y1 - d.y0);
+              if (!largerDataPointArea || area > largerDataPointArea) {
+                // Update areas based on the larger rectangle
+                smallerDataPointArea = largerDataPointArea;
+                largerDataPointArea = area;
+              } else if (!smallerDataPointArea || area > smallerDataPointArea) {
+                // Update area of smaller rectangle
+                smallerDataPointArea = area;
+              }
+            });
+            // Calculate true percentage
+            truePercentage = (smallerDataPointArea / largerDataPointArea) * 100;
+
+            svg
+              .selectAll("rect")
+              .data(root.leaves())
+              .join("rect")
+              .attr("x", function (d) {
+                return d.x0;
+              })
+              .attr("y", function (d) {
+                return d.y0;
+              })
+              .attr("width", function (d) {
+                return d.x1 - d.x0;
+              })
+              .attr("height", function (d) {
+                return d.y1 - d.y0;
+              })
+              .style("stroke", "black")
+              .style("fill", function (d, i) {
+                if (randomIndexes.includes(i)) {
+                  return "red";
+                } else {
+                  return "#69b3a2";
+                }
+              });
+          })
+          .catch(function (error) {
+            //all trials complete
+          });
+      }
+
+      loadTrial(1);
+    </script>
+  </head>
+</html>
