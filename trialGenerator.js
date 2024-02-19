@@ -11,6 +11,9 @@ let resultsArray = [];
 // Store the generated CSV data in a variable accessible to both loadTrial and the download event listener
 let currentCSVData = "";
 
+// Save the currentCSVData after every trial
+let savedCSVData = "";
+
 function generateRandomCSV() {
   const sections = [
     "S1",
@@ -84,16 +87,6 @@ function saveResults() {
     }
   }
 
-  // let results = resultsArray.join("\n");
-  // const blob = new Blob([results], { type: "text/plain" });
-  // const url = window.URL.createObjectURL(blob);
-  // const a = document.createElement("a");
-  // a.href = url;
-  // a.download = "all_trial_results.txt";
-  // document.body.appendChild(a);
-  // a.click();
-  // window.URL.revokeObjectURL(url);
-
   // Navigate to congrats.html
   // window.location.href = "congrats.html";
 }
@@ -139,6 +132,9 @@ function loadTrial(trialNumber) {
 
   // Generate random CSV data for the trial
   let currentCSVData = generateRandomCSV();
+
+  // Save the currentCSVData to the variable
+  savedCSVData = currentCSVData;
 
   // Parse the CSV string into an array of objects
   let data = d3.csvParse(currentCSVData);
@@ -210,26 +206,39 @@ function loadTrial(trialNumber) {
       }
     });
 
+  // Update text labels
+  svg.selectAll("text").remove(); // Remove existing text labels
   // Add text to rectangles - In Progress
-  // svg
-  //   .selectAll("text")
-  //   .data(root.leaves())
-  //   .enter()
-  //   .append("text")
-  //   .attr("x", function (d) {
-  //     return d.x0 + 5;
-  //   }) // +10 to adjust position (more right)
-  //   .attr("y", function (d) {
-  //     return d.y0 + 20;
-  //   }) // +20 to adjust position (lower)
-  //   .text(function (d) {
-  //     return d.data.Section;
-  //   })
-  //   .attr("font-size", "15px")
-  //   .attr("fill", "white");
+  svg
+    .selectAll("text")
+    .data(root.leaves())
+    .enter()
+    .append("text")
+    .attr("x", function (d) {
+      return d.x0 + 10;
+    }) // +10 to adjust position (more right)
+    .attr("y", function (d) {
+      return d.y0 + 10;
+    }) // +20 to adjust position (lower)
+    .text(function (d) {
+      return d.data.Section;
+    })
+    .attr("text-anchor", "middle") // Center the text horizontally
+    .attr("dominant-baseline", "middle") // Center the text vertically
+    .attr("font-size", "12px")
+    .attr("fill", "white");
+
+  // Save the currentCSVData after every trial
+  saveCurrentCSVData(currentCSVData);
 }
 
 loadTrial(1);
+
+// Function to save the currentCSVData after every trial
+function saveCurrentCSVData(csvData) {
+  savedCSVData = csvData;
+  console.log("Saved CSV data: \n", savedCSVData);
+}
 
 // Event listener for download button
 document
@@ -241,8 +250,8 @@ document
 // Function to trigger the download with the current CSV data
 function triggerDownload() {
   // Check if CSV data is available
-  if (currentCSVData) {
-    downloadCSV(currentCSVData, "generated_data.csv");
+  if (savedCSVData) {
+    downloadCSV(savedCSVData, "generated_data.csv");
   } else {
     console.error("No CSV data available for download.");
   }
