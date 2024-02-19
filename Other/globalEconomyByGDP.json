@@ -16,11 +16,7 @@
             {"name": "Iran", "weight": 0.57, "code": "IR"},
             {"name": "Thaïland", "weight": 0.53, "code": "TH"},
             {"name": "United Arab Emirates", "weight": 0.5, "code": "AE"},
-            {"name": "Hong Kong", "weight": 0.42, "code": "HK"},
-            {"name": "Israel", "weight": 0.4, "code": "IL"},
-            {"name": "Malasya", "weight": 0.4, "code": "MY"},
-            {"name": "Singapore", "weight": 0.39, "code": "SG"},
-            {"name": "Philippines", "weight": 0.39, "code": "PH"}
+            {"name": "Hong Kong", "weight": 0.42, "code": "HK"}
           ]
         }
     ]

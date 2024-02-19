@@ -89,16 +89,92 @@
       //end: drawing conf.
       //begin: reusable d3Selection
       var svg, drawingArea, treemapContainer;
-      //end: reusable d3Selection
-      d3.json("globalEconomyByGDP.json").then(function (rootData) {
-        initData();
-        initLayout(rootData);
-        hierarchy = d3.hierarchy(rootData).sum(function (d) {
-          return d.weight;
-        });
-        _voronoiTreemap.clip(circlingPolygon)(hierarchy);
-        drawTreemap(hierarchy);
+
+      function generateRandomData() {
+        const data = {
+          name: "world",
+          children: [
+            {
+              name: "Asia",
+              color: "#f58321",
+              children: [
+                {
+                  name: "S1",
+                  weight: Math.floor(Math.random() * 100) + 10,
+                  code: "S1",
+                },
+                {
+                  name: "S2",
+                  weight: Math.floor(Math.random() * 100) + 10,
+                  code: "S2",
+                },
+                {
+                  name: "S3",
+                  weight: Math.floor(Math.random() * 100) + 10,
+                  code: "S3",
+                },
+                {
+                  name: "S4",
+                  weight: Math.floor(Math.random() * 100) + 10,
+                  code: "S4",
+                },
+                {
+                  name: "S5",
+                  weight: Math.floor(Math.random() * 100) + 10,
+                  code: "S5",
+                },
+                {
+                  name: "S6",
+                  weight: Math.floor(Math.random() * 100) + 10,
+                  code: "S6",
+                },
+                {
+                  name: "S7",
+                  weight: Math.floor(Math.random() * 100) + 10,
+                  code: "S7",
+                },
+                {
+                  name: "S8",
+                  weight: Math.floor(Math.random() * 100) + 10,
+                  code: "S8",
+                },
+                {
+                  name: "S9",
+                  weight: Math.floor(Math.random() * 100) + 10,
+                  code: "S9",
+                },
+                {
+                  name: "S10",
+                  weight: Math.floor(Math.random() * 100) + 10,
+                  code: "S10",
+                },
+              ],
+            },
+          ],
+        };
+        // Convert data object to a JSON string
+        //const jsonString = JSON.stringify(data, null, 2);
+        //return jsonString;
+        return data;
+      }
+      // Example usage:
+      console.log(generateRandomData());
+
+      // Usage of random data
+      const rootData = generateRandomData();
+
+      // Parse the data
+      const parsedData = JSON.parse(JSON.stringify(rootData));
+
+      // Initialize
+      initData();
+      initLayout(parsedData);
+      hierarchy = d3.hierarchy(parsedData).sum(function (d) {
+        return d.weight;
       });
+      _voronoiTreemap.clip(circlingPolygon)(hierarchy);
+      drawTreemap(hierarchy);
+
       function initData(rootData) {
         circlingPolygon = computeCirclingPolygon(treemapRadius);
         fontScale.domain([3, 20]).range([8, 20]).clamp(true);
