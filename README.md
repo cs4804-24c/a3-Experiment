@@ -1,7 +1,7 @@
 Assignment 3 - Replicating a Classic Experiment  
 ===
 
-Experiment: In this experiment what we wanted to try was to determine 
+Experiment: This experiment is based off the paper "Jurassic Mark: Inattentional Bindness fo Datasaurus Reveals that Visualizations are Explored Not Seen". Specifically we attempted experiment 1: fiteration task. The idea behind this experiment is to focus on a specific mark (blue X's) in a sccaterplot while filtering out any other blue and green markers in the graph. Even within this experiment there are hidden images like a dinasaur which is tested to see if the particpant noticed it.
 
 Data:
 
