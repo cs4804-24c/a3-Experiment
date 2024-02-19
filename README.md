@@ -24,21 +24,21 @@ Example Visualization:
 
 ![pie chart](img/piechart_example.png)
 
-The average log2error of the bar chart trials was ~2.5408.
+The average log2error of the pie chart trials was ~2.5408.
 
 ## Voronoi Tree Map
 Example Visualization:
 
 ![voronoi tree map](img/voronoitreemap_example.png)
 
-The average log2error of the bar chart trials was ~2.6697.
+The average log2error of the voronoi tree map trials was ~2.6697.
 
 ## Bubble Chart
 Example Visualization:
 
 ![bubble chart](img/bubblechart_example.png)
 
-The average log2error of the bar chart trials was ~3.0739.
+The average log2error of the bubble chart trials was ~3.0739.
 
 Technical/Design Achievements
 ---
