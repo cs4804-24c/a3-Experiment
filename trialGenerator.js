@@ -87,16 +87,6 @@ function saveResults() {
     }
   }
 
-  // let results = resultsArray.join("\n");
-  // const blob = new Blob([results], { type: "text/plain" });
-  // const url = window.URL.createObjectURL(blob);
-  // const a = document.createElement("a");
-  // a.href = url;
-  // a.download = "all_trial_results.txt";
-  // document.body.appendChild(a);
-  // a.click();
-  // window.URL.revokeObjectURL(url);
-
   // Navigate to congrats.html
   // window.location.href = "congrats.html";
 }
