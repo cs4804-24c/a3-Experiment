@@ -310,7 +310,7 @@ function nextTest(){
 
         newLink.click();
         
-    location.href = "/end.html";
+    location.href = "https://kylieflerlage.github.io/a3-Experiment//end.html";
     }
 }
 
