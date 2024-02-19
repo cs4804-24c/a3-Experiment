@@ -1,23 +1,9 @@
 Assignment 3 - Replicating a Classic Experiment  
 ===
+a) test at least three competing visualizations or experiment conditions
+b) implement data/stimuli generation and error calculation functions (if following the baseline, use Cleveland and McGill's 1984 paper and Heer and Bostock's 2010 replication), 
+c) run the experiment with 10 participants (or equivalent number of trials), and d) do basic analysis and reporting of the results.
 
-For the scope of this project, assume the role of a scientist who runs experiments for a living.
-
-For example: 
-
-Q: How do we know that bar charts are "better" than pie charts?  
-A: Controlled experiments!
-
-In this assignment you'll implement a simple controlled experiment using some of the visualizations you’ve been building in this class. 
-You'll need to develop support code for the experiment sequence, results file output, and other experiment components. 
-(These are all simple with Javascript buttons and forms.)
-The main goals for you are to a) test at least three competing visualizations or experiment conditions, b) implement data/stimuli generation and error calculation functions (if following the baseline, use Cleveland and McGill's 1984 paper and Heer and Bostock's 2010 replication), c) run the experiment with 10 participants (or equivalent number of trials), and d) do basic analysis and reporting of the results.
-
-For this assignment you should aim to write everything from scratch. For experimentation it is often necessary to control all elements of the chart.
-You should definitely *reference* demo programs from books or the web, and if you do please provide a References section with links at the end of your Readme.
-
-Going Beyond Cleveland-McGill
----
 
 Several have expressed interest in conducting surveys of various sorts. I encourage you go move beyond Cleveland and McGill if you can think of other interesting visualization experiment designs and corresponding analyses. 
 
@@ -110,3 +96,10 @@ GitHub Details
 ```
 a3-FirstLastnameMember1-FirstLastnameMember2-FirstLastnameMember3-...
 ```
+
+
+** References
+[chart Creation](https://gist.github.com/nbremer/21746a9668ffdf6d8242#file-radarchart-js)
+I took out anything that could count as an untested variable, and edited formatting to let me modify variables as needed for the tests.
+
+[write to file](https://codepen.io/jayeshdhage/pen/bGBPMxx)
