@@ -11,6 +11,9 @@ let resultsArray = [];
 // Store the generated CSV data in a variable accessible to both loadTrial and the download event listener
 let currentCSVData = "";
 
+// Save the currentCSVData after every trial
+let savedCSVData = "";
+
 function generateRandomCSV() {
   const sections = [
     "S1",
@@ -140,6 +143,9 @@ function loadTrial(trialNumber) {
   // Generate random CSV data for the trial
   let currentCSVData = generateRandomCSV();
 
+  // Save the currentCSVData to the variable
+  savedCSVData = currentCSVData;
+
   // Parse the CSV string into an array of objects
   let data = d3.csvParse(currentCSVData);
 
@@ -210,6 +216,9 @@ function loadTrial(trialNumber) {
       }
     });
 
+  // Save the currentCSVData after every trial
+  saveCurrentCSVData(currentCSVData);
+
   // Add text to rectangles - In Progress
   // svg
   //   .selectAll("text")
@@ -231,6 +240,12 @@ function loadTrial(trialNumber) {
 
 loadTrial(1);
 
+// Function to save the currentCSVData after every trial
+function saveCurrentCSVData(csvData) {
+  savedCSVData = csvData;
+  console.log("Saved CSV data: \n", savedCSVData);
+}
+
 // Event listener for download button
 document
   .getElementById("downloadCSVButton")
@@ -241,8 +256,8 @@ document
 // Function to trigger the download with the current CSV data
 function triggerDownload() {
   // Check if CSV data is available
-  if (currentCSVData) {
-    downloadCSV(currentCSVData, "generated_data.csv");
+  if (savedCSVData) {
+    downloadCSV(savedCSVData, "generated_data.csv");
   } else {
     console.error("No CSV data available for download.");
   }
