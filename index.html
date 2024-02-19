@@ -1,9 +1,333 @@
 <!DOCTYPE html>
-<div id="container"></div>
-<script type="module">
+<html lang="en">
 
-import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+<head>
+  <title>Assignment 3</title>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <style>
+    #input-container {
+      position: absolute;
+      top: 700px;
+      left: 10px;
+    }
+  </style>
+</head>
 
-console.log(d3);
+<body>
+  <div id="input-container">
+    <button id="inputButton">Enter Percentage</button>
+  </div>
 
-</script>
+  <script>
+    console.log(d3); // test if d3 is loaded
+
+    // Data for Tracking for the CSV
+    let whichVar = "None Chosen";
+    let csvData = [];
+    let data = {}; // Initialize data as an empty object
+    const MAXSAMPLES = 20;
+
+    // Counters for each graph type
+    let numVert = 0;
+    let numR2L = 0;
+    let numL2R = 0;
+    let numUpsideDown = 0;
+
+    // Initialized Graph
+    var margin = {
+      top: 80,
+      right: 80,
+      bottom: 80,
+      left: 80
+    };
+    var width = 1000 - margin.left - margin.right;
+    var height = 1000 - margin.top - margin.bottom;
+    var svg = d3.select("body")
+      .append('svg')
+      .attr('height', height - margin.top - margin.bottom)
+      .attr('width', width - margin.left - margin.right)
+      .attr('viewBox', [0, 0, width, height]);
+
+    // Functions
+
+    //Creates a random number between the max and minimum for graphing
+    function generateNumber(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    // Generates data points for a graph
+    function generateDataPoints() {
+      let numDP = generateNumber(5, 10); // Generate between 5 and 10 data points inclusive
+      // Creates all the data points for the graph
+      let dataPoints = [];
+      let newDP = 0;
+      for (let i = 0; i < numDP; i++) {
+        newDP = generateNumber(1, 100);
+        dataPoints.push({
+          X: i + 1,
+          Y: newDP
+        });
+      }
+
+      // Tells the graph which locations to mark
+      let markedDPs = [];
+      if (numDP > 0) { // Ensure there are data points before marking
+        let firstIndex = generateNumber(0, numDP - 1);
+        let secondIndex = generateNumber(0, numDP - 1);
+        while (secondIndex === firstIndex) {
+          secondIndex = generateNumber(0, numDP - 1);
+        }
+        markedDPs.push(firstIndex);
+        markedDPs.push(secondIndex);
+      }
+
+      return {
+        datapoints: dataPoints,
+        marked_dataPoints: markedDPs
+      };
+    }
+
+
+    // Resets SVG
+    function resetSVG() {
+      // Remove all existing elements within the SVG
+      svg.selectAll("*").remove();
+
+      // Append a new SVG element
+      svg.append('svg')
+        .attr('height', height - margin.top - margin.bottom)
+        .attr('width', width - margin.left - margin.right)
+        .attr('viewBox', [0, 0, width, height]);
+    }
+
+    // Create Bar Chart
+    function makeBar(data) {
+      resetSVG();
+
+      // Add X axis
+      var x = d3.scaleBand()
+        .domain(data.datapoints.map(function(d) {
+          return d.X;
+        }))
+        .range([0, width])
+        .padding(0.1);
+      svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x));
+
+      // Add Y axis
+      var y = d3.scaleLinear()
+        .domain([0, d3.max(data.datapoints, function(d) {
+          return d.Y;
+        })])
+        .range([height, 0]);
+      svg.append("g")
+        .call(d3.axisLeft(y));
+
+      // Add bars
+      svg.selectAll("mybar")
+        .data(data.datapoints)
+        .enter()
+        .append("rect")
+        .attr("x", function(d) {
+          return x(d.X);
+        })
+        .attr("y", function(d) {
+          return y(d.Y);
+        })
+        .attr("width", x.bandwidth())
+        .attr("height", function(d) {
+          return height - y(d.Y);
+        })
+        .attr("fill", function(d, i) {
+          return data.marked_dataPoints.includes(i) ? "gray" : "steelblue";
+        });
+    }
+
+    // Create Left to Right Bar Chart
+    function makeLeft2Right(data) {
+      whichVar = "Left2Right";
+      makeBar(data);
+      svg.attr("transform", "rotate(270)");
+    }
+
+    // Create Right to Left Bar Chart
+    function makeRight2Left(data) {
+      whichVar = "Right2Left";
+      makeBar(data);
+      svg.attr("transform", "rotate(90)");
+    }
+
+    // Create Upside Down Vertical Bar Chart
+    function makeUpsideDown(data) {
+      whichVar = "UpsideDown";
+      makeBar(data);
+      svg.attr("transform", "rotate(180)");
+    }
+
+    // Creates Vertical Bar Chart
+    function makeVertBar(data){
+      whichVar = "Vert";
+      makeBar(data);
+    }
+
+    // Calculates the error and returns it to each array
+    function calcError(data, input) {
+      let numbers = data.marked_dataPoints.map(index => data.datapoints[index].Y); // Get the Y-values of marked data points
+      let [leastNum, greatestNum] = numbers.sort((a, b) => a - b); // Sort Y-values in ascending order
+      let realPerc = (leastNum / greatestNum) * 100; // Calculate the real percentage
+     
+      let error = Math.log2(Math.abs(realPerc - parseFloat(input)) + 0.00001);
+      // console.log(error);
+      csvData.push({
+        "graph":whichVar,
+        "error":error
+        })
+      console.log(csvData);
+    }
+
+    // Add event listener to the button
+    document.getElementById('inputButton').addEventListener('click', function() {
+      var input = prompt("Enter what percentage of the larger bar the smaller bar takes up:");
+      // Here you can use the input value as needed
+      console.log(data);
+      calcError(data,input);
+      checkDataCollected();
+    });
+
+    // Checks if all data has been collected
+    function checkDataCollected() {
+      let totalGraphs = numVert + numR2L + numL2R + numUpsideDown;
+      console.log(totalGraphs);
+      if (totalGraphs >= MAXSAMPLES*4) {
+        removeAllGraphs();
+        displayAllDataCollected();
+      } else {
+        newGraph();
+      }
+    }
+
+    // Creates a new Graph if necessary
+    function newGraph() {
+      let seed = generateNumber(1, 4);
+      while(1){
+        if (seed === 1 && numVert < MAXSAMPLES) {
+          data = generateDataPoints();
+          makeVertBar(data);
+          numVert++;
+          break;
+        } else if (seed === 2 && numR2L < MAXSAMPLES) {
+          data = generateDataPoints();
+          makeRight2Left(data);
+          numR2L++;
+          break;
+        } else if (seed === 3 && numL2R < MAXSAMPLES) {
+          data = generateDataPoints();
+          makeLeft2Right(data);
+          numL2R++;
+          break;
+        } else if (seed === 4 && numUpsideDown < MAXSAMPLES) {
+          data = generateDataPoints();
+          makeUpsideDown(data);
+          numUpsideDown++;
+          break;
+        } else {
+          seed = generateNumber(1, 4);
+        }
+      }
+    }
+
+    // Remove all graphs and buttons
+    function removeAllGraphs() {
+      // Remove SVG
+      svg.selectAll("*").remove();
+      // Remove Button
+      document.getElementById('input-container').innerHTML = '';
+    }
+
+    // Display "All Data Collected" message
+    function displayAllDataCollected() {
+      let message = document.createElement('h1');
+      message.textContent = 'All Data Collected';
+      document.getElementById('input-container').appendChild(message);
+      uploadData();
+    }
+
+
+   // Reads the csv file and returns a promise that resolves with the CSV data
+  function readData() {
+      return fetch('experimentData.csv')
+          .then(response => response.text())
+          .catch(error => {
+              console.error('Error:', error);
+              throw error; // Re-throw the error to be caught later
+          });
+  }
+
+  // Updates the previous contents of the csv file
+  function updateData(prevData, newData) {
+      if (prevData === null){
+        return newData
+      }
+      else{
+        return [...prevData, ...newData]; // Concatenate arrays to combine previous data and new data
+      }
+  }
+
+
+  // Transfer Data
+  function uploadData() {
+      readData()
+          .then(prevData => {
+              // Assuming `csvData` is already defined somewhere in your code
+              let newData = csvData; // Use your `csvData` variable here
+              let updatedData = updateData(prevData, newData);
+              console.log(updatedData);
+
+              // Extract the unique graph types
+              let graphTypes = updatedData.map(row => row.graph);
+              graphTypes = [...new Set(graphTypes)]; // Get unique values
+
+              // Prepare data for each graph type
+              let graphData = {};
+              graphTypes.forEach(graphType => {
+                  graphData[graphType] = updatedData
+                      .filter(row => row.graph === graphType)
+                      .map(row => row.error);
+              });
+
+              // Generate CSV content
+              let csvContent = "";
+              // Header row
+              csvContent += graphTypes.join(",") + "\n";
+              // Data rows
+              let maxErrors = Math.max(...Object.values(graphData).map(arr => arr.length));
+              for (let i = 0; i < maxErrors; i++) {
+                  let rowData = graphTypes.map(graphType => (graphData[graphType][i] || "").toString());
+                  csvContent += rowData.join(",") + "\n";
+              }
+
+              // Create a Blob object containing the CSV data
+              let blob = new Blob([csvContent], { type: 'text/csv' });
+
+              // Create a download link for the Blob object
+              let link = document.createElement('a');
+              link.href = URL.createObjectURL(blob);
+              link.setAttribute('download', 'experimentData.csv');
+              link.click();
+          })
+          .catch(error => console.error('Error:', error));
+  }
+
+
+  
+
+
+
+
+    // Generate the first graph
+    newGraph();
+  </script>
+</body>
+
+</html>
