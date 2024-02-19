@@ -86,9 +86,8 @@ function saveResults() {
       document.body.removeChild(link);
     }
   }
-
   // Navigate to congrats.html
-  // window.location.href = "congrats.html";
+  window.location.href = "congrats.html";
 }
 
 // Event listener for form submission
