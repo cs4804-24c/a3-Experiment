@@ -1,6 +1,16 @@
 Assignment 3 - Replicating a Classic Experiment  
 ===
 
+Experiment: In this experiment what we wanted to try was to determine 
+
+Data:
+
+Firebase/Revisit:
+
+Testing: In https://andrewsalls.github.io/study-a3/ is where the experiment was conducted. We were able to get __ particpants to take part during this experiment. 
+
+Visualizations:
+
 For the scope of this project, assume the role of a scientist who runs experiments for a living.
 
 For example: 
