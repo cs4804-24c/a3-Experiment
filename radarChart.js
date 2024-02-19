@@ -298,7 +298,7 @@ function nextTest(){
         cfg.color = d3.scale.ordinal()
 		.range(["grey","grey","grey"])
 		cfg.roundStrokes = false;
-		var toChange = Math.floor(Math.random()*3+1;
+		var toChange = Math.floor(Math.random()*3+1);
 		
 		switch(toChange){
 			case 1:
