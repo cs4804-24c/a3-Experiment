@@ -42,6 +42,31 @@
       // Initialize an array to store the results
       let resultsArray = [];
 
+      function generateRandomCSV() {
+        const sections = [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6",
+          "S7",
+          "S8",
+          "S9",
+          "S10",
+        ];
+
+        let data = "Section,Group,Number\nG1,,\n"; // Header row
+
+        for (let i = 0; i < 10; i++) {
+          const section = sections[i];
+          const number = Math.floor(Math.random() * 100) + 1; // Random number between 1 and 100
+          data += `${section},G1,${number}\n`; // Add data row
+        }
+
+        return data;
+      }
+
       // append the svg object to the body of the page
       const svg = d3
         .select("#my_dataviz")
@@ -107,77 +132,75 @@
         if (trialNumber > 6) {
           return;
         }
-        d3.csv("/CSV/csv" + trialNumber + ".csv")
-          .then(function (data) {
-            const root = d3
-              .stratify()
-              .id(function (d) {
-                return d.Section;
-              })
-              .parentId(function (d) {
-                return d.Group;
-              })(data);
-            root.sum(function (d) {
-              return +d.Number;
-            });
 
-            d3.treemap().size([width, height]).padding(4)(root);
+        // Generate random data for the trial
+        let trialData = generateRandomData(); // Generate new random data for each trial
 
-            const randomIndexes = [];
-            while (randomIndexes.length < 2) {
-              const index = Math.floor(Math.random() * root.leaves().length);
-              if (!randomIndexes.includes(index)) {
-                randomIndexes.push(index);
-              }
-            }
-
-            const selectedRectangles = root
-              .leaves()
-              .filter((d, i) => randomIndexes.includes(i));
-
-            let largerDataPointArea, smallerDataPointArea;
-
-            selectedRectangles.forEach(function (d) {
-              const area = (d.x1 - d.x0) * (d.y1 - d.y0);
-              if (!largerDataPointArea || area > largerDataPointArea) {
-                // Update areas based on the larger rectangle
-                smallerDataPointArea = largerDataPointArea;
-                largerDataPointArea = area;
-              } else if (!smallerDataPointArea || area > smallerDataPointArea) {
-                // Update area of smaller rectangle
-                smallerDataPointArea = area;
-              }
-            });
-            // Calculate true percentage
-            truePercentage = (smallerDataPointArea / largerDataPointArea) * 100;
-
-            svg
-              .selectAll("rect")
-              .data(root.leaves())
-              .join("rect")
-              .attr("x", function (d) {
-                return d.x0;
-              })
-              .attr("y", function (d) {
-                return d.y0;
-              })
-              .attr("width", function (d) {
-                return d.x1 - d.x0;
-              })
-              .attr("height", function (d) {
-                return d.y1 - d.y0;
-              })
-              .style("stroke", "black")
-              .style("fill", function (d, i) {
-                if (randomIndexes.includes(i)) {
-                  return "red";
-                } else {
-                  return "#69b3a2";
-                }
-              });
+        const root = d3
+          .stratify()
+          .id(function (d) {
+            return d.Section;
           })
-          .catch(function (error) {
-            //all trials complete
+          .parentId(function (d) {
+            return d.Group;
+          })(trialData);
+        root.sum(function (d) {
+          return +d.Number;
+        });
+
+        d3.treemap().size([width, height]).padding(4)(root);
+
+        const randomIndexes = [];
+        while (randomIndexes.length < 2) {
+          const index = Math.floor(Math.random() * root.leaves().length);
+          if (!randomIndexes.includes(index)) {
+            randomIndexes.push(index);
+          }
+        }
+
+        const selectedRectangles = root
+          .leaves()
+          .filter((d, i) => randomIndexes.includes(i));
+
+        let largerDataPointArea, smallerDataPointArea;
+
+        selectedRectangles.forEach(function (d) {
+          const area = (d.x1 - d.x0) * (d.y1 - d.y0);
+          if (!largerDataPointArea || area > largerDataPointArea) {
+            // Update areas based on the larger rectangle
+            smallerDataPointArea = largerDataPointArea;
+            largerDataPointArea = area;
+          } else if (!smallerDataPointArea || area > smallerDataPointArea) {
+            // Update area of smaller rectangle
+            smallerDataPointArea = area;
+          }
+        });
+        // Calculate true percentage
+        truePercentage = (smallerDataPointArea / largerDataPointArea) * 100;
+
+        svg
+          .selectAll("rect")
+          .data(root.leaves())
+          .join("rect")
+          .attr("x", function (d) {
+            return d.x0;
+          })
+          .attr("y", function (d) {
+            return d.y0;
+          })
+          .attr("width", function (d) {
+            return d.x1 - d.x0;
+          })
+          .attr("height", function (d) {
+            return d.y1 - d.y0;
+          })
+          .style("stroke", "black")
+          .style("fill", function (d, i) {
+            if (randomIndexes.includes(i)) {
+              return "red";
+            } else {
+              return "#69b3a2";
+            }
           });
       }
 
