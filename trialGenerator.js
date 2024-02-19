@@ -216,26 +216,30 @@ function loadTrial(trialNumber) {
       }
     });
 
+  // Update text labels
+  svg.selectAll("text").remove(); // Remove existing text labels
+  // Add text to rectangles - In Progress
+  svg
+    .selectAll("text")
+    .data(root.leaves())
+    .enter()
+    .append("text")
+    .attr("x", function (d) {
+      return d.x0 + 10;
+    }) // +10 to adjust position (more right)
+    .attr("y", function (d) {
+      return d.y0 + 10;
+    }) // +20 to adjust position (lower)
+    .text(function (d) {
+      return d.data.Section;
+    })
+    .attr("text-anchor", "middle") // Center the text horizontally
+    .attr("dominant-baseline", "middle") // Center the text vertically
+    .attr("font-size", "12px")
+    .attr("fill", "white");
+
   // Save the currentCSVData after every trial
   saveCurrentCSVData(currentCSVData);
-
-  // Add text to rectangles - In Progress
-  // svg
-  //   .selectAll("text")
-  //   .data(root.leaves())
-  //   .enter()
-  //   .append("text")
-  //   .attr("x", function (d) {
-  //     return d.x0 + 5;
-  //   }) // +10 to adjust position (more right)
-  //   .attr("y", function (d) {
-  //     return d.y0 + 20;
-  //   }) // +20 to adjust position (lower)
-  //   .text(function (d) {
-  //     return d.data.Section;
-  //   })
-  //   .attr("font-size", "15px")
-  //   .attr("fill", "white");
 }
 
 loadTrial(1);
