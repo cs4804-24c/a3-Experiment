@@ -1,3 +1,5 @@
+let numCollected = 0;
+
 let playerIDs = [];
 let playerPPGs = [];
 
@@ -10,15 +12,28 @@ const legendSize = 100;
 const plotWidth = window.innerWidth * 0.8 - margin.left - margin.right - legendSize;
 const plotHeight = 600 - margin.top - margin.bottom;
 
+// Scatterplot
+const svg = d3.select('#scatterplot-container').append('svg')
+.attr('width', plotWidth + margin.left + margin.right + legendSize)
+.attr('height', plotHeight + margin.top + margin.bottom)
+.append('g')
+.attr('transform', `translate(${margin.left},${margin.top})`);
+
 fetch('/api/playerindex?LeagueID=00&Season=2023-24')
     .then(response => response.json())
     .then(res => {
         let players = [];
         res['PlayerIndex'].forEach( e => {
-            players.push(e);
+            players.push({"PlayerID": e['PERSON_ID'], "PTS": e['PTS']})
         });
-        playerIDs = getRandomPlayerIDs(players, 5);
-        console.log('Randomly selected player IDs:', playerIDs); // TODO: Just for debugging purposes
+        playerIDs = getRandomPlayerIDs(players, 2);
+        //console.log('Randomly selected player IDs:', playerIDs); // TODO: Just for debugging purposes
+
+        playerPPGs = playerIDs.map(playerID => {
+            const selectedPlayer = players.find(player => player.PlayerID === playerID);
+            console.log(selectedPlayer);
+            return selectedPlayer.PTS;
+        });
         
         // Ensure all player data gets fetched first
         Promise.all(playerIDs.map(playerID =>
@@ -27,15 +42,7 @@ fetch('/api/playerindex?LeagueID=00&Season=2023-24')
                 .then(data => data['PlayerGameLog'])
         ))
         .then(playerGameLogs => {
-            // Calculate PPG
-            playerPPGs = playerGameLogs.map(playerGameLog => {
-                const totalPoints = playerGameLog.reduce((sum, game) => sum + parseInt(game['PTS']), 0);
-                const totalGames = playerGameLog.length;
-                const ppg = totalPoints / totalGames;
-                return ppg;
-            });
-
-            console.log('Player PPGs:', playerPPGs); // TODO: Just for debugging purposes
+            //console.log('Player PPGs:', playerPPGs); // TODO: Just for debugging purposes
 
             // Merge player data
             const playersCombined = playerGameLogs.flatMap((playerGameLog, index) => {
@@ -47,14 +54,85 @@ fetch('/api/playerindex?LeagueID=00&Season=2023-24')
                 }));
             });
 
-            // Scatterplot
-            const svg = d3.select('#scatterplot-container').append('svg')
-                .attr('width', plotWidth + margin.left + margin.right + legendSize)
-                .attr('height', plotHeight + margin.top + margin.bottom)
-                .append('g')
-                .attr('transform', `translate(${margin.left},${margin.top})`);
+            drawScatterPlot(playersCombined, playerIDs);
+            
+            // Pick two random players and update question element
+            const index1 = Math.floor(Math.random() * playerIDs.length);
+            let index2 = Math.floor(Math.random() * playerIDs.length);
+            while (index2 === index1) {
+                index2 = Math.floor(Math.random() * playerIDs.length);
+            }
 
-            const xScale = d3.scaleTime()
+            const player1ID = playerIDs[index1];
+            player1PPG = playerPPGs[index1];
+
+            const player2ID = playerIDs[index2];
+            player2PPG = playerPPGs[index2];
+
+            const questionElement = document.getElementById("ppg-question");
+            questionElement.textContent = `(${numCollected+1}/10) What is the PPG difference between Player ${player1ID} and Player ${player2ID} (rounded to the nearest whole number)?`;
+        })
+    })
+
+// Helper function to pick X random NBA players
+function getRandomPlayerIDs(data, count) {
+    const randomPlayerIDs = [];
+    let personIds = [];
+    for (let i = 0; i < data.length; i++) {
+        personIds.push(data[i]['PlayerID'])
+    }
+    for (let i = 0; i < count; i++) {
+        const randomIndex = Math.floor(Math.random() * personIds.length);
+        randomPlayerIDs.push(personIds[randomIndex]);
+    }
+    return randomPlayerIDs;
+}
+
+// Helper function to check answer
+function checkAnswer() {
+    const userAnswer = parseFloat(document.getElementById("user-answer").value);
+
+    const actualDiff = Math.abs(player1PPG - player2PPG); 
+    const roundedDiff = Math.round(actualDiff); 
+    const resultElement = document.getElementById("result");
+
+    if (userAnswer === roundedDiff) {
+        resultElement.textContent = `Correct! The actual difference was ${roundedDiff} PPG.`;
+    } else {
+        resultElement.textContent = `Incorrect! The actual difference is ${roundedDiff} PPG.`;
+    }
+
+    let body = {
+        'filename': 'scatter_vis.csv',
+        'actualVal': roundedDiff,
+        'guessedVal': userAnswer
+    }
+    
+    //console.log(body); //TODO: For testing purposes
+
+    fetch('/submitGuess', {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+
+    document.getElementById('user-answer').value = "";
+    svg.selectAll("*").remove();
+
+    numCollected++;
+
+    if (numCollected != 10) {
+        loadNextTest();
+    } else {
+        document.querySelector('body').innerHTML = "Testing complete, please close this tab."
+    }
+}
+
+// Helper function to draw the scatterplot
+function drawScatterPlot(playersCombined, playerIDs) {
+    const xScale = d3.scaleTime()
                 .domain(d3.extent(playersCombined, d => d.date))
                 .range([0, plotWidth]);
 
@@ -111,6 +189,46 @@ fetch('/api/playerindex?LeagueID=00&Season=2023-24')
                     .attr('dy', '0.35em')
                     .text(playerID);
             });
+}
+
+// Helper function to load a new scatterplot test; bit of a lazy copy paste
+function loadNextTest() {
+    fetch('/api/playerindex?LeagueID=00&Season=2023-24')
+    .then(response => response.json())
+    .then(res => {
+        let players = [];
+        res['PlayerIndex'].forEach( e => {
+            players.push({"PlayerID": e['PERSON_ID'], "PTS": e['PTS']})
+        });
+        playerIDs = getRandomPlayerIDs(players, 2);
+        //console.log('Randomly selected player IDs:', playerIDs); // TODO: Just for debugging purposes
+
+        playerPPGs = playerIDs.map(playerID => {
+            const selectedPlayer = players.find(player => player.PlayerID === playerID);
+            console.log(selectedPlayer);
+            return selectedPlayer.PTS;
+        });
+        
+        // Ensure all player data gets fetched first
+        Promise.all(playerIDs.map(playerID =>
+            fetch(`/api/playergamelog?DateFrom=&DateTo=&LeagueID=&PlayerID=${playerID}&Season=2023-24&SeasonType=Regular+Season`)
+                .then(response => response.json())
+                .then(data => data['PlayerGameLog'])
+        ))
+        .then(playerGameLogs => {
+            //console.log('Player PPGs:', playerPPGs); // TODO: Just for debugging purposes
+
+            // Merge player data
+            const playersCombined = playerGameLogs.flatMap((playerGameLog, index) => {
+                const playerID = playerIDs[index];
+                return playerGameLog.map(game => ({
+                    playerID,
+                    date: new Date(game['GAME_DATE']),
+                    points: game['PTS']
+                }));
+            });
+
+            drawScatterPlot(playersCombined, playerIDs);
             
             // Pick two random players and update question element
             const index1 = Math.floor(Math.random() * playerIDs.length);
@@ -126,37 +244,7 @@ fetch('/api/playerindex?LeagueID=00&Season=2023-24')
             player2PPG = playerPPGs[index2];
 
             const questionElement = document.getElementById("ppg-question");
-            questionElement.textContent = `What is the PPG difference between Player ${player1ID} and Player ${player2ID} (rounded to the nearest whole number)?`;
+            questionElement.textContent = `(${numCollected+1}/10) What is the PPG difference between Player ${player1ID} and Player ${player2ID} (rounded to the nearest whole number)?`;
         })
-        .catch(error => console.error('playerGameLog error:', error));
     })
-    .catch(error => console.error('playerIndex error:', error));
-
-// Helper function to pick X random NBA players
-function getRandomPlayerIDs(data, count) {
-    const randomPlayerIDs = [];
-    let personIds = [];
-    for (let i = 0; i < data.length; i++) {
-        personIds.push(data[i]['PERSON_ID'])
-    }
-    for (let i = 0; i < count; i++) {
-        const randomIndex = Math.floor(Math.random() * personIds.length);
-        randomPlayerIDs.push(personIds[randomIndex]);
-    }
-    return randomPlayerIDs;
-}
-
-// Helper function to check answer
-function checkAnswer() {
-    const userAnswer = parseFloat(document.getElementById("user-answer").value);
-
-    const actualDiff = Math.abs(player1PPG - player2PPG); 
-    const roundedDiff = Math.round(actualDiff); 
-    const resultElement = document.getElementById("result");
-
-    if (userAnswer === roundedDiff) {
-        resultElement.textContent = `Correct! The actual difference was ${roundedDiff} PPG.`;
-    } else {
-        resultElement.textContent = `Incorrect! The actual difference is ${roundedDiff} PPG.`;
-    }
 }
