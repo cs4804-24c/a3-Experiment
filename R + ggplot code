@@ -1,0 +1,18 @@
+** This code was run in RStudio
+
+library(tidyverse)
+library(gapminder)
+
+menu<-read.csv("/Users/audreymongillo/Desktop/A3 - Master Data File.csv")
+head(menu)
+
+
+ggplot(menu, aes(x = reorder(Graph_Type, Error), y = Error)) +
+  stat_summary(fun = mean, geom = 'bar') +
+  stat_summary(fun.data = mean_cl_boot, geom = 'errorbar') +
+  labs(x="", y="Average Error")
+
+ggplot(menu, aes(x = Error, y = reorder(Graph_Type, -Error))) +
+  stat_summary(fun = mean, geom = 'point') +
+  stat_summary(fun.data = mean_cl_boot, geom = 'errorbar') +
+  labs(x="Average Error", y="")

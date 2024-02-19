@@ -29,8 +29,10 @@ https://wpi0-my.sharepoint.com/:x:/g/personal/ajmongillo_wpi_edu/EaM53PTMraxCtOL
 # Results 
 ### Chart
 ![Screenshot 2024-02-16 at 4.01.33 PM.png](img%2FScreenshot%202024-02-16%20at%204.01.33%20PM.png)
-### Graph of Log2 Average with Bootstrapped 95% Confidence Intervals
+### Bar Graph of Log2 Average with Bootstrapped 95% Confidence Intervals
 ![Screenshot 2024-02-18 at 6.04.03 PM.png](img%2FScreenshot%202024-02-18%20at%206.04.03%20PM.png)
+### Cleveland and McGill Graph of Log2 Average with Bootstrapped 95% Confidence Intervals
+![Screenshot 2024-02-18 at 11.21.57 PM.png](img%2FScreenshot%202024-02-18%20at%2011.21.57%20PM.png)
 
 # Technical Achievements
 For our technical achievement we did an extra chart type. We added a packed circles chart, which is something we had not
