@@ -7,27 +7,35 @@ GitHub Pages Link
 https://amgiovenco.github.io/a3-Experiment/
 
 Experiment Summary
----
+===
 Log2Error & 95% Confidence Intervals
 
 "insert ally's figure here"
 
 ## Bar Chart
+Example Visualization:
+
 ![bar chart](img/barchart_example.png)
 
 The average log2error of the bar chart trials was ~1.7468.
 
 ## Pie Chart
+Example Visualization:
+
 ![pie chart](img/piechart_example.png)
 
 The average log2error of the bar chart trials was ~2.5408.
 
 ## Voronoi Tree Map
+Example Visualization:
+
 ![voronoi tree map](img/voronoitreemap_example.png)
 
 The average log2error of the bar chart trials was ~2.6697.
 
 ## Bubble Chart
+Example Visualization:
+
 ![bubble chart](img/bubblechart_example.png)
 
 The average log2error of the bar chart trials was ~3.0739.
