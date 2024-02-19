@@ -3,7 +3,7 @@ let numCollected = 0;
 let playerIDs = [];
 let playerPPGs = [];
 
-let player1PPG, player2PPG = 0;
+let player1PPG = 0;//, player2PPG = 0;
 
 const colors = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -26,7 +26,7 @@ fetch('/api/playerindex?LeagueID=00&Season=2023-24')
         res['PlayerIndex'].forEach( e => {
             players.push({"PlayerID": e['PERSON_ID'], "PTS": e['PTS']})
         });
-        playerIDs = getRandomPlayerIDs(players, 2);
+        playerIDs = getRandomPlayerIDs(players, 1);
         //console.log('Randomly selected player IDs:', playerIDs); // TODO: Just for debugging purposes
 
         playerPPGs = playerIDs.map(playerID => {
@@ -58,19 +58,21 @@ fetch('/api/playerindex?LeagueID=00&Season=2023-24')
             
             // Pick two random players and update question element
             const index1 = Math.floor(Math.random() * playerIDs.length);
+            /*
             let index2 = Math.floor(Math.random() * playerIDs.length);
             while (index2 === index1) {
                 index2 = Math.floor(Math.random() * playerIDs.length);
             }
+            */
 
             const player1ID = playerIDs[index1];
             player1PPG = playerPPGs[index1];
 
-            const player2ID = playerIDs[index2];
-            player2PPG = playerPPGs[index2];
+            //const player2ID = playerIDs[index2];
+            //player2PPG = playerPPGs[index2];
 
             const questionElement = document.getElementById("ppg-question");
-            questionElement.textContent = `(${numCollected+1}/10) What is the PPG difference between Player ${player1ID} and Player ${player2ID} (rounded to the nearest whole number)?`;
+            questionElement.textContent = `(${numCollected+1}/10) What is the points per game (PPG) average that Player ${player1ID} scored? (rounded to the nearest whole number)`;
         })
     })
 
@@ -92,14 +94,15 @@ function getRandomPlayerIDs(data, count) {
 function checkAnswer() {
     const userAnswer = parseFloat(document.getElementById("user-answer").value);
 
-    const actualDiff = Math.abs(player1PPG - player2PPG); 
-    const roundedDiff = Math.round(actualDiff); 
+    //const actualDiff = Math.abs(player1PPG - player2PPG); 
+    //const roundedDiff = Math.round(actualDiff); \
+    const roundedDiff = Math.round(player1PPG);
     const resultElement = document.getElementById("result");
 
     if (userAnswer === roundedDiff) {
-        resultElement.textContent = `Correct! The actual difference was ${roundedDiff} PPG.`;
+        resultElement.textContent = `Correct! The actual PPG average was ${roundedDiff} PPG.`;
     } else {
-        resultElement.textContent = `Incorrect! The actual difference is ${roundedDiff} PPG.`;
+        resultElement.textContent = `Incorrect! The actual PPG average is ${roundedDiff} PPG.`;
     }
 
     let body = {
@@ -200,7 +203,7 @@ function loadNextTest() {
         res['PlayerIndex'].forEach( e => {
             players.push({"PlayerID": e['PERSON_ID'], "PTS": e['PTS']})
         });
-        playerIDs = getRandomPlayerIDs(players, 2);
+        playerIDs = getRandomPlayerIDs(players, 1);
         //console.log('Randomly selected player IDs:', playerIDs); // TODO: Just for debugging purposes
 
         playerPPGs = playerIDs.map(playerID => {
@@ -232,19 +235,21 @@ function loadNextTest() {
             
             // Pick two random players and update question element
             const index1 = Math.floor(Math.random() * playerIDs.length);
+            /*
             let index2 = Math.floor(Math.random() * playerIDs.length);
             while (index2 === index1) {
                 index2 = Math.floor(Math.random() * playerIDs.length);
             }
+            */
 
             const player1ID = playerIDs[index1];
             player1PPG = playerPPGs[index1];
 
-            const player2ID = playerIDs[index2];
-            player2PPG = playerPPGs[index2];
+            //const player2ID = playerIDs[index2];
+            //player2PPG = playerPPGs[index2];
 
             const questionElement = document.getElementById("ppg-question");
-            questionElement.textContent = `(${numCollected+1}/10) What is the PPG difference between Player ${player1ID} and Player ${player2ID} (rounded to the nearest whole number)?`;
+            questionElement.textContent = `(${numCollected+1}/10) What is the points per game (PPG) average that Player ${player1ID} scored? (rounded to the nearest whole number)`;
         })
     })
 }
