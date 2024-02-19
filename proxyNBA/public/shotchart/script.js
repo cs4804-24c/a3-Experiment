@@ -44,7 +44,7 @@ document.getElementById('submitGuess').onclick = () => {
         })
         document.getElementById('guess').value = ""
         guessCount++;
-        if (guessCount!=10) nextPlayer()
+        if (guessCount!=20) nextPlayer()
         else document.querySelector('body').innerHTML = "Testing complete, please close this tab."
     } 
 }

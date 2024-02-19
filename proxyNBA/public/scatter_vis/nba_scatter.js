@@ -72,7 +72,7 @@ fetch('/api/playerindex?LeagueID=00&Season=2023-24')
             //player2PPG = playerPPGs[index2];
 
             const questionElement = document.getElementById("ppg-question");
-            questionElement.textContent = `(${numCollected+1}/10) What is the points per game (PPG) average that Player ${player1ID} scored? (rounded to the nearest whole number)`;
+            questionElement.textContent = `(${numCollected+1}/20) What is the points per game (PPG) average that Player ${player1ID} scored?`;
         })
     })
 
@@ -92,44 +92,51 @@ function getRandomPlayerIDs(data, count) {
 
 // Helper function to check answer
 function checkAnswer() {
-    const userAnswer = parseFloat(document.getElementById("user-answer").value);
+    let userAnswer = (document.getElementById("user-answer").value);
 
-    //const actualDiff = Math.abs(player1PPG - player2PPG); 
-    //const roundedDiff = Math.round(actualDiff); \
-    const roundedDiff = Math.round(player1PPG);
-    const resultElement = document.getElementById("result");
+    if (userAnswer !== "") {
+        //const actualDiff = Math.abs(player1PPG - player2PPG); 
+        //const roundedDiff = Math.round(actualDiff);
+        //const roundedDiff = Math.round(player1PPG);
+        const lowerBound = player1PPG - 0.1;
+        const upperBound = player1PPG + 0.1;
 
-    if (userAnswer === roundedDiff) {
-        resultElement.textContent = `Correct! The actual PPG average was ${roundedDiff} PPG.`;
-    } else {
-        resultElement.textContent = `Incorrect! The actual PPG average is ${roundedDiff} PPG.`;
-    }
+        const resultElement = document.getElementById("result");
 
-    let body = {
-        'filename': 'scatter_vis.csv',
-        'actualVal': roundedDiff,
-        'guessedVal': userAnswer
-    }
-    
-    //console.log(body); //TODO: For testing purposes
-
-    fetch('/submitGuess', {
-        method: 'POST',
-        body: JSON.stringify(body),
-        headers: {
-            "Content-Type": "application/json"
+        if (userAnswer === player1PPG) {
+            resultElement.textContent = `Correct! The actual PPG average was ${player1PPG}.`;
+        } else if (userAnswer >= lowerBound && userAnswer <= upperBound) {
+            resultElement.textContent = `Close! The actual PPG average was ${player1PPG}.`;
+        } else {
+            resultElement.textContent = `Incorrect! The actual PPG average is ${player1PPG}.`;
         }
-    });
 
-    document.getElementById('user-answer').value = "";
-    svg.selectAll("*").remove();
+        let body = {
+            'filename': 'scatter_vis.csv',
+            'actualVal': player1PPG,
+            'guessedVal': userAnswer
+        }
+        
+        //console.log(body); //TODO: For testing purposes
 
-    numCollected++;
+        fetch('/submitGuess', {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
 
-    if (numCollected != 10) {
-        loadNextTest();
-    } else {
-        document.querySelector('body').innerHTML = "Testing complete, please close this tab."
+        document.getElementById('user-answer').value = "";
+        svg.selectAll("*").remove();
+
+        numCollected++;
+
+        if (numCollected != 20) {
+            loadNextTest();
+        } else {
+            document.querySelector('body').innerHTML = "Testing complete, please close this tab."
+        }
     }
 }
 
@@ -249,7 +256,7 @@ function loadNextTest() {
             //player2PPG = playerPPGs[index2];
 
             const questionElement = document.getElementById("ppg-question");
-            questionElement.textContent = `(${numCollected+1}/10) What is the points per game (PPG) average that Player ${player1ID} scored? (rounded to the nearest whole number)`;
+            questionElement.textContent = `(${numCollected+1}/20) What is the points per game (PPG) average that Player ${player1ID} scored?`;
         })
     })
 }
