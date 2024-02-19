@@ -5,7 +5,7 @@ Experiment: This experiment is based off the paper "Jurassic Mark: Inattentional
 
 Data: The datasaurus graph was sourced from https://www.dropbox.com/sh/xaxpz3pm5r5awes/AADUbGVagF9i4RmM9JkPtviEa?dl=0. The data was translated to have a normal distribution, that is x and y means of 0 and x and y variance of 1. To limit the differences between the scatter point plots and the datasaurus graph, data for each scatter point plot was generated such that the graphs had the same number of points in each quadrant, the same mean*, and the same variance* as the datasaurus graph.
 
-* Within a 0.02 margin of error from the datasaurus graph.
+_*_ Within a 0.02 margin of error from the datasaurus graph.
 
 Firebase/Revisit:
 
