@@ -103,13 +103,13 @@ function checkAnswer() {
 
         const resultElement = document.getElementById("result");
 
-        if (userAnswer === player1PPG) {
-            resultElement.textContent = `Correct! The actual PPG average was ${player1PPG}.`;
-        } else if (userAnswer >= lowerBound && userAnswer <= upperBound) {
-            resultElement.textContent = `Close! The actual PPG average was ${player1PPG}.`;
-        } else {
-            resultElement.textContent = `Incorrect! The actual PPG average is ${player1PPG}.`;
-        }
+        // if (userAnswer === player1PPG) {
+        //     resultElement.textContent = `Correct! The actual PPG average was ${player1PPG}.`;
+        // } else if (userAnswer >= lowerBound && userAnswer <= upperBound) {
+        //     resultElement.textContent = `Close! The actual PPG average was ${player1PPG}.`;
+        // } else {
+        //     resultElement.textContent = `Incorrect! The actual PPG average is ${player1PPG}.`;
+        // }
 
         let body = {
             'filename': 'scatter_vis.csv',
