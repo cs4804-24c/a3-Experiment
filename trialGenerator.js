@@ -32,7 +32,7 @@ function generateRandomCSV() {
 
   for (let i = 0; i < 10; i++) {
     const section = sections[i];
-    const number = Math.floor(Math.random() * 100) + 1; // Random number between 1 and 100
+    const number = Math.floor(Math.random() * 100) + 10; // Random number between 10 and 100
     data += `${section},G1,${number}\n`; // Add data row
   }
 
