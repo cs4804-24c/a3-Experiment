@@ -24,7 +24,7 @@ Bar Graph Facing Right:<br />
 ![BarGraphFacingRight](FacingRight.png)<br /><br />
 
 Bar Graph Facing Left: <br />
-![BarGraphFacingLeft](Facing Left)<br /><br />
+![BarGraphFacingLeft](FacingLeft.png)<br /><br />
 
 Analysis:<br />
 
