@@ -39,9 +39,7 @@ document
       // Add result to the array
       const result = `Trial ${trialNumber} - True Percentage: ${truePercentage.toFixed(
         2
-      )}, Your Answer: ${percentage.toFixed(2)}, Error: ${error.toFixed(
-        2
-      )}`;
+      )}, Your Answer: ${percentage.toFixed(2)}, Error: ${error.toFixed(2)}`;
       resultsArray.push(result);
 
       if (trialNumber >= 6) {
@@ -110,6 +108,10 @@ function loadTrial(trialNumber) {
       smallerDataPointArea = area;
     }
   });
+
+  console.log("Selected rectangles: ", selectedRectangles);
+  console.log("Larger data point area: ", largerDataPointArea);
+  console.log("Smaller data point area: ", smallerDataPointArea);
   // Calculate true percentage
   truePercentage = (smallerDataPointArea / largerDataPointArea) * 100;
 

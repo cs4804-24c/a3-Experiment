@@ -38,24 +38,31 @@ var svg, drawingArea, treemapContainer;
 
 let selectedValues = [];
 let truePercentage = 0;
-console.log(generateRandomJSON())
+console.log(generateRandomJSON());
 
 function loadTrial(trialNumber) {
+  // Clear selected values at the beginning of each trial
+  selectedValues = [];
+
   if (trialNumber > 6) {
     // load results
     saveResults();
     window.location.href = "congrats.html";
   }
-const jsonString = JSON.stringify(generateRandomJSON());
-d3.json("data:text/json;charset=utf-8," + encodeURIComponent(jsonString)).then(function (rootData) {
-  initData();
-  initLayout(rootData);
-  hierarchy = d3.hierarchy(rootData).sum(function (d) {
-    return d.weight;
+  const jsonString = JSON.stringify(generateRandomJSON());
+  currentCSVData = jsonString;
+  console.log(currentCSVData);
+  d3.json(
+    "data:text/json;charset=utf-8," + encodeURIComponent(jsonString)
+  ).then(function (rootData) {
+    initData();
+    initLayout(rootData);
+    hierarchy = d3.hierarchy(rootData).sum(function (d) {
+      return d.weight;
+    });
+    _voronoiTreemap.clip(circlingPolygon)(hierarchy);
+    drawTreemap(hierarchy);
   });
-  _voronoiTreemap.clip(circlingPolygon)(hierarchy);
-  drawTreemap(hierarchy);
-});
 }
 function initData(rootData) {
   circlingPolygon = computeCirclingPolygon(treemapRadius);
@@ -74,10 +81,7 @@ function computeCirclingPolygon(radius) {
   return circlingPolygon;
 }
 function initLayout(rootData) {
-  svg = d3
-    .select("svg")
-    .attr("width", svgWidth)
-    .attr("height", svgHeight);
+  svg = d3.select("svg").attr("width", svgWidth).attr("height", svgHeight);
   drawingArea = svg
     .append("g")
     .classed("drawingArea", true)
@@ -89,10 +93,7 @@ function initLayout(rootData) {
   treemapContainer
     .append("path")
     .classed("world", true)
-    .attr(
-      "transform",
-      "translate(" + [-treemapRadius, -treemapRadius] + ")"
-    )
+    .attr("transform", "translate(" + [-treemapRadius, -treemapRadius] + ")")
     .attr("d", "M" + circlingPolygon.join(",") + "Z");
   drawTitle();
   drawFooter();
@@ -135,10 +136,7 @@ function drawLegends(rootData) {
     .append("g")
     .classed("legend", true)
     .attr("transform", "translate(" + [0, legendsMinY] + ")");
-  var legends = legendContainer
-    .selectAll(".legend")
-    .data(continents)
-    .enter();
+  var legends = legendContainer.selectAll(".legend").data(continents).enter();
   var legend = legends
     .append("g")
     .classed("legend", true)
@@ -158,7 +156,7 @@ function drawLegends(rootData) {
 function drawTreemap(hierarchy) {
   var leaves = hierarchy.leaves();
   var numLeaves = leaves.length;
-  
+
   // Generate two random indices within the range of the number of data points
   var randomIndices = [];
   while (randomIndices.length < 2) {
@@ -170,10 +168,7 @@ function drawTreemap(hierarchy) {
   var cells = treemapContainer
     .append("g")
     .classed("cells", true)
-    .attr(
-      "transform",
-      "translate(" + [-treemapRadius, -treemapRadius] + ")"
-    )
+    .attr("transform", "translate(" + [-treemapRadius, -treemapRadius] + ")")
     .selectAll(".cell")
     .data(leaves)
     .enter()
@@ -185,29 +180,25 @@ function drawTreemap(hierarchy) {
     .style("fill", function (d, i) {
       // Apply blue color to the randomly selected indices
       if (randomIndices.includes(i)) {
-        
         selectedValues.push(d.data.weight);
         console.log("selected values: " + selectedValues);
-        return "blue";
+        return "red";
       } else {
         return d.parent.data.color;
       }
     });
-    // Sort the values in ascending order
-    selectedValues.sort(function(a, b) {
-      return a - b;
-    });
-    // Calculate the percentage
-    var smallerValue = selectedValues[0];
-    var biggerValue = selectedValues[1];
-    truePercentage = (smallerValue / biggerValue) * 100;
+  // Sort the values in ascending order
+  selectedValues.sort(function (a, b) {
+    return a - b;
+  });
+  // Calculate the percentage
+  var smallerValue = selectedValues[0];
+  var biggerValue = selectedValues[1];
+  truePercentage = (smallerValue / biggerValue) * 100;
   var labels = treemapContainer
     .append("g")
     .classed("labels", true)
-    .attr(
-      "transform",
-      "translate(" + [-treemapRadius, -treemapRadius] + ")"
-    )
+    .attr("transform", "translate(" + [-treemapRadius, -treemapRadius] + ")")
     .selectAll(".label")
     .data(leaves)
     .enter()
@@ -219,12 +210,12 @@ function drawTreemap(hierarchy) {
     .style("font-size", function (d) {
       return fontScale(d.data.weight);
     });
-  // labels
-  //   .append("text")
-  //   .classed("name", true)
-  //   .html(function (d) {
-  //     return d.data.weight < 1 ? d.data.code : d.data.name;
-  //   });
+  labels
+    .append("text")
+    .classed("name", true)
+    .html(function (d) {
+      return d.data.weight < 1 ? d.data.code : d.data.name;
+    });
   // labels.append("text").classed("value", true);
   //.text(function (d) {
   //return d.data.weight + "%";
@@ -232,10 +223,7 @@ function drawTreemap(hierarchy) {
   var hoverers = treemapContainer
     .append("g")
     .classed("hoverers", true)
-    .attr(
-      "transform",
-      "translate(" + [-treemapRadius, -treemapRadius] + ")"
-    )
+    .attr("transform", "translate(" + [-treemapRadius, -treemapRadius] + ")")
     .selectAll(".hoverer")
     .data(leaves)
     .enter()
@@ -245,7 +233,7 @@ function drawTreemap(hierarchy) {
       return "M" + d.polygon.join(",") + "z";
     });
   hoverers.append("title").text(function (d) {
-    return d.data.name + "\n" + d.value + "%";
+    // return d.data.name + "\n" + d.value + "%";
   });
 }
 
@@ -268,9 +256,7 @@ document
       // Add result to the array
       const result = `Trial ${trialNumber} - True Percentage: ${truePercentage.toFixed(
         2
-      )}, Your Answer: ${percentage.toFixed(2)}, Error: ${error.toFixed(
-        2
-      )}`;
+      )}, Your Answer: ${percentage.toFixed(2)}, Error: ${error.toFixed(2)}`;
       resultsArray.push(result);
 
       if (trialNumber >= 6) {
@@ -286,4 +272,4 @@ document
     }
   });
 
-  loadTrial(trialNumber);
+loadTrial(trialNumber);
