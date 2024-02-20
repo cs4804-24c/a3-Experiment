@@ -26,7 +26,7 @@
 </div>
 <script type="module">
     import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
-
+var arr = [[0,0],[0,0],[0,0],[0,0],[0,0]]
 
     /* This trial happens 5 times, once normally, and 4 more times with the event listener. */
 
@@ -86,6 +86,7 @@
     // log
     // iterate 5 total trials
 
+        var i = 0;
 
     document.getElementById('myForm').addEventListener('submit', function (event) {
         // Prevent the default form submission behavior
@@ -98,6 +99,18 @@
         // Display the user input
         alert("You entered: " + response + "\nThe real spot was " + answer);
 
+        arr[i] = [response, answer];
+        i++;
+        console.log(i, arr);
+        
+        if (i >= 5){
+            console.log("enough");
+            log(arr);
+            location.href="index.html";
+        }
+
+        answer = Math.floor(Math.random() * 701);
+        
         svg.append('circle')
         .attr('cx', margin.left + answer)
         .attr('cy', height/2)
@@ -116,6 +129,11 @@
 
 
     });
+
+
+    function log(arr) {
+        console.log('logging ', arr)
+    }
 
 
 </script>
