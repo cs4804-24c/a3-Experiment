@@ -7,9 +7,11 @@ Data: The datasaurus graph was sourced from https://www.dropbox.com/sh/xaxpz3pm5
 
 * Within a 0.02 margin of error from the datasaurus graph.
 
-Firebase/Revisit:
+Firebase/reVISit:
 
-For storing data from ReVisit, we implemented FireBase using the instructions on the website. We ran into a few issues with ReCaptcha and CORS that we had to troubleshoot in office hours. Through FireBase, we created a collection for our participant responses with each of the participant's responses being stored in a separate document identified by their unique participant ID. To export the data from FireBase, we implemented and utilized Rowy (a low-code backend for managing Firebase databases) to export the data to a CSV where it could be further analyzed. 
+For storing data from reVISit, we implemented FireBase using the instructions on the website. We ran into a few issues with ReCaptcha and CORS that we had to troubleshoot in office hours, as well as some issues with creating the github page to host the study online. Through FireBase, we created a collection for our participant responses with each of the participant's responses being stored in a separate document identified by their unique participant ID. To export the data from FireBase, we implemented and utilized Rowy (a low-code backend for managing Firebase databases) to export the data to a CSV where it could be further analyzed. 
+
+Due to needing to include the files from reVISit, the github page and associated reVISit code are in a separate repository, https://github.com/AndrewSalls/study-a3 . As part of the study, we implemented d3 scatter plots which render the data we generated, and transition between the plots on a timer.
 
 Testing: In https://andrewsalls.github.io/study-a3/ is where the experiment was conducted. We were able to get 22 particpants to take part during this experiment. 
 
@@ -19,12 +21,12 @@ Visualizations: The visuals we created for the testing includes:
 We calculated the accuracy of identifying the major quadrants and if the the graph outlined a dinosaur or a gorilla. We found that these were the results.
 ![Test](img/rates.png)
 
-Based off these calculations it can be said that noticing the dinosaur did not work since it seem many people are were seeing the gorilla which was not even in the test. The gorilla question was to ask whether they paid attention to the moving scatterplo graph. Also it the participants were not sucessful in identifying which quadrant has the most number of blue X's so their visual perception could not keep up. There were too many moving parts. 
+Based off these calculations it can be said that noticing the dinosaur did not work since it seem many people are were seeing the gorilla which was not even in the test. The gorilla question was to ask whether they paid attention to the changing scatter plots, as an indication of whether they actually saw the dinosaur or just assumed it was there. Also, the participants were not sucessful in identifying which quadrant has the most number of blue X's, so their visual perception could not keep up. There were too many moving parts.
 
 Technical Achievements
 - Generation of data for scatter plots that had the same number of points in each quadrant, the same mean, and the same variance as the datasaurus graph.
-- Utilized Revisit infrastructure to test our visualizations (including troubleshooting for implementing Revisit with Professor Harrison [CORS, ReCaptcha, etc.]
-- Utilized FireBase to store data and participant response from Revisit
+- Utilized reVISit infrastructure to test our visualizations (including troubleshooting for implementing reVISit with Professor Harrison [CORS, ReCaptcha, etc.])
+- Utilized FireBase to store data and participant response from reVISit
 - Utilized Rowy (low-code backend) to manage database and export Firebase data to CSV for analyzation
 
 
