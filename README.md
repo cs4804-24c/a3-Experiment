@@ -26,3 +26,8 @@ For my experiment I decided to conduct the same study as the Cleveland and McGil
 
 ## Design Achievement
 - Mimicked the example video as much as possible to give a very minimilistic approach to not have outside factors sway the results.
+
+## Sources
+- d3 documents
+- ChatGPT for quick formatting
+- https://stackoverflow.com/questions/17414565/interpretation-of-stat-summary-mean-cl-boot-at-ggplot2 for bootstrap confidence interval
