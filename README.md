@@ -9,14 +9,15 @@ Data: The datasaurus graph was sourced from https://www.dropbox.com/sh/xaxpz3pm5
 
 Firebase/Revisit:
 
-Testing: In https://andrewsalls.github.io/study-a3/ is where the experiment was conducted. We were able to get __ particpants to take part during this experiment. 
+Testing: In https://andrewsalls.github.io/study-a3/ is where the experiment was conducted. We were able to get 22 particpants to take part during this experiment. 
 
 Visualizations: After the data was collected from the partipants 
 
 Technical Achievements
 - Generation of data for scatter plots that had the same number of points in each quadrant, the same mean, and the same variance as the datasaurus graph.
-
-
+- Utilizing Revisit infrastructure to test our visualizations (including troubleshooting Revisit with Professor Harrison [CORS, ReCaptcha, etc.]
+- Utilizing FireBase to store data and participant response from Revisit
+- Utilizing Rowy (low-code backend) to manage database and export Firebase data to CSV for visualization creation
 
 
 For this assignment you should aim to write everything from scratch. For experimentation it is often necessary to control all elements of the chart.
