@@ -1,9 +1,569 @@
 <!DOCTYPE html>
-<div id="container"></div>
-<script type="module">
+<html>
 
-import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+<head>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
 
-console.log(d3);
+  <link rel ="stylesheet" type = "text/css" href = "style.css">
+</head>
 
-</script>
+<body>
+  <div id="loader"></div>
+  <div id="directions">
+    <div id="intro">
+     <p> In this experiment, you are asked to judge what is the percent of a smaller value to a larger value in several charts. 
+      We won’t record any other information from you except your answers and the time it takes you to answer. 
+      Click the “agree” button to begin. Thank you!</p>
+      <button id="agree">Agree</button>
+      <button id="disagree">Disagree</button>
+    </div>
+  </div>
+  <div id="ending">
+    <div id="end">
+     <p> Thank You For Participating!</p>
+      <button id="exit">Exit</button>
+    </div>
+  </div>
+  <div id="svgcontainer"></div>
+  <div class="ui">
+    <div id="controls">
+      
+      <h3 id="chartNumber">0</h3>
+      <button id="next">Next</button>
+    </div>
+
+    <p>What percentage is the smaller of the larger? (between 0 and 100):</p>
+    <form 
+    id="result-form"
+    method="POST"
+    action="https://script.google.com/macros/s/AKfycbzVUg7hS88GXI6CggvJ2f_cj3kdq_tzW_SeqkfA1Mr_NyFan9dE3YbdXJZpy4l2FSOR/exec"
+    onsubmit="">
+      
+      <input name="Id" type="hidden" id="idString">
+      <input type="range" id="percent" name="vol" min="0" max="100" oninput="syncInputs(this.value);">
+      <input name="GuessValue" type="number" id="guessValue" value=50 oninput="syncInputs(this.value);">
+      <input name="Type" type="hidden" id="type" value="Bar">
+      <input name="TrueValue" type="hidden" id="trueValue" value="0">
+      <input name="Point1" type="hidden" id="point1" value="0">
+      <input name="Point2" type="hidden" id="point2" value="0">
+      <input name="Error" type="hidden" id="error", value="0">
+      <input type="submit" id="submit">
+    </form>
+  </div>
+</body>
+
+  <script>
+
+    /* initial svg set up */
+    var margin = { top: 70, right: 150, bottom: 30, left: 50 },
+      width = 800 - margin.left - margin.right,
+      height = 500 - margin.top - margin.bottom;
+
+    var svg = d3.select("#svgcontainer")
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+    var chartIndex = 0
+    var data
+    document.getElementById("next").style.display = "none";
+    document.getElementById("chartNumber").innerHTML = (chartIndex+1).toFixed(0)+"/60";
+    document.getElementById("ending").style.display = "none";
+
+    /* event listeners */
+
+    document.getElementById("agree").onclick = () => {
+      document.getElementById("directions").style.display = "none"
+
+      const loader = document.getElementById("loader")
+      const form = document.getElementById('result-form');
+      document.body.style.pointerEvents="none"
+      const data = new FormData(form);
+    
+      const action = form.action;
+      loader.style.display = "block"
+      fetch(action, {
+        method: 'POST',
+        body: data,
+      })
+      .then(() => {
+        document.body.style.pointerEvents="auto"
+        loader.style.display = "none"
+      })
+    }
+
+    document.getElementById("disagree").onclick = () => {
+      exitExperiment();
+    }
+    document.getElementById("exit").onclick = () => {
+      exitExperiment();
+    }
+
+    
+
+  
+
+    document.getElementById("next").onclick = () => {
+      if (chartIndex < data.length-1) {
+        chartIndex = chartIndex+1
+        swapPlots()
+        document.getElementById("chartNumber").innerHTML = (chartIndex+1).toFixed(0)+"/60"
+      }else{
+        endScreen()
+      }
+    }
+
+    
+
+
+    /* Function For generateing the random data foor the charts*
+    
+    Returns array of sets of random data and what chart it goes too
+    */
+    function generateData() {
+
+      //generate random key to show which user made this guess
+      const r = (Math.random() + 1).toString(36).substring(7);
+      console.log("random", r);
+      document.getElementById("idString").value = r
+
+      //charts array for random chart order 1,2,3 correlates to the chart
+      var chartArray = Array(20).fill(1).concat(Array(20).fill(2), Array(20).fill(3));
+      var data = [];
+      //randomize the chart order
+      chartArray = chartArray.sort(() => Math.random() - 0.5);
+      chartArray = chartArray.sort(() => Math.random() - 0.5);
+      chartArray = chartArray.sort(() => Math.random() - 0.5);
+
+
+      //for each chart we generate data
+      for (let i = 0; i < chartArray.length; i++) {
+
+        // random number of data points between 5 and 10
+        var numPoints = Math.floor(Math.random() * 6) + 5;
+        
+        //data array forr single chart
+        var singleChartData = [];
+
+        var remainingValue = 100;
+
+        if (chartArray[i] == 3) {
+          for (let j = 0; j < numPoints; j++) {
+              if (j < numPoints - 1) {
+                  
+                  value = Math.floor(Math.random() * (remainingValue - (numPoints - 1 - j)) + 1);
+              } else {
+                  
+                  value = remainingValue;
+              }
+      
+              singleChartData.push({
+                  value: value,
+                  selected: j < 2,
+              });
+      
+              remainingValue -= value;
+          }
+      }else
+        //for filling the data array
+        for (let j = 0; j < numPoints; j++) {
+
+          singleChartData.push({
+            value: Math.floor(Math.random() * 100) + 1,
+            selected: j < 2, //set the first two grapghs to selected
+          });
+        }
+
+        // randomize order of the chart data so the selected charts are random
+        singleChartData = singleChartData.sort(() => Math.random() - 0.5);
+        singleChartData = singleChartData.sort(() => Math.random() - 0.5);
+        singleChartData = singleChartData.sort(() => Math.random() - 0.5);
+
+        // push chart data to main  
+        data.push({
+          values: singleChartData,
+          type: chartArray[i]
+        });
+      }
+      return data;
+    }
+
+
+
+
+    /* bar chart section*/
+
+
+    //  sacler for the bar chart
+    var y = d3.scaleLinear()
+      .domain([0, 100])
+      .range([height, 0]);
+    
+
+
+    
+    /*
+
+    function for drawing the bar chart
+    returns difference in percentage of the selected bars
+
+    */ 
+
+    function drawBarChart(data) {
+    
+       // remove previous elements
+        svg.selectAll("circle").remove();
+        svg.selectAll("rect").remove();
+        svg.selectAll("line").remove();
+        svg.selectAll("text").remove();
+        svg.selectAll('polygon').remove();
+        svg.selectAll('g').remove();
+        svg.selectAll('path').remove();
+        
+        
+        // make rectangle for each data point
+        svg.selectAll("rect")
+        .data(data)
+        .enter()
+        .append("rect")
+        .attr("x", (d, i) => i * 40) // space bars
+        .attr("y", function(d) { return y(d.value); })// height of bar
+        .attr("width", 30)
+        .attr("height", function(d) { return height - y(d.value); })// height of bar
+        .style("stroke", "black")
+        .style("fill", "white");
+
+        svg.selectAll("circle")// for selected bars mark with circle
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("cx", (d, i) => i * 40 + 15)
+        .attr("cy", function(d) { return y(d.value) + (height - y(d.value)) / 2; }) 
+        .attr("r", d => d.selected ? 4 : 0)
+        .style("fill", d => d.selected ? "black" : "white");
+
+        svg.append("g")
+      .call(d3.axisLeft(y).tickValues([0, 100]));// add axis with single label
+
+      selectedSize =[];// size of the selected
+          for (let i = 0; i < data.length; i++) {
+
+            if(data[i].selected){
+              selectedSize.push(data[i].value)
+            }
+          }
+          return selectedSize
+
+    }
+
+
+
+
+
+    /* Radar chart section*/
+
+    
+    /*
+
+    function for drawing the radar chart
+    returns difference in percentage of the selected peaks
+
+    */ 
+
+    function drawRadarChart(data) {
+
+
+      var centerX = 200;//radar location
+      var centerY = 200;
+
+
+      //remove previous elements
+      svg.selectAll("circle").remove();
+      svg.selectAll("rect").remove();
+      svg.selectAll("line").remove();
+      svg.selectAll("text").remove();
+      svg.selectAll('polygon').remove();
+      svg.selectAll('g').remove();
+      svg.selectAll('path').remove();
+
+      var points = [] // for dat points
+        
+      const angle = 360/data.length // increasing angle of radar char
+
+
+      // x and y value of points
+        for(let i = 0; i < data.length; i++){
+          points.push({
+            x: 0,
+            y: data[i].value *2
+          });
+        }
+
+
+      //for rotating the points by the increasing angle
+        points.forEach((point, i) => {
+          var angleInRadians = (i * angle * Math.PI) / 180;
+          var newX = point.x * Math.cos(angleInRadians) - point.y * Math.sin(angleInRadians);
+          var newY = point.x * Math.sin(angleInRadians) + point.y * Math.cos(angleInRadians);
+  
+          // Update the point's coordinates
+          point.x = newX;
+          point.y = newY;
+      });
+  
+      
+   // lines for the chart they will be rotated as well
+      for (var i = 0; i < data.length; i++) {
+        
+        var angleInRadians = (i * angle * Math.PI) / 180;
+        var x2 = 0 * Math.cos(angleInRadians) - 200 * Math.sin(angleInRadians);
+        var y2 = 0 * Math.sin(angleInRadians) + 200 * Math.cos(angleInRadians);
+
+        svg.append("line")
+            .attr("x1", 0)
+            .attr("y1", 0)
+            .attr("x2", x2)
+            .attr("y2", y2)
+            .attr("stroke", "grey")
+            .attr("transform", "translate(" + centerX + "," + centerY + ")");
+
+            if( i== data.length-2){ // add a signle 100 lable for scale
+            svg.append("text")
+            .attr("x",x2)  
+            .attr("y",y2)  
+            .attr("transform", "translate(" + centerX + "," + centerY + ")")
+            .attr("text-anchor", "top")
+            .attr("alignment-baseline", "top")
+            .text("100");
+            }
+    }
+     
+      
+    // use rotated points to build radar polygon
+      svg.append("polygon")
+      .attr("points", points.map(point => point.x + "," + point.y).join(" "))
+      .attr("fill", "none")
+      .attr("stroke", "black")
+      .attr("transform", "translate(" + centerX + "," + centerY + ")")
+      .style("stroke-width", '3px' );
+
+    
+
+      //add circle to selected data points
+    svg.selectAll("circle")
+          .data(data)
+          .enter()
+          .append("circle")
+          .attr("cx", (d, i) => points[i].x)
+          .attr("cy", (d, i) => points[i].y)
+          .attr("transform", "translate(" + centerX + "," + centerY + ")")
+          .attr("r", d => d.selected ? 4 : 0)
+          .style("fill", d => d.selected ? "black" : "white");
+
+
+          selectedSize =[];// size of the selected
+          for (let i = 0; i < data.length; i++) {
+
+            if(data[i].selected){
+              selectedSize.push(data[i].value)
+            }
+          }
+
+          return selectedSize
+
+  
+}
+
+
+
+        
+ /* pie chart section*/
+
+    
+    /*
+
+    function for drawing pie chart returns difference in percentage of the selected slices
+
+    */ 
+
+    function drawPieChart(data) {
+
+
+      var centerX = 200;//pie location
+      var centerY = 200;
+
+      svg.selectAll("circle").remove();
+      svg.selectAll("rect").remove();
+      svg.selectAll("line").remove();
+      svg.selectAll("text").remove();
+      svg.selectAll('polygon').remove();
+      svg.selectAll('g').remove();
+      svg.selectAll('path').remove();
+
+
+      var pie = d3.pie()
+      .value(function(d) {return d.value; })
+      
+      
+
+      var slices= svg.selectAll('pie')
+      .data(pie(data))
+      .enter()
+      .append('path')
+        .attr('d', d3.arc().innerRadius(0).outerRadius(200))
+        .attr('fill', "none")
+        .attr("stroke", "black")
+        .attr("transform", "translate(" + centerX + "," + centerY + ")");
+        
+        selectedSize =[];// size of the selected
+        for (let i = 0; i < slices._groups[0].length; i++) {
+          
+          if(slices._groups[0][i].__data__.data.selected){
+
+
+            sliceData = slices._groups[0][i].__data__;
+
+            
+            svg.append('circle')
+            .attr('cx',d3.arc().innerRadius(0).outerRadius(200).centroid(sliceData)[0] )//based on sliceData
+            .attr('cy',d3.arc().innerRadius(0).outerRadius(200).centroid(sliceData)[1] )// based on sliceDate
+            .attr('r', 4)
+            .attr('fill', 'black')
+            .attr("transform", "translate(" + centerX + "," + centerY + ")");
+        }
+            
+          
+        }
+
+        selectedSize =[];// size of the selected
+          for (let i = 0; i < data.length; i++) {
+
+            if(data[i].selected){
+              selectedSize.push(data[i].value)
+            }
+          }
+
+        return selectedSize
+    }
+
+
+
+
+
+
+    function syncInputs(val) {
+      //const percentage = (values[0].value/values[1].value)*100 
+
+      document.getElementById("percent").value = val
+      document.getElementById("guessValue").value = val; 
+      document.getElementById("error").value = calculateError(document.getElementById("trueValue").value, val).toFixed(2)
+    }
+
+    function handleSubmit(val) {
+      //inputs.push(["input", val])
+      console.log(val)
+    }
+
+    window.addEventListener("load", function() {
+      
+      const loader = document.getElementById("loader")
+      const form = document.getElementById('result-form');
+      form.addEventListener("submit", function(e) {
+        
+        syncInputs(document.getElementById("guessValue").value);
+        e.preventDefault();
+        document.body.style.pointerEvents="none"
+        const data = new FormData(form);
+        const action = e.target.action;
+        form.ge
+        loader.style.display = "block"
+        fetch(action, {
+          method: 'POST',
+          body: data,
+        })
+        .then(() => {
+          document.body.style.pointerEvents="auto"
+          loader.style.display = "none"
+          next.click()
+        })
+      });
+    });
+
+
+    //Calculate error between the real and reported percentage scales
+    function calculateError(real, input) {
+      return Math.log2(Math.abs(input-real) + (1/8))
+    }
+
+    function findSelected(data) {
+      return data.values.filter(x => x.selected).sort( (a,b) => a.value - b.value)
+    }
+        
+
+    function updatePoints(selected) {
+      const smaller = Math.min(selected[0], selected[1])
+      const larger = Math.max(selected[0], selected[1])
+      document.getElementById("point1").value = smaller
+      document.getElementById("point2").value = larger
+      document.getElementById("trueValue").value = (smaller/larger)*100
+    }
+
+    /*
+
+    function to help run expirement will have to be changed
+
+    */
+
+    function swapPlots() {
+      const type = document.getElementById("type")
+      const currentData = data[chartIndex];
+      if (currentData.type === 1) {
+        type.value = "Bar"
+        var selectedPoints=drawBarChart(currentData.values);
+        updatePoints(selectedPoints)
+        console.log(currentData);
+        console.log(selectedPoints);
+      } else if (currentData.type === 2) {
+        type.value = "Radar"
+        var selectedPoints=drawRadarChart(currentData.values);
+        updatePoints(selectedPoints)
+        console.log(currentData);
+        console.log(selectedPoints);
+      } else if (currentData.type === 3) {
+        type.value = "Pie"
+        var selectedPoints = drawPieChart(currentData.values);
+        updatePoints(selectedPoints)
+        console.log(currentData);
+        console.log(selectedPoints)
+      }
+    }
+
+    function exitExperiment() {
+      window.location.href = "about:blank";
+    }
+
+    function runExperiment() {
+      var results = [];
+      data = generateData();
+      console.log(data);
+
+      swapPlots()
+      
+    }
+
+    function endScreen() {
+      document.getElementById("result-form").style.display = "none";
+      document.getElementById("ending").style.display = "block";
+    } 
+      
+    runExperiment();
+  </script>
+</body>
+
+</html>
+
+        
+    

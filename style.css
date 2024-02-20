@@ -1,0 +1,163 @@
+body {
+  overflow: hidden;
+  display: inline;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+}
+
+#controls {
+  float: left;
+  display: flex;
+  width: 500px;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+#controls h3 {
+  margin: 0px 20px;
+  font-size: 18px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+p {
+  font-size: 22px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.ui p {
+  margin-top: 50px;
+  width: 400px;
+}
+
+.ui {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+} 
+
+button{
+background-color: #e7e7e7;
+  padding: 12px 22px;
+  text-align: center;
+  font-size: 22px;
+  border: none;
+}
+
+#svgcontainer {
+  margin-left: 60px;
+  padding: 50px;
+  width: 500px;
+}  
+
+
+
+
+form {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: center;
+}
+
+#directions {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  position: absolute;
+  background-color: #55555556;
+  text-align: center;
+  overflow:auto;
+}
+
+#intro{
+  margin: auto;
+  margin-top: 35vh;
+  width: 800px;
+  padding: 30px;
+  text-align: center;
+  background-color: #FFB100;
+  font-size: larger;
+}
+
+#directions button {
+  width: 200px;
+  margin: auto;
+  margin-top: 20px;
+}
+
+#ending {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  position: absolute;
+  background-color: #55555556;
+  text-align: center;
+  overflow:auto;
+}
+
+#end{
+  margin: auto;
+  margin-top: 35vh;
+  width: 800px;
+  padding: 30px;
+  text-align: center;
+  background-color: #FFB100;
+  font-size: larger;
+}
+
+#end button {
+  width: 200px;
+  margin: auto;
+  margin-top: 20px;
+}
+
+form {
+  margin: 10px;
+  width: 400px;
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+input {
+  margin: 15px;
+  width: fit-content;
+  font-size: larger;
+  cursor:pointer;
+}
+
+
+input[type=submit]:active {
+  padding:5px 15px; 
+  background:#cccccc; 
+  border:0 none;
+  -webkit-border-radius: 5px;
+  border-radius: 5px; 
+}
+
+#percent {
+  width: 250px;
+}
+
+#guessValue {
+  width: 80px;
+}
+
+#loader {
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+  margin-top: 300px;
+  position: absolute;
+  z-index: 2;
+  display: none;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
