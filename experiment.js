@@ -3,38 +3,37 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('intro').style.display = 'none';
         document.getElementById('chartArea').style.display = 'block';
         document.getElementById('responseForm').style.display = 'block';
-        nextTrial(); // Start with the first trial
+        nextTrial();
     });
 
     document.getElementById('responseForm').addEventListener('submit', function(event) {
         event.preventDefault();
         const userEstimate = document.getElementById('estimate').value;
-        console.log(`Your estimate: ${userEstimate}%`); // For demonstration, log the estimate
-        saveUserInput(userEstimate); // Save user input for the result display
-        nextTrial(); // Move to next trial
+        console.log(`Your estimate: ${userEstimate}%`);
+        saveUserInput(userEstimate);
+        nextTrial();
     });
 });
 
 let chartSequence = ['bar', 'pie', 'box', 'bar', 'pie', 'box', 'bar', 'pie', 'box'];
 let totalQuestions = 0;
-let userInputs = []; // To store user inputs
-let correctResults = []; // To store correct results for each chart
+let userInputs = [];
+let correctResults = [];
 
 function generateData() {
     const dataSet = [];
     for (let i = 0; i < 5; i++) {
         dataSet.push(Math.floor(Math.random() * 101));
     }
-    correctResults.push(dataSet); // Store correct result for later display
+    correctResults.push(dataSet);
     return dataSet;
 }
 
 function saveUserInput(input) {
-    userInputs.push(input); // Save user's input
+    userInputs.push(input);
 }
 
 function displayChart(data) {
-    // Clear the existing chart before displaying a new one
     d3.select("#chart").selectAll("*").remove();
 
     const chartType = chartSequence[totalQuestions % chartSequence.length];
@@ -45,13 +44,13 @@ function displayChart(data) {
         case 'pie':
             displayPieChart(data);
             break;
-        case 'box': // Change from 'scatter' to 'box'
+        case 'box':
             displayBoxPlot(data);
             break;
         default:
             console.error('Unknown chart type:', chartType);
     }
-    totalQuestions++; // Increment the total questions counter
+    totalQuestions++;
 }
 
 function displayBarChart(data) {
@@ -107,12 +106,10 @@ function displayBoxPlot(data) {
     const min = sortedData[0];
     const max = sortedData[sortedData.length - 1];
 
-    // Scales
     const yScale = d3.scaleLinear()
-        .domain([0, 100]) // Assuming data is in the 0-100 range; adjust if necessary
+        .domain([0, 100])
         .range([height, 0]);
 
-    // Draw box plot
     svg.append("line")
         .attr("x1", width / 2)
         .attr("x2", width / 2)
@@ -138,8 +135,7 @@ function displayBoxPlot(data) {
 
 function nextTrial() {
     if (totalQuestions >= chartSequence.length) {
-        displayResult(); // Display the results after the last trial
-        // Optionally, you could reset the experiment here or offer the user a button to start over.
+        displayResult();
     } else {
         const data = generateData();
         displayChart(data);
@@ -147,28 +143,25 @@ function nextTrial() {
 }
 
 function displayResult() {
-    // Hide experiment elements
     document.getElementById('chartArea').style.display = 'none';
     document.getElementById('responseForm').style.display = 'none';
 
-    // Create a results section or use an existing div
     let resultsDiv = document.getElementById('results');
     if (!resultsDiv) {
         resultsDiv = document.createElement('div');
         resultsDiv.id = 'results';
         document.body.appendChild(resultsDiv);
     } else {
-        // Clear previous results if the div already exists
         resultsDiv.innerHTML = '';
     }
 
     let resultContent = '<h3>Experiment Results</h3><table border="1"><tr><th>Chart Type</th><th>Your Input (%)</th><th>Correct Value (%)</th></tr>';
     userInputs.forEach((input, index) => {
         const data = correctResults[index];
-        const min = Math.min(...data); // Smallest value
-        const max = Math.max(...data); // Largest value
-        const percentage = (min / max) * 100; // Correct calculation for percentage
-        const correctValue = percentage.toFixed(2) + '%'; // Format to two decimal places and add '%'
+        const min = Math.min(...data);
+        const max = Math.max(...data);
+        const percentage = (min / max) * 100;
+        const correctValue = percentage.toFixed(2) + '%';
 
         resultContent += `<tr><td>${chartSequence[index]}</td><td>${input}</td><td>${correctValue}</td></tr>`;
     });
