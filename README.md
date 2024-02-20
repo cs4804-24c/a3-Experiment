@@ -21,12 +21,14 @@ The experiment was conducted in https://andrewsalls.github.io/study-a3/. We were
 The visuals we created for the study include:
 
 Generating graphs in d3:
+
 ![image](https://github.com/shivalimani/a3-Experiment/assets/77992504/cf1cd3b6-4af4-4653-939e-c280a408bd9b)
 ![image](https://github.com/shivalimani/a3-Experiment/assets/77992504/2e9392fd-a729-45ee-9498-da11c618fed3)
 (the graph with the dinosaur)
 
 # Results:
 We calculated the accuracy of identifying the major quadrants and if the the graph outlined a dinosaur or a gorilla. We found that these were the results.
+
 ![Test](img/rates.png)
 
 Based off these calculations it can be said that noticing the dinosaur did not work since it seem many people are were seeing the gorilla which was not even in the test. The gorilla question was to ask whether they paid attention to the changing scatter plots, as an indication of whether they actually saw the dinosaur or just assumed it was there. Also, the participants were not sucessful in identifying which quadrant has the most number of blue X's, so their visual perception could not keep up. There were too many moving parts.
