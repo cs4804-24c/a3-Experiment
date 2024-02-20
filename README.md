@@ -8,13 +8,30 @@ Requirements
     1. http://geospatialmqptesting.dyn.wpi.edu:3000/bar_vis/
     2. http://geospatialmqptesting.dyn.wpi.edu:3000/scatter_vis/
     3. http://geospatialmqptesting.dyn.wpi.edu:3000/shotchart/
+
 - Concise description and screenshot of your experiment.
+
 ![](/img/barchart.png)
 ![](/img/scatterchart.png)
 ![](/img/shotchart.png)
+
+In this experiment, we took NBA player shooting data and plotted it on three different visualizations (Bar chart, Scatter chart, and a shot chart). We then had users enter what they thought the average point per game was based on the visualization provided. Ultimately, there were 20 estimates inputted for each chart from 10 people, giving us 200 entries of data per visualization. We then calculated the percent difference to determine which visualizations produced the most accurate estimates (The original error formula used in the Cleveland-McGill paper would not be accurate over the range of possible point values). The formula is: abs(a-b)/((a+b)/2)*100+1/8
+
+ After calculating the error, we were able to rank the charts as the following: 
+1. Scatter plot
+2. Shot chart
+3. Bar chart
+
 - Description of the technical achievements you attempted with this project.
-    - Wrote a web server in Node.js using Express.js to handle submissions of 
+    - Wrote a web server in Node.js using Express.js to handle submissions of user estimate which wrote their estimate and actual value to a given CSV
+    - Retrieved NBA stat data dynamically using the NBA Stats API. This utilized the web server to bypass CORS limitations.
+    - Deployed the web server and charts to a local PC to avoid having the web server being blocked from the NBA API on well known hosting services (ex. AWS, Glitch)
+
 - Description of the design achievements you attempted with this project.
+    - Plotted shots taken from the NBA API on an SVG
+    - Drew the lines of a basketball court on an SVG (3 point line, paint line, basketball net, etc.)
+    - Filter down shot chart by games played
+    - Click on shots to view a video clip of the shot taken
 
 Background
 ---
