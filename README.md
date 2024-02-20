@@ -15,10 +15,9 @@ Visualizations: After the data was collected from the partipants
 
 Technical Achievements
 - Generation of data for scatter plots that had the same number of points in each quadrant, the same mean, and the same variance as the datasaurus graph.
-- Utilizing Revisit infrastructure to test our visualizations (including troubleshooting Revisit with Professor Harrison [CORS, ReCaptcha, etc.]
-- Utilizing FireBase to store data and participant response from Revisit
-- Utilizing Rowy (low-code backend) to manage database and export Firebase data to CSV for visualization creation
-
+- Utilized Revisit infrastructure to test our visualizations (including troubleshooting for implementing Revisit with Professor Harrison [CORS, ReCaptcha, etc.]
+- Utilized FireBase to store data and participant response from Revisit
+- Utilized Rowy (low-code backend) to manage database and export Firebase data to CSV for analyzation
 
 For this assignment you should aim to write everything from scratch. For experimentation it is often necessary to control all elements of the chart.
 You should definitely *reference* demo programs from books or the web, and if you do please provide a References section with links at the end of your Readme.
