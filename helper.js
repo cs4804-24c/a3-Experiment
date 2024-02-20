@@ -1,4 +1,4 @@
-// Function to save results to a text file
+// Function to save results to a csv file
 function saveResults() {
   // Prepare CSV header
   let csv = "TrialNumber,TruePercentage,YourAnswer,Accuracy\n";
@@ -38,4 +38,29 @@ function saveResults() {
   }
   // Navigate to congrats.html
   window.location.href = "congrats.html";
+}
+
+function generateRandomCSV() {
+  const sections = [
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5",
+    "S6",
+    "S7",
+    "S8",
+    "S9",
+    "S10",
+  ];
+
+  let data = "Section,Group,Number\nG1,,\n"; // Header row
+
+  for (let i = 0; i < 10; i++) {
+    const section = sections[i];
+    const number = Math.floor(Math.random() * 100) + 10; // Random number between 10 and 100
+    data += `${section},G1,${number}\n`; // Add data row
+  }
+
+  return data;
 }
