@@ -24,16 +24,53 @@ We have a list of colors that we want to experiment on. I created another list t
 
 For display results, I used elements defined in the style container and fed in the values from the results list. Meanwhile, all the user responses are uploaded to the Firebase during the test in real-time. Each user has a distinct username and their response for the total 20 sub-tests. With the JSON file exported from the Firebase, we could then collect and analyze the data with a simple Python script.
 
-
-## Analysis
-
-
 ## Technical Achievement
 1. Deployed our game within the reVISit framework based on the html-input example.
 
    Link to the repo wiht reVISit framework version: https://github.com/YifuYuan/a3-revisit 
 3. Set up the Firebase with the visual experiment game so that all the user responses are stored on the cloud in real-time, which simplifies the data collection process.
 <img width="1097" alt="image" src="https://github.com/YifuYuan/a3-Experiment/assets/90162512/b3318610-3e4f-474e-bc21-f654aecc5022">
+
+
+## Analysis
+<img width="518" alt="Bar_Gaph" src="https://github.com/YifuYuan/a3-Experiment/assets/90162512/ce360329-02cf-436c-854f-f58282d07f49">
+<p float="left">
+    <img src="https://github.com/YifuYuan/a3-Experiment/assets/90162512/5e7e0367-97c7-447d-b730-8ce302d375ca" width="500" />
+    <img src="https://github.com/YifuYuan/a3-Experiment/assets/90162512/cc936d55-dc98-4a0c-b6de-f4671b3fe8e0" width="500" />
+</p>
+
+<p float="left">
+    <img src="https://github.com/YifuYuan/a3-Experiment/assets/90162512/99a8dd6f-0a1c-4e0d-96a9-6356da6c0c09" width="500" />
+    <img src="https://github.com/YifuYuan/a3-Experiment/assets/90162512/6cbae31b-e16c-4b51-89fe-0c6202038db4" width="500" />
+</p>
+
+<p float="left">
+    <img src="https://github.com/YifuYuan/a3-Experiment/assets/90162512/3221ed01-83dc-441f-879a-97e7af1d1d1b" width="500" />
+    <img src="https://github.com/YifuYuan/a3-Experiment/assets/90162512/3e2d7b4f-9536-4773-9d04-44bc1891d844" width="500" />
+</p>
+
+<p float="left">
+    <img src="https://github.com/YifuYuan/a3-Experiment/assets/90162512/487855bd-17b2-467e-a321-4cd04c8253f6" width="500" />
+    <img src="https://github.com/YifuYuan/a3-Experiment/assets/90162512/761fd5ab-3906-4b5f-9941-d269eb2575af" width="500" />
+</p>
+
+<p float="left">
+    <img src="https://github.com/YifuYuan/a3-Experiment/assets/90162512/43f4317b-866d-4b3e-863e-7fe9b491e943" width="500" />
+    <img src="https://github.com/YifuYuan/a3-Experiment/assets/90162512/efc2d213-1ca3-4877-ba9a-f77a37847741" width="500" />
+</p>
+
+The above graphs, excluding the bar chart, are logistic regressions separated by color pairs(Bk, B, G, R, Y representing black, blue, green, red, and yellow respectively) that use a 95% confidence interval.  From the odds ratio provided from each graph, we can compare how likely it is that a person taking the experiment will guess a given trial correctly based on the color combination shown to them.  The odds ratio of each graph is the best indicator of how likely someone is to guess correctly on a given trial. Additionally, each graph provides a p-value, which indicates whether or not the results are statistically significant. If the p-value is below .05 for the difference in dot representation, then we reject the null hypothesis that the difference in dots does not have an effect on if the person gets it right or wrong. If the difference in dots does play a role, when the difference in dots is smaller, the user is more likely to make a mistake. This mistake can be attributed to the color between the two groups. For example, we see a very low p-value for Black and Yellow combination. This means that the number of dots did impact whether the person got the answer right or wrong. The closer the dots were in number, the more likely the user was to get the answer wrong. When the count of dots is close between the two groups the users can only rely on the color to differentiate the information between the two groups.
+
+Based on the trials conducted, there is sufficient evidence to suggest that color has a significant effect on perception of cardinality. For example, the trails that had a color pairing of green and yellow had correct guesses 96.66% of the time, while the color pairs of black and blue had correct guesses 78.33% of the time. In addition to the data shown on the bar graph, the odds ratios support that certain color pairs made it easier to guess cardinality. It is also worth noting that the color combinations black-green, black-yellow, and blue-yellow all tied for second place on the bar graph. Additionally, every color combination had at least a 75% accuracy rate. This could indicate that the experiment may have been easy, or that it wasn't fine tuned to getting the desired results.
+
+## Future Steps
+If we were to do this experiment again, we would make the difference between the two groups be within a range as opposed to being a random number between 20-100. Also we would make it so the two groups cannot have the same number of circles, this did not happen often but when it did happen which affected our analysis. It might also be worth considering reducing the time that the dots are shown to within one second so that the experiment can focus more on how easily people can immediately interpret cardinality of data based on color.
+
+
+
+
+
+
 
 
 
