@@ -9,7 +9,7 @@ Data: The datasaurus graph was sourced from https://www.dropbox.com/sh/xaxpz3pm5
 
 Firebase/Revisit:
 
-For storing data from ReVisit, we implemented FireBase using the instructions on the website. Through FireBase, we created a collection for our participant responses with each of the participant's responses being stored in a separate document identified by their unique participant ID. To export the data from FireBase, we implemented and utilized Rowy (a low-code backend for managing Firebase databases) to export the data to a CSV where it could be further analyzed. 
+For storing data from ReVisit, we implemented FireBase using the instructions on the website. We ran into a few issues with ReCaptcha and CORS that we had to troubleshoot in office hours. Through FireBase, we created a collection for our participant responses with each of the participant's responses being stored in a separate document identified by their unique participant ID. To export the data from FireBase, we implemented and utilized Rowy (a low-code backend for managing Firebase databases) to export the data to a CSV where it could be further analyzed. 
 
 Testing: In https://andrewsalls.github.io/study-a3/ is where the experiment was conducted. We were able to get 22 particpants to take part during this experiment. 
 
