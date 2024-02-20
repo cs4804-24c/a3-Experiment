@@ -14,31 +14,6 @@ let currentCSVData = "";
 // Save the currentCSVData after every trial
 let savedCSVData = "";
 
-function generateRandomCSV() {
-  const sections = [
-    "S1",
-    "S2",
-    "S3",
-    "S4",
-    "S5",
-    "S6",
-    "S7",
-    "S8",
-    "S9",
-    "S10",
-  ];
-
-  let data = "Section,Group,Number\nG1,,\n"; // Header row
-
-  for (let i = 0; i < 10; i++) {
-    const section = sections[i];
-    const number = Math.floor(Math.random() * 100) + 10; // Random number between 10 and 100
-    data += `${section},G1,${number}\n`; // Add data row
-  }
-
-  return data;
-}
-
 // append the svg object to the body of the page
 const svg = d3
   .select("#my_dataviz")
@@ -48,48 +23,6 @@ const svg = d3
   .append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-// Function to save results to a text file
-function saveResults() {
-  // Prepare CSV header
-  let csv = "TrialNumber,TruePercentage,YourAnswer,Accuracy\n";
-  // Iterate over resultsArray and format each result as a CSV row
-  resultsArray.forEach(function (result, index) {
-    // Parse relevant information from the result string
-    const regex =
-      /True Percentage: (\d+\.\d+), Your Answer: (\d+\.\d+), Accuracy: (\d+\.\d+)/;
-    const match = result.match(regex);
-    if (match) {
-      const truePercentage = parseFloat(match[1]);
-      const yourAnswer = parseFloat(match[2]);
-      const accuracy = parseFloat(match[3]);
-
-      // Add formatted row to CSV
-      csv += `${index + 1},${truePercentage},${yourAnswer},${accuracy}\n`;
-    }
-  });
-  // Create a Blob containing the CSV data
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-
-  // Trigger file download
-  if (navigator.msSaveBlob) {
-    // For IE 10+
-    navigator.msSaveBlob(blob, "all_trial_results.csv");
-  } else {
-    const link = document.createElement("a");
-    if (link.download !== undefined) {
-      const url = URL.createObjectURL(blob);
-      link.setAttribute("href", url);
-      link.setAttribute("download", "all_trial_results.csv");
-      link.style.visibility = "hidden";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-  }
-  // Navigate to congrats.html
-  window.location.href = "congrats.html";
-}
-
 // Event listener for form submission
 document
   .getElementById("percentageForm")
@@ -98,23 +31,21 @@ document
 
     const percentage = parseFloat(document.getElementById("percentage").value);
     if (!isNaN(percentage) && trialNumber <= 6) {
-      const accuracy = Math.log2(Math.abs(percentage - truePercentage) + 0.125);
+      const error = Math.log2(Math.abs(percentage - truePercentage) + 0.125);
       console.log("percentage: " + percentage);
       console.log("true percentage: " + truePercentage);
-      console.log("accuracy: " + accuracy);
+      console.log("error: " + error);
 
       // Add result to the array
       const result = `Trial ${trialNumber} - True Percentage: ${truePercentage.toFixed(
         2
-      )}, Your Answer: ${percentage.toFixed(2)}, Accuracy: ${accuracy.toFixed(
-        2
-      )}`;
+      )}, Your Answer: ${percentage.toFixed(2)}, Error: ${error.toFixed(2)}`;
       resultsArray.push(result);
 
       if (trialNumber >= 6) {
         // load results
         saveResults();
-        return;
+        window.location.href = "voronoitreemap.html";
       }
       trialNumber++;
       document.getElementById("trialNum").innerHTML = "Trial " + trialNumber;
@@ -177,6 +108,10 @@ function loadTrial(trialNumber) {
       smallerDataPointArea = area;
     }
   });
+
+  console.log("Selected rectangles: ", selectedRectangles);
+  console.log("Larger data point area: ", largerDataPointArea);
+  console.log("Smaller data point area: ", smallerDataPointArea);
   // Calculate true percentage
   truePercentage = (smallerDataPointArea / largerDataPointArea) * 100;
 
