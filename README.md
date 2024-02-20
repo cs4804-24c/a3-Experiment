@@ -47,4 +47,4 @@ This web application is designed to conduct an interactive experiment where part
 
 ## Setup
 Use this link
-https://github.com/JinjiaOu/a3-Experiment/blob/main/index.html
+https://jinjiaou.github.io/a3-Experiment/
