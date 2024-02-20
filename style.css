@@ -1,0 +1,38 @@
+h1 {
+    text-align:center;
+    font-family:Verdana;
+}
+
+p{
+    font-family: Tahoma;
+    text-align:center;
+}
+
+div{
+    text-align: center;
+    
+}
+
+button{
+    background-color: #FFB347;
+    height:3em;
+    width:10em;
+    border-radius: 10%;
+    border:none;
+}
+
+button:hover{
+    background-color: #eba543;
+}
+
+a{
+    text-decoration:none;
+    font-size: 2em;
+    color: black;
+    font-family: Tahoma;
+
+}
+
+body{
+    background-color: #e9e9e9;
+}
