@@ -257,18 +257,18 @@ document
 
     const percentage = parseFloat(document.getElementById("percentage").value);
     if (!isNaN(percentage) && trialNumber <= 6) {
-      let accuracy = Math.log2(Math.abs(percentage - truePercentage) + 0.125);
-      if (accuracy < 0) {
-        accuracy = 0;
+      let error = Math.log2(Math.abs(percentage - truePercentage) + 0.125);
+      if (error < 0) {
+        error = 0;
       }
       console.log("percentage: " + percentage);
       console.log("true percentage: " + truePercentage);
-      console.log("accuracy: " + accuracy);
+      console.log("error: " + error);
 
       // Add result to the array
       const result = `Trial ${trialNumber} - True Percentage: ${truePercentage.toFixed(
         2
-      )}, Your Answer: ${percentage.toFixed(2)}, Accuracy: ${accuracy.toFixed(
+      )}, Your Answer: ${percentage.toFixed(2)}, Error: ${error.toFixed(
         2
       )}`;
       resultsArray.push(result);

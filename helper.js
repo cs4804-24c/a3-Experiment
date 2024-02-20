@@ -1,20 +1,20 @@
 // Function to save results to a csv file
 function saveResults() {
   // Prepare CSV header
-  let csv = "TrialNumber,TruePercentage,YourAnswer,Accuracy\n";
+  let csv = "TrialNumber,TruePercentage,YourAnswer,Error\n";
   // Iterate over resultsArray and format each result as a CSV row
   resultsArray.forEach(function (result, index) {
     // Parse relevant information from the result string
     const regex =
-      /True Percentage: (\d+\.\d+), Your Answer: (\d+\.\d+), Accuracy: (\d+\.\d+)/;
+      /True Percentage: (\d+\.\d+), Your Answer: (\d+\.\d+), Error: (\d+\.\d+)/;
     const match = result.match(regex);
     if (match) {
       const truePercentage = parseFloat(match[1]);
       const yourAnswer = parseFloat(match[2]);
-      const accuracy = parseFloat(match[3]);
+      const error = parseFloat(match[3]);
 
       // Add formatted row to CSV
-      csv += `${index + 1},${truePercentage},${yourAnswer},${accuracy}\n`;
+      csv += `${index + 1},${truePercentage},${yourAnswer},${error}\n`;
     }
   });
   // Create a Blob containing the CSV data
