@@ -1,7 +1,7 @@
 Assignment 3 - Replicating a Classic Experiment  
 ===
 
-PUT LINK HERE
+https://jamesstaryi.github.io/a3-Experiment/
 
 # Description
 For my experiment I decided to conduct the same study as the Cleveland and McGill experiment. I used a bar chart, a tree map, and a pie chart as the 3 visualizations for my experiment. The experiment was conducted on 10 of my friends, totalling 600 trials (200 for each chart). The results are shown below.
