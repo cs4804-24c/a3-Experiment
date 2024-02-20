@@ -58,7 +58,7 @@ function generateRandomCSV() {
 
   for (let i = 0; i < 10; i++) {
     const section = sections[i];
-    const number = Math.floor(Math.random() * 100) + 10; // Random number between 10 and 100
+    const number = Math.floor(Math.random() * 100) + 5; // Random number between 5 and 100
     data += `${section},G1,${number}\n`; // Add data row
   }
 
@@ -91,7 +91,7 @@ function generateRandomJSON() {
   return data;
 }
 
-// generate random number from 10 to 100
+// generate random number from 5 to 100
 function generateRandomNumber() {
-  return Math.floor(Math.random() * 100) + 10;
+  return Math.floor(Math.random() * 100) + 5;
 }
