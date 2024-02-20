@@ -64,3 +64,40 @@ function generateRandomCSV() {
 
   return data;
 }
+
+function generateRandomJSON() {
+  const data = {
+    name: "world",
+    children: [
+      {
+        name: "Asia",
+        color: "#f58321",
+        children: [
+          { name: "China", weight: generateRandomNumber(), code: "CN" },
+          { name: "Japan", weight: generateRandomNumber(), code: "JP" },
+          { name: "India", weight: generateRandomNumber(), code: "IN" },
+          { name: "South Korea", weight: generateRandomNumber(), code: "KR" },
+          { name: "Russia", weight: generateRandomNumber(), code: "RU" },
+          { name: "Indonesia", weight: generateRandomNumber(), code: "ID" },
+          { name: "Turkey", weight: generateRandomNumber(), code: "TR" },
+          { name: "Saudi Arabia", weight: generateRandomNumber(), code: "SA" },
+          { name: "Iran", weight: generateRandomNumber(), code: "IR" },
+          { name: "Thaïland", weight: generateRandomNumber(), code: "TH" },
+          { name: "United Arab Emirates", weight: generateRandomNumber(), code: "AE" },
+          { name: "Hong Kong", weight: generateRandomNumber(), code: "HK" },
+          { name: "Israel", weight: generateRandomNumber(), code: "IL" },
+          { name: "Malasya", weight: generateRandomNumber(), code: "MY" },
+          { name: "Singapore", weight: generateRandomNumber(), code: "SG" },
+          { name: "Philippines", weight: generateRandomNumber(), code: "PH" },
+        ],
+      },
+    ],
+  };
+
+  return data;
+}
+
+// generate random number from 10 to 100
+function generateRandomNumber() {
+  return Math.floor(Math.random() * 100) + 10;
+}

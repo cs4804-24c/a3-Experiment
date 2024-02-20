@@ -38,7 +38,16 @@ var svg, drawingArea, treemapContainer;
 
 let selectedValues = [];
 let truePercentage = 0;
-d3.json("globalEconomyByGDP.json").then(function (rootData) {
+console.log(generateRandomJSON())
+
+function loadTrial(trialNumber) {
+  if (trialNumber > 6) {
+    // load results
+    saveResults();
+    window.location.href = "congrats.html";
+  }
+const jsonString = JSON.stringify(generateRandomJSON());
+d3.json("data:text/json;charset=utf-8," + encodeURIComponent(jsonString)).then(function (rootData) {
   initData();
   initLayout(rootData);
   hierarchy = d3.hierarchy(rootData).sum(function (d) {
@@ -47,6 +56,7 @@ d3.json("globalEconomyByGDP.json").then(function (rootData) {
   _voronoiTreemap.clip(circlingPolygon)(hierarchy);
   drawTreemap(hierarchy);
 });
+}
 function initData(rootData) {
   circlingPolygon = computeCirclingPolygon(treemapRadius);
   fontScale.domain([3, 20]).range([8, 20]).clamp(true);
@@ -209,13 +219,13 @@ function drawTreemap(hierarchy) {
     .style("font-size", function (d) {
       return fontScale(d.data.weight);
     });
-  labels
-    .append("text")
-    .classed("name", true)
-    .html(function (d) {
-      return d.data.weight < 1 ? d.data.code : d.data.name;
-    });
-  labels.append("text").classed("value", true);
+  // labels
+  //   .append("text")
+  //   .classed("name", true)
+  //   .html(function (d) {
+  //     return d.data.weight < 1 ? d.data.code : d.data.name;
+  //   });
+  // labels.append("text").classed("value", true);
   //.text(function (d) {
   //return d.data.weight + "%";
   //});
@@ -270,8 +280,10 @@ document
       }
       trialNumber++;
       document.getElementById("trialNum").innerHTML = "Trial " + trialNumber;
-      // loadTrial(trialNumber);
+      loadTrial(trialNumber);
     } else {
       alert("Please enter a valid percentage.");
     }
   });
+
+  loadTrial(trialNumber);
