@@ -1,7 +1,7 @@
 Assignment 3 - Replicating a Classic Experiment  
 ===
 
-Experiment: This experiment is based off the paper "Jurassic Mark: Inattentional Bindness fo Datasaurus Reveals that Visualizations are Explored Not Seen". Specifically we attempted experiment 1: fiteration task. The idea behind this experiment is to focus on a specific mark (blue X's) in a sccaterplot while filtering out any other blue and green markers in the graph. Even within this experiment there are hidden images like a dinasaur which is tested to see if the particpant noticed it.
+Experiment: This experiment is based off the paper "Jurassic Mark: Inattentional Bindness fo Datasaurus Reveals that Visualizations are Explored Not Seen". Specifically we attempted experiment 1: fiteration task. The idea behind this experiment is to focus on a specific mark (blue X's) in a sccaterplot while filtering out any other blue and green markers in the graph. Even within this experiment there are hidden images like a dinosaur which is tested to see if the particpant noticed it.
 
 Data: The datasaurus graph was sourced from https://www.dropbox.com/sh/xaxpz3pm5r5awes/AADUbGVagF9i4RmM9JkPtviEa?dl=0. The data was translated to have a normal distribution, that is x and y means of 0 and x and y variance of 1. To limit the differences between the scatter point plots and the datasaurus graph, data for each scatter point plot was generated such that the graphs had the same number of points in each quadrant, the same mean*, and the same variance* as the datasaurus graph.
 
@@ -11,7 +11,11 @@ Firebase/Revisit:
 
 Testing: In https://andrewsalls.github.io/study-a3/ is where the experiment was conducted. We were able to get 22 particpants to take part during this experiment. 
 
-Visualizations: After the data was collected from the partipants 
+Visualizations: The visuals we created for the testing includes:
+
+[image]
+
+We calculated the accuracy of identofying the major quadrants and if the the graph outlined a dinosaur or a gorilla. We found that
 
 Technical Achievements
 - Generation of data for scatter plots that had the same number of points in each quadrant, the same mean, and the same variance as the datasaurus graph.
