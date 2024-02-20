@@ -96,10 +96,20 @@ GitHub Details
 ```
 a3-FirstLastnameMember1-FirstLastnameMember2-FirstLastnameMember3-...
 ```
+** Error
+isFilledErr	hasColorErr	isRoundErr
+3.741645121	3.733173975	3.791575356
 
+total tests run:
+isFilled: 213
+hasColor: 241
+isRound: 206
+![image](https://github.com/kylieflerlage/a3-Experiment/assets/128189858/c52d75e9-5fed-4e80-8452-df835e3f82e5)
 
 ** References
 [chart Creation](https://gist.github.com/nbremer/21746a9668ffdf6d8242#file-radarchart-js)
 I took out anything that could count as an untested variable, and edited formatting to let me modify variables as needed for the tests.
 
 [write to file](https://codepen.io/jayeshdhage/pen/bGBPMxx)
+
+[bootstrap ci in r] https://bookdown.org/dereksonderegger/570/3-confidence-intervals-via-bootstrapping.html
