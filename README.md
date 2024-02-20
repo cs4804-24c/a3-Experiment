@@ -19,15 +19,13 @@ Visualizations: The visuals we created for the testing includes:
 We calculated the accuracy of identifying the major quadrants and if the the graph outlined a dinosaur or a gorilla. We found that these were the results.
 ![Test](img/rates.png)
 
+Based off these calculations it can be said that noticing the dinosaur did not work since it seem many people are were seeing the gorilla which was not even in the test. The gorilla question was to ask whether they paid attention to the moving scatterplo graph. Also it the participants were not sucessful in identifying which quadrant has the most number of blue X's so their visual perception could not keep up. There were too many moving parts. 
+
 Technical Achievements
 - Generation of data for scatter plots that had the same number of points in each quadrant, the same mean, and the same variance as the datasaurus graph.
 - Utilized Revisit infrastructure to test our visualizations (including troubleshooting for implementing Revisit with Professor Harrison [CORS, ReCaptcha, etc.]
 - Utilized FireBase to store data and participant response from Revisit
 - Utilized Rowy (low-code backend) to manage database and export Firebase data to CSV for analyzation
 
-For this assignment you should aim to write everything from scratch. For experimentation it is often necessary to control all elements of the chart.
-You should definitely *reference* demo programs from books or the web, and if you do please provide a References section with links at the end of your Readme.
 
-Going Beyond Cleveland-McGill
----
 
