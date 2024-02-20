@@ -8,9 +8,13 @@ https://amgiovenco.github.io/a3-Experiment/
 
 Experiment Summary
 ===
-Log2Error & 95% Confidence Intervals
+Log2Error & 95% Confidence Interval Chart
 
 ![log2error chart](img/error_bars_chart.png)
+
+The bar chart performed the best, followed by the pie chart, then the voronoi tree map, and finally the bubble chart.
+
+Calculations for mean log2error for each visualization type, standard deviation, and confidence interval can be seen in /spreadsheets/data_error_graph.xlsx. R code for the above chart can be found in rConfidenceInterval.r.
 
 ## Bar Chart
 Example Visualization:
