@@ -1,0 +1,81 @@
+﻿Trial Number,Visualization Type,Guessed Percentage,Correct Percentage
+1,Pie Chart,25,29
+2,Pie Chart,100,86
+3,Bubble Chart,80,83
+4,Voronoi Tree Map,25,67
+5,Voronoi Tree Map,75,88
+6,Voronoi Tree Map,50,72
+7,Bubble Chart,75,70
+8,Pie Chart,25,33
+9,Bubble Chart,5,3
+10,Voronoi Tree Map,75,73
+11,Bubble Chart,100,93
+12,Bubble Chart,90,82
+13,Pie Chart,85,84
+14,Voronoi Tree Map,75,84
+15,Voronoi Tree Map,5,2
+16,Voronoi Tree Map,15,37
+17,Bubble Chart,20,11
+18,Bar Chart,60,62
+19,Bar Chart,5,3
+20,Bar Chart,90,86
+21,Bar Chart,70,71
+22,Bubble Chart,95,86
+23,Bar Chart,60,51
+24,Pie Chart,100,90
+25,Bubble Chart,75,59
+26,Bar Chart,45,35
+27,Pie Chart,30,44
+28,Bar Chart,75,67
+29,Pie Chart,50,45
+30,Bar Chart,5,4
+31,Pie Chart,97,92
+32,Pie Chart,15,19
+33,Pie Chart,50,54
+34,Voronoi Tree Map,10,10
+35,Bar Chart,10,31
+36,Pie Chart,100,95
+37,Bubble Chart,25,14
+38,Bar Chart,50,49
+39,Pie Chart,90,80
+40,Voronoi Tree Map,80,77
+41,Bubble Chart,25,17
+42,Pie Chart,25,35
+43,Pie Chart,75,58
+44,Bubble Chart,30,27
+45,Pie Chart,50,64
+46,Pie Chart,10,8
+47,Bubble Chart,100,92
+48,Voronoi Tree Map,100,100
+49,Voronoi Tree Map,45,47
+50,Bubble Chart,40,30
+51,Bubble Chart,25,18
+52,Voronoi Tree Map,45,36
+53,Bar Chart,10,11
+54,Voronoi Tree Map,10,14
+55,Bubble Chart,20,31
+56,Bubble Chart,15,24
+57,Bar Chart,55,51
+58,Bubble Chart,10,6
+59,Bubble Chart,95,77
+60,Bar Chart,30,32
+61,Bar Chart,50,48
+62,Voronoi Tree Map,75,80
+63,Voronoi Tree Map,20,21
+64,Pie Chart,95,87
+65,Bubble Chart,100,90
+66,Bar Chart,95,92
+67,Bubble Chart,30,22
+68,Voronoi Tree Map,10,13
+69,Bar Chart,75,64
+70,Voronoi Tree Map,100,87
+71,Bar Chart,40,38
+72,Pie Chart,55,60
+73,Pie Chart,97,93
+74,Pie Chart,60,55
+75,Voronoi Tree Map,75,64
+76,Bar Chart,70,70
+77,Bar Chart,10,6
+78,Bar Chart,75,67
+79,Voronoi Tree Map,30,53
+80,Voronoi Tree Map,35,32

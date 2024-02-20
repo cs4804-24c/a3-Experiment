@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voronoi Diagram</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+<div id="voronoiChart"></div>
+<script>
+
+//I found this website that SHOULD help me quite a bit https://www.react-graph-gallery.com/voronoi
+//the website was in .txs so I had to convert it to .html but it worksssssss
+
+
+//fake data to make lines and such
+const data = 
+[{x: 10, y: 20}, 
+{x: 40, y: 90}, 
+{x: 70, y: 80},
+{x: 90, y: 10},
+{x: 20, y: 30},
+{x: 50, y: 60},
+{x: 80, y: 70},
+{x: 100, y: 40},
+{x: 30, y: 50},
+{x: 60, y: 20},
+{x: 90, y: 30},
+{x: 10, y: 70},
+{x: 40, y: 40},];
+
+
+const width = 400, height = 400;
+
+const svg = d3.select('#voronoiChart').append('svg')
+    .attr('width', width)
+    .attr('height', height);
+
+//make clip path to create graph in a circle
+const clipPathId = 'circle-clip';
+svg.append('clipPath')
+    .attr('id', clipPathId)
+    .append('circle')
+    .attr('cx' , width / 2)
+    .attr('cy', height / 2)
+    .attr('r', width / 2);
+
+const xScale = d3.scaleLinear().domain([0, 100]).range([0, width]);
+const yScale = d3.scaleLinear().domain([0, 100]).range([0, height]);
+
+//compute the voronoi diagram
+const delaunay = d3.Delaunay.from(data.map(d => [xScale(d.x), yScale(d.y)]));
+const voronoi = delaunay.voronoi([0, 0, width, height]);
+
+//draw the voronoi cells and outline the clip path
+svg.append('path')
+    .attr('d', voronoi.render())
+    .style('fill', 'none')
+    .style('stroke', 'black')
+    .attr('clip-path', `url(#${clipPathId})`);
+
+svg.append('circle')
+    .attr('cx', width / 2)
+    .attr('cy', height / 2)
+    .attr('r', width / 2)
+    .style('fill', 'none')
+    .style('stroke', 'black')
+    .style('strone-width', 2);
+
+</script>
+</body>
+</html>

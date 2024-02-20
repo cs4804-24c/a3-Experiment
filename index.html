@@ -1,9 +1,535 @@
 <!DOCTYPE html>
-<div id="container"></div>
-<script type="module">
+<html>
+    <head>
+        <script src="https://d3js.org/d3.v6.min.js"></script>
+        <script src="https://rawcdn.githack.com/Kcnarf/d3-weighted-voronoi/v1.1.3/build/d3-weighted-voronoi.js"></script>
+        <script src="https://rawcdn.githack.com/Kcnarf/d3-voronoi-map/v2.1.1/build/d3-voronoi-map.js"></script>
+        <script src="https://rawcdn.githack.com/Kcnarf/d3-voronoi-treemap/v1.1.2/build/d3-voronoi-treemap.js"></script> 
+        <style>
+            h1 {color: black; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial;}
+            h3 {color: black; font-family:'Segoe UI', Geneva;}
+            h5 {color: black; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva;}
+            p {color: black; font-family: Arial;}
+            input {font-size: 14px; font-family:'Segoe UI', Geneva; border: 2px solid black;}
+            button {font-size: 14px; font-family:'Segoe UI', Geneva; background-color: white; border: 2px solid black;}
+        </style>
+    </head>
 
-import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+    <body>
+        <div id="initial">
+            <h1>
+                Data Visualization (CS4804) Experiment
+            </h1>
+            <h3>
+                Group Members: Ryan Dillon, Alessandra Giovenco, Pegah Emdad
+            </h3>
+            <p>
+                Thank you for participating! <br>
+                In this study, you will be shown a series of visualizations. <br>
+                In each visualization, two sections of the graph will be marked with a dot. <br>
+                In the text box, please enter the percentage of the smaller marked section in comparison to the larger marked section. <br>
+                For example, if the smaller section appears to be 50% of the larger section, enter "50" in the text box.
+            </p>
+            <h5>Ready to start?</h5>
+            <button id ="begin" onclick="return showExperiment()">Begin</button>
+        </div>
 
-console.log(d3);
+        <div id="experiment" style="display:none">
+            <h1>
+                Data Visualization (CS4804) Experiment
+            </h1>
+            <p>
+                In the text box, please enter the percentage of the smaller marked section in comparison to the larger marked section. <br>
+                For example, if the smaller section appears to be 50% of the larger section, enter "50" in the text box.
+            </p>
+            <h3 id="count"></h3>
+            <div id="visualization"></div>
+            <input id="answer" type="text" value=""></input>
+            <button id="submit" onclick="return recordResult()">Submit</button>
+        </div>
 
-</script>
+        <div id="results" style="display:none">
+            <h1>
+                Data Visualization (CS4804) Experiment
+            </h1>
+            <p>
+                Thank you for participating! Hit the button to export your results to a .csv file.
+            </p>
+            <div id="printedResults"></div>
+            <button id="export" onclick="return exportResults()">Export to .csv</button>
+        </div>
+
+        <script>
+            console.log(d3); // test if d3 is loaded
+
+            var visOrder = [];
+            var results = [];
+            var count = 0;
+
+            var visType = "";
+            var correctAnswer = 0;
+
+            // change screen from intial screen to visualization screen
+            function showExperiment() {
+                document.getElementById('initial').style.display='none';
+                document.getElementById('experiment').style.display='block';
+                startExperiment();
+            }
+
+             // change screen from visualization screen to results screen
+            function showResults() {
+                document.getElementById('experiment').style.display='none';
+                document.getElementById('results').style.display='block';
+                //printAllResults();
+            }
+
+            function makeDataset() {
+                // create and fill an array of 5 data points (values 0-100)
+                var data = d3.range(1, 6).map(function (d) {
+                    return{
+                        idx: d.toString(),
+                        val: Math.floor(Math.random()*100 + 1)
+                    };
+                });
+
+                // randomly choose two indices in the data point array to mark
+                let markOne = Math.floor(Math.random()*5)
+                let markTwo = Math.floor(Math.random()*5);
+                
+                // if the indices are the same, reassign the second one until they no longer match
+                while (markOne == markTwo) {
+                    markTwo = Math.floor(Math.random()*5);
+                }
+
+                // create the struct to use as the dataset for each graph
+                var dataSet = {
+                    data: data,
+                    markOne: markOne,
+                    markTwo: markTwo
+                }
+
+                console.log(data)
+                console.log(markOne);
+                console.log(markTwo);
+
+                return dataSet;
+            }
+
+            // creates an array containing a random order of visualizations (20 per vis type, 80 total)
+            function createTrialOrder() {
+                var barCount = 0;
+                var pieCount = 0;
+                var bubbleCount = 0;
+                var treeCount = 0;
+
+                var order = [];
+
+                while (barCount < 20 || pieCount < 20 || bubbleCount < 20 || treeCount < 20) {
+                    // generate a number 1-4
+                    let num = Math.floor(Math.random()*4) + 1;
+
+                    // num = 1 corresponds to bar chart
+                    if (num == 1) {
+                        if (barCount < 20) {
+                            order.push(num);
+                            barCount++;
+                        }
+                        else {
+                            continue;
+                        }
+                    }
+
+                    // num = 2 corresponds to pie chart
+                    else if (num == 2) {
+                        if (pieCount < 20) {
+                            order.push(num);
+                            pieCount++;
+                        }
+                        else {
+                            continue;
+                        }
+                    }
+
+                    // num = 3 corresponds to bubble chart
+                    else if (num == 3) {
+                        if (bubbleCount < 20) {
+                            order.push(num);
+                            bubbleCount++;
+                        }
+                        else {
+                            continue;
+                        }
+                    }
+
+                    // num = 4 corresponds to voronoi tree map
+                    else {
+                        if (treeCount < 20) {
+                            order.push(num);
+                            treeCount++;
+                        }
+                        else {
+                            continue;
+                        }
+                    }
+                }
+
+                console.log(order);
+                return order;
+
+            }
+
+            function createTrial(num) {
+                count++;
+                let dataSet = makeDataset();
+
+                // figure out what the correct answer is for ratio of marked sections
+                if (dataSet.data[dataSet.markOne].val < dataSet.data[dataSet.markTwo].val) {
+                    correctAnswer = Math.floor(dataSet.data[dataSet.markOne].val / ((dataSet.data[dataSet.markTwo].val)/100));
+                }
+
+                else if (dataSet.data[dataSet.markOne].val > dataSet.data[dataSet.markTwo].val) {
+                    correctAnswer = Math.floor(dataSet.data[dataSet.markTwo].val / ((dataSet.data[dataSet.markOne].val)/100));
+                }
+
+                else {
+                    correctAnswer = 100;
+                }
+
+                // remove current visualization
+                var currSvg = d3.select("div#visualization").select('svg')
+                currSvg.remove();
+
+                // let the user know how many questions they have to go
+                document.getElementById('count').innerHTML = "Question " + (count) + "/80"
+
+                if (visOrder[num] == 1) {
+                    visType = "Bar Chart";
+                    createBarChart(dataSet);
+                }
+
+                else if (visOrder[num] == 2) {
+                    visType = "Pie Chart";
+                    createPieChart(dataSet);
+                }
+
+                else if (visOrder[num] == 3) {
+                    visType = "Bubble Chart";
+                    createBubbleChart(dataSet);
+                }   
+
+                else {
+                    visType = "Voronoi Tree Map";
+                    createVoronoiTreeMap(dataSet);
+                }
+            }
+
+            function recordResult() {
+                // do some stuff to record result
+                let result = {
+                    trialNum: count,
+                    visType: visType,
+                    answer: parseInt(document.getElementById('answer').value),
+                    correctAnswer: correctAnswer
+                }
+
+                console.log(result);
+                results.push(result);
+                
+                if (count == 80) {
+                    showResults();
+                }
+
+                else {
+                    // then clear the input box and create the next trial
+                    document.getElementById("answer").value="";
+                    createTrial(count);
+                }
+            }
+
+            
+            function createBarChart(dataSet) {
+                // set the dimensions and margins of the graph
+                var margin = { top: 30, right: 30, bottom: 40, left: 60 },
+                    width = 460 - margin.left - margin.right,
+                    height = 400 - margin.top - margin.bottom;
+
+                // append the svg object to the body of the page
+                var svg = d3.select("div#visualization")
+                    .append("svg")
+                    .attr("width", width + margin.left + margin.right)
+                    .attr("height", height + margin.top + margin.bottom)
+                    .append("g")
+                    .attr("transform",
+                        "translate(" + margin.left + "," + margin.top + ")");
+
+                // X axis
+                var x = d3.scaleBand()
+                    .range([0, width])
+                    .domain(dataSet.data.map(function (d) { return d.idx}))
+                    .padding(0.2);
+                svg.append("g")
+                    .attr("transform", "translate(0," + height + ")")
+                    .call(d3.axisBottom(x))
+                    .selectAll("text")
+                    .attr("transform", "translate(-10,0)rotate(-45)")
+                    .style("text-anchor", "end");
+
+                // Add Y axis
+                var y = d3.scaleLinear()
+                    .domain([0, 100])
+                    .range([height, 0]);
+                svg.append("g")
+                    .call(d3.axisLeft(y));
+
+                // Bars
+                svg.selectAll("mybar")
+                    .data(dataSet.data)
+                    .enter()
+                    .append("rect")
+                    .attr("x", function (d) { return x(d.idx); })
+                    .attr("y", function (d) { return y(d.val); })
+                    .attr("width", x.bandwidth())
+                    .attr("height", function (d) { return height - y(d.val); })
+                    .attr("stroke", "black" )
+                    .attr("fill", "white" );
+
+                // Add circles on two bars
+                var circlesData = [
+                    { idx: dataSet.markOne, val: 2 },
+                    { idx: dataSet.markTwo, val: 2 }
+                ];
+
+                svg.selectAll("circle")
+                    .data(circlesData)
+                    .enter()
+                    .append("circle")
+                    .attr("cx", function (d) { return x(d.idx + 1) + x.bandwidth() / 2; })
+                    .attr("cy", function (d) { return y(d.val); })
+                    .attr("r", 2.5)
+                    .style("fill", "black");
+             }
+
+            function createPieChart(dataSet) {
+                // set the dimensions and margins of the graph
+                var width = 460,
+                    height = 400,
+                    radius = Math.min(width, height) / 2;
+
+                // append the svg object to the body of the page
+                var svg = d3.select("div#visualization")
+                    .append("svg")
+                    .attr("width", width)
+                    .attr("height", height + 70)
+                    .append("g")
+                    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+                // Set up the pie chart layout
+                var pie = d3.pie();
+
+                // Generate the arc data for the pie slices
+                var arc = d3.arc()
+                    .innerRadius(0)
+                    .outerRadius(radius);
+
+                // do some moving around of data to make calculation of slices and dots easier
+                let dataVals = [];
+
+                dataSet.data.forEach(function (row) {
+                    dataVals.push(row.val);
+                })
+
+                var tempData = pie(dataVals);
+                let data = [];
+                let index = 1;
+
+                tempData.forEach(function (row) {
+                    d = {
+                        index: index,
+                        pieData: row
+                    };
+
+                    data.push(d);
+                    index++;
+                })
+
+                // Append the pie slices to the svg
+                const slices = svg.selectAll("path")
+                    .data(tempData)
+                    .enter()
+                    .append("path")
+                    .attr("d", arc)
+                    .attr("stroke", "black" )
+                    .attr("fill", "white" );
+
+                 // Add circles on two pie slices
+                var circleData = [
+                    { startAngle: data[dataSet.markOne].pieData.startAngle, endAngle: data[dataSet.markOne].pieData.endAngle},  
+                    { startAngle: data[dataSet.markTwo].pieData.startAngle, endAngle: data[dataSet.markTwo].pieData.endAngle}
+                ];
+
+                svg.selectAll("circle")
+                    .data(circleData)
+                    .enter()
+                    .append("circle")
+                    .attr("cx", function (d) { return arc.centroid(d)[0]; })
+                    .attr("cy", function (d) { return arc.centroid(d)[1]; })
+                    .attr("r", 2.5)
+                    .style("fill", "black"); 
+            }
+
+            function createBubbleChart(dataSet) {
+                var width = 460; 
+                var height = 400; 
+                var padding = 50;
+
+                // Create the pack layout
+                const pack = d3.pack()
+                .size([width - padding, height - padding])
+                .padding(5);
+
+                // Create the hierarchy from the data
+                const hierarchy = d3.hierarchy({children: dataSet.data})
+                .sum(d => d.val);
+
+                // Compute the pack layout
+                const root = pack(hierarchy);
+
+                // Create the SVG element
+                const svg = d3.select("div#visualization")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height+70);
+
+                // Create the bubbles
+                const bubbles = svg.selectAll(".bubble")
+                .data(root.descendants().slice(1))
+                .enter()
+                .append("g")
+                .attr("class", "bubble")
+                .attr("transform", d => `translate(${d.x + padding}, ${d.y + padding})`);
+
+                // Add the circles to the bubbles
+                bubbles.append("circle")
+                .attr("r", d => d.r)
+                .attr("stroke", "black" )
+                .attr("fill", "white" );
+                
+                bubbles.append("circle")
+                .attr("r", function(d) {
+                    if (d.data.idx == dataSet.markOne+1 || d.data.idx == dataSet.markTwo+1) {
+                        return 2.5;
+                    }
+                    else {
+                        return 0;
+                    }
+                })
+                .attr("fill", "black");
+
+            }
+
+            function createVoronoiTreeMap(dataSet) {
+                var width = 400; 
+                var height = 400;
+                var margin = {top: 0, left: 0};
+
+                // Create the SVG element
+                const svg = d3.select("div#visualization")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height+70);
+
+                // create space for the labels (dots)
+                const labels = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+                // create hierarchy of data
+                const hierarchy = d3.hierarchy({children: dataSet.data})
+                .sum(d => d.val);
+
+                // tree map will be clipped in a circle
+                circle = d3
+                    .range(100)
+                    .map(i => [
+                        (width * (1 + Math.cos((i / 50) * Math.PI))) / 2,
+                        (height * (1 + Math.sin((i / 50) * Math.PI))) / 2
+                    ])
+
+                let voronoiTreeMap = d3.voronoiTreemap()
+                    .clip(circle);
+                
+                voronoiTreeMap(hierarchy);
+                
+                // create nodes for VTM
+                let allNodes = hierarchy.descendants()
+                    .sort((a, b) => b.depth - a.depth)
+                    .map((d, i) => Object.assign({}, d, {id: i}));
+                
+                // create voronoi cells
+                svg.selectAll('path')
+                    .data(allNodes)
+                    .enter()
+                    .append('path')
+                    .attr('d', d => "M" + d.polygon.join("L") + "Z")
+                    .style('fill', "white")
+                    .attr("stroke", "black")
+                    .attr("stroke-width", 1)
+                    .style('fill-opacity', d => d.depth === 2 ? 1 : 0);
+
+                // add dots to appropriate voronoi cells
+                labels.selectAll('text')
+                    .data(allNodes.filter(d => d.depth === 1 ))
+                    .enter()
+                    .append('text')
+                    .attr('class', d => `label-${d.data.idx}`)
+                    .attr('text-anchor', 'middle')
+                    .attr("transform", d => "translate("+[d.polygon.site.x, d.polygon.site.y+6]+")")
+                    .text(".") 
+                    .attr('opacity', function(d) {
+                        console.log(d);
+                        if(parseInt(d.data.idx) === dataSet.markOne + 1){
+                            return(1);
+                        }
+                        else if(parseInt(d.data.idx) === dataSet.markTwo + 1) {
+                            return(1);
+                        }
+                        else {
+                            return(0);
+                        }
+                    })
+                    .style("font-size", "50px");
+
+                return svg.node();
+            }
+
+            // starts experiment by creating the visualiation order and then creating the first trial
+            function startExperiment() {
+                visOrder = createTrialOrder();
+                
+                csvHeadings = {
+                    trialNum: "Trial Number",
+                    visType: "Visualization Type",
+                    answer: "Guessed Percentage",
+                    correctAnswer: "Correct Percentage"
+                }
+
+                results.push(csvHeadings);
+                createTrial(count);
+            }
+
+            // creates a link to export results to a csv file
+            function exportResults() {
+                csvData = "";
+
+                results.forEach(function(row) {
+                    csvData += row.trialNum + ',' + row.visType + ',' + row.answer + ',' + row.correctAnswer + '\n';
+                });
+
+                let anchor = document.createElement('a');
+                anchor.href = 'data:text/csv;charset=utf-8,' + encodeURI(csvData);
+                anchor.target = '_blank';
+                anchor.download = 'data.csv';
+                anchor.click();
+            }
+
+        </script>
+    </body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubble Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+<canvas id="bubbleChart" width="900" height="450"></canvas>
+<script src = "bubbleChart.html"></script>
+</body>
+</html>
+
+<script>
+//this is just the bubbles it isn't the randomizations
+document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bubbleChart');
+    var context = canvas.getContext('2d');
+
+    var bubbles = [
+        //each bubble is defined by an x position, a y position, and a radius.
+        //I tried to make them close together but it was a little tricky
+        { x: 100, y: 200, r: 20 }, //1
+        { x: 185, y: 227, r: 30 }, //2
+        { x: 190, y: 182, r: 15 }, //3
+        { x: 240, y: 215, r: 25 }, //4
+        { x: 232, y: 155, r: 35 }, //5
+        { x: 400, y: 100, r: 40 }, //6
+        { x: 450, y: 300, r: 45 }, //7
+        { x: 500, y: 150, r: 50 }, //8
+        { x: 550, y: 250, r: 60}, //9
+        { x: 600, y: 70, r: 70 }, //10
+        { x: 240, y: 300, r: 60 }, //11
+        { x: 100, y: 300, r: 80 }, //12
+    ];
+
+    function drawBubble(bubble) {
+        context.beginPath();
+        context.arc(bubble.x, bubble.y, bubble.r, 0, Math.PI * 2, false);
+        context.stroke();
+    }
+
+    bubbles.forEach(drawBubble);
+});
+</script>
