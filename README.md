@@ -35,25 +35,39 @@ https://wpi0-my.sharepoint.com/:x:/g/personal/ajmongillo_wpi_edu/EaM53PTMraxCtOL
 ![Screenshot 2024-02-18 at 11.21.57 PM.png](img%2FScreenshot%202024-02-18%20at%2011.21.57%20PM.png)
 
 # Technical Achievements
-For our technical achievement we did an extra chart type. We added a packed circles chart, which is something we had not
-yet had much experience implementing. By adding this extra chart, we were able to see how more types of charts compared 
+- We did an extra chart type. We added a packed circle graph, which is something we had not
+yet had much experience implementing. By adding this extra graph, we were able to see how more types of graphs compared 
 to each other. We were also able to see how well users can spot the difference in area instead of just height. Using 
 bar graphs tested mostly the users ability to determine how different heights compared to each other, but by using 
-circles, we were able to test area as well. Another technical achievement we added was connecting out next button to the
+circles, we were able to test area as well.
+- The packed circle graph is dynamic. When the graph first appears on the screen, the circles start near the middle and move out
+to the appropriate places. 
+- We connected the "Next" button to the
 enter key on the keyboard. Instead of having to click next after each trial, users are able to just click the enter 
-button to move on to the next one. 
+button to move on to the next one.
+- We added a "Results" button at the end of the 
+experiment that, when clicked, automatically generates a bar graph showing the individual user's results for each 
+type of graph along with a table of the error values. The user is able to click back from this screen and click the 
+"Download" button to generate a unique csv file with their name as the file name.
+- Our background screen includes an external image that links to a site where the original Cleveland and McGill paper can be accessed.
 
 # Design Achievements
-For our design achievement we added a background tab to the start page of our experiment. Users are able to navigate to 
+- We added a background color and a number of different fonts to make each screen more visually appealing for the user. 
+- Font types and colors were customized for each screen and matched an overall theme.
+- We added a tab at the top of the screen, which changes the color of the words when the user hovers over them. 
+- We added a background tab to the start page of our experiment. Users are able to navigate to 
 the background tab to learn more about our experiment, where the experiment came from, and what we plan on doing with 
-the data. This screen allows the user to have more information about what they are participating in. At the end of our 
-experiment we also added a results page to show the user a graph of their own results and a breakdown of the average 
-log2 error they got for each type of graph. This allows the user to get instant feedback on how they did and gives them 
+the data.
+- At the end of our 
+experiment, our results page is designed to show the user a graph of their own results and a breakdown of the average 
+log2 error they got for each type of graph in a way that is clean and simple. This allows the user to get instant feedback on how they did and gives them 
 an initial idea as to what the results of the experiment may be. 
 
+# Resources
 
+- Used in the creation of the packed circle graph: https://d3-graph-gallery.com/graph/circularpacking_basic.html
 
-
+- ChatGPT was used for some minor debugging and understanding how to style different screens.
 
 
 
