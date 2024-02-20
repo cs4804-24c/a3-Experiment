@@ -3,18 +3,13 @@ Assignment 3 - Replicating a Classic Experiment
 
 Experiment: This experiment is based off the paper "Jurassic Mark: Inattentional Bindness fo Datasaurus Reveals that Visualizations are Explored Not Seen". Specifically we attempted experiment 1: fiteration task. The idea behind this experiment is to focus on a specific mark (blue X's) in a sccaterplot while filtering out any other blue and green markers in the graph. Even within this experiment there are hidden images like a dinasaur which is tested to see if the particpant noticed it.
 
-Data: The datasaurus graph was sourced from https://www.dropbox.com/sh/xaxpz3pm5r5awes/AADUbGVagF9i4RmM9JkPtviEa?dl=0. The data was translated to have a normal distribution, that is x and y means of 0 and x and y variance of 1. To limit the differences between the scatter point plots and the datasaurus graph, data for each scatter point plot was generated such that the graphs had the same number of points in each quadrant, the same mean*, and the same variance* as the datasaurus graph.
-
-_*_ Within a 0.02 margin of error from the datasaurus graph.
+Data:
 
 Firebase/Revisit:
 
 Testing: In https://andrewsalls.github.io/study-a3/ is where the experiment was conducted. We were able to get __ particpants to take part during this experiment. 
 
-Visualizations:
-
-Technical Achievements
-- Generation of data for scatter plots that had the same number of points in each quadrant, the same mean, and the same variance as the datasaurus graph.
+Visualizations: After the data was collected from the partipants 
 
 For the scope of this project, assume the role of a scientist who runs experiments for a living.
 
@@ -30,7 +25,6 @@ The main goals for you are to a) test at least three competing visualizations or
 
 For this assignment you should aim to write everything from scratch. For experimentation it is often necessary to control all elements of the chart.
 You should definitely *reference* demo programs from books or the web, and if you do please provide a References section with links at the end of your Readme.
-
 
 Going Beyond Cleveland-McGill
 ---
