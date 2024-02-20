@@ -1,9 +1,5 @@
 # Important notes:
 
-## Python code
-It says I (matt) committed the python notebook but that work goes to Kathleen Wang
-
-
 ## Link to google sheet export 
 
 https://docs.google.com/spreadsheets/d/1YLLFVs2y0ahIyru7jkPcVm1RXUPCGGYrQGN_UHzxJ40/edit#gid=0
