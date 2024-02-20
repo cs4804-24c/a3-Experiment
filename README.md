@@ -10,7 +10,7 @@ Experiment Summary
 ===
 Log2Error & 95% Confidence Intervals
 
-"insert ally's figure here"
+![log2error chart](img/error_bars_chart.png)
 
 ## Bar Chart
 Example Visualization:
