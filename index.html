@@ -1,9 +1,31 @@
 <!DOCTYPE html>
-<div id="container"></div>
-<script type="module">
-
-import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
-
-console.log(d3);
-
-</script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chart Perception Experiment</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+<div id="intro">
+    <h2>Welcome to the Chart Perception Experiment</h2>
+    <p>In this experiment,</p>
+    <p>you are ask to judge </p>
+    <p>what is the percentage of a small</p>
+    <p>value to a large value in several chart</p>
+    <p>This experiment won't record any personal information</p>
+    <p>Do you want to participate in the experiment?</p>
+    <button id="startBtn">Yes, Start the Experiment</button>
+</div>
+<div id="chartArea" style="display:none;">
+    <div id="chart"></div>
+    <form id="responseForm" style="display:none;">
+        <label for="estimate">Your Estimate (%):</label>
+        <input type="number" id="estimate" name="estimate" min="0" max="100" step="1" required>
+        <button type="submit">Submit</button>
+        <p>e.g. If you think the smallest one is exactly half of the biggest one,</p>
+        <p>please input "50"</p>
+    </form>
+</div>
+<script src="experiment.js"></script>
+</body>
+</html>
