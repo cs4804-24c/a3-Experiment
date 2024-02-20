@@ -1,9 +1,387 @@
 <!DOCTYPE html>
-<div id="container"></div>
-<script type="module">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Assignment 3</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js" charset="utf-8"></script>
+    <style type="text/css">
+       body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center; 
+        }
+    </style>
+</head>
+<body>
 
-import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+<div id="startScreen">
+    <div>
+        <h3>
+            In this experiment,
+            <br></br>
+            you are asked to judge 
+            <br></br>
+            what is the percent of a smaller value to a larger value in several charts.
+            <br></br>
+            <br></br>
+            We won't record any other information from you except your answers.
+            <br></br>
+            Click the "agree" button to begin.
+            <br></br>
+            <br></br>
+            Thank you!
+        </h3>
+            
+        <button id="disagreeButton">Disagree</button>
+        <button id="agreeButton">Agree</button>
+    </div>
+</div>
 
-console.log(d3);
+<div id="disagreeScreen" style="display: none">
+    <h3>You must take part in the experiment.</h3>
+    <button id="goBackButton">Go Back</button>
+</div>
 
+<div id="chartScreen" style="display: none">
+    <div id="chartPlaceholder"></div>
+    <div>
+        <h3>
+            Two values are marked with dots.
+            <br></br>
+            What do you think the percent of the smaller value to the larger value?
+            <br></br>
+            Please put your answer below.
+            <br></br>
+            e.g. If you think the smaller one is exactly a half of the bigger one,
+            <br></br>
+            please input "50".
+        </h3>
+    </div>
+    <div id="inputField">
+        <input type="text" id="input">
+        <button id="nextButton">Next</button>
+    </div>
+</div>
+
+<div id="doneScreen" style="display: none;">
+    <h3>Thanks!</h3>
+    <button id="downloadButton">Download CSV</button>
+</div>
+
+
+<script type="text/javascript">
+    document.getElementById("agreeButton").addEventListener("click", function() {
+        document.getElementById("startScreen").style.display = "none";
+        document.getElementById("disagreeScreen").style.display = "none";
+        document.getElementById("chartScreen").style.display = "block";
+        generateChart();
+        document.getElementById("input").focus();
+    });
+
+    document.getElementById("disagreeButton").addEventListener("click", function() {
+        document.getElementById("startScreen").style.display = "none";
+        document.getElementById("disagreeScreen").style.display = "block";
+        document.getElementById("chartScreen").style.display = "none";
+    });
+
+    document.getElementById("goBackButton").addEventListener("click", function() {
+        document.getElementById("startScreen").style.display = "block";
+        document.getElementById("disagreeScreen").style.display = "none";
+        document.getElementById("chartScreen").style.display = "none";
+    });
+
+    let barChartTrials = 0;
+    let treeMapChartTrials = 0;
+    let pieChartTrials = 0;
+
+    let numberOfTrials = 20;
+
+    let index1height = 0;
+    let index2height = 0;
+
+    let chartTypeArray = new Array(60);
+    let actualPercents = new Array(60);
+    let inputPercents = new Array(60);
+    let error = new Array(60);
+    let totalCount = 0;
+
+    let trials = [];
+
+    function finish(){
+        document.getElementById("doneScreen").style.display = "block";
+        document.getElementById("chartScreen").style.display = "none";
+    }
+
+    function generateChart() {
+        let randomNumber = Math.random();
+        let barChartViz = randomNumber <= 0.33;
+        let treeMapChartViz = randomNumber > 0.33 && randomNumber <= 0.67
+        let pieChartViz = randomNumber > 0.67
+
+        while((barChartViz && barChartTrials == numberOfTrials) || 
+            (treeMapChartViz && treeMapChartTrials == numberOfTrials) || 
+            (pieChartViz && pieChartTrials == numberOfTrials)) {
+                randomNumber = Math.random();
+                barChartViz = randomNumber <= 0.33;
+                treeMapChartViz = randomNumber > 0.33 && randomNumber <= 0.67
+                pieChartViz = randomNumber > 0.67
+        }
+
+        data = d3.range(10).map(function() {
+            return Math.random();
+        });
+
+        data = data.map(value => Math.floor(value*200 + 50))
+        console.log(data)
+
+        let width = 500;
+        let height = 500;
+        
+        index1 = Math.floor(Math.random() * 10);
+        index2 = Math.floor(Math.random() * 10);
+
+        let index1Value = 0;
+        let index2Value = 0;
+
+        while(index1 == index2) {
+            index1 = Math.floor(Math.random() * data.length);
+        }
+        
+        d3.select('#chartPlaceholder').selectAll('*').remove();
+
+        if(barChartViz){
+            var barWidth = width / data.length;
+
+            var svg = d3.select('#chartPlaceholder')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            var bars = svg.selectAll('rect')
+                .data(data)
+                .enter()
+                .append('rect')
+                .attr('x', function(d, i) { return i * barWidth; })
+                .attr('y', function(d) { return height - d; })
+                .attr('width', barWidth)
+                .attr('height', function(d) { return d; })
+                .style('fill', 'white')
+                .style('stroke', 'black')
+                .style('stroke-width', '3px');
+
+            var circles = svg.selectAll('.circle')
+                .data(data)
+                .enter()
+                .append('circle')
+                .attr('class', 'circle')
+                .attr('r', 4)
+                .attr('cx', function(d, i) { return (i * barWidth) + (barWidth / 2); })
+                .attr('cy', function(d) { return height - 25; })
+                .style('fill', function(d, i) {
+                    if (i === index1) index1Value = d;
+                    if (i === index2) index2Value = d;
+                    return (i === index1 || i === index2) ? 'black' : 'none';
+                });
+                
+
+            d3.select('#chartPlaceholder')
+                .style('height', '500px')
+                .style('width', '500px')
+                .style('border', '3px solid black')
+                .style('position', 'relative');
+
+            chartTypeArray[totalCount] = "Bar Chart"
+            barChartTrials++
+        }
+
+        else if(treeMapChartViz){
+            var svg = d3.select('#chartPlaceholder')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            var treemap = d3.treemap()
+                .size([width, height])
+                .padding(2);
+
+                var root = d3.hierarchy({ children: data })
+                .sum(function(d) { return d; });
+
+            treemap(root);
+
+            var cell = svg.selectAll('g')
+                .data(root.leaves())
+                .enter().append('g')
+                .attr('transform', function(d) { return 'translate(' + d.x0 + ',' + d.y0 + ')'; });
+
+            cell.append('rect')
+                .attr('width', function(d) { return d.x1 - d.x0; })
+                .attr('height', function(d) { return d.y1 - d.y0; })
+                .style('stroke', 'black')
+                .style('fill', 'white');
+
+            cell.filter(function(d, i) {
+                if (i === index1) index1Value = d.value;
+                if (i === index2) index2Value = d.value;
+                return i === index1 || i === index2;
+            })
+                .append('circle')
+                .attr('r', 4)
+                .attr('cx', function(d) { return (d.x1 - d.x0) / 2; })
+                .attr('cy', function(d) { return (d.y1 - d.y0) / 2; })
+                .style('fill', 'black');
+
+            d3.select('#chartPlaceholder')
+                .style('height', '500px')
+                .style('width', '500px')
+                .style('border', '3px solid black')
+                .style('position', 'relative');
+
+            chartTypeArray[totalCount] = "Tree Map"
+            treeMapChartTrials++
+        }
+        else if(pieChartViz){
+            var radius = Math.min(width, height) / 2;
+            var svg = d3.select('#chartPlaceholder')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height)
+                .append('g')
+                .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+
+            var pie = d3.pie()
+                .sort(null)
+                .value(function(d) { return d; });
+
+            var arc = d3.arc()
+                .outerRadius(radius - 10)
+                .innerRadius(0);
+
+            var arcs = svg.selectAll('.arc')
+                .data(pie(data))
+                .enter().append('g')
+                .attr('class', 'arc');
+
+            arcs.append('path')
+                .attr('d', arc)
+                .style('fill', 'white')
+                .style('stroke', 'black')
+                .style('stroke-width', '2px');
+
+            arcs.filter(function(d, i) {
+                    if (i === index1) index1Value = d.value;
+                    if (i === index2) index2Value = d.value;
+                    return i === index1 || i === index2;
+            })
+                .append('circle')
+                .attr('r', 4)
+                .attr('cx', function(d) {
+                    var centroid = arc.centroid(d);
+                    return centroid[0];
+                })
+                .attr('cy', function(d) {
+                    var centroid = arc.centroid(d);
+                    return centroid[1];
+                })
+                .style('fill', 'black');
+
+            d3.select('#chartPlaceholder')
+                .style('height', '500px')
+                .style('width', '500px')
+                .style('border', '3px solid black')
+                .style('position', 'relative');
+
+            chartTypeArray[totalCount] = "Pie Chart"
+            pieChartTrials++;
+        }
+
+        
+        //calculate the percentage
+        if(index1Value < index2Value)
+        {
+            let percent = (index1Value/index2Value) * 100;
+            console.log("Percent: " + percent)
+            actualPercents[totalCount] = Math.round(percent);
+        }
+        else {
+            let percent = (index2Value/index1Value) * 100;
+            console.log("Percent: " + percent)
+            actualPercents[totalCount] = Math.round(percent);
+        }
+
+    }
+
+    function isValidInteger(str) {
+        return /^\d+$/.test(str);
+    }
+
+    document.getElementById("nextButton").addEventListener("click", function()
+    {
+        var inputValue = document.getElementById("input").value.trim();
+        
+        if (!isValidInteger(inputValue)) {
+            alert("Please enter a valid integer.");
+            return;
+        }
+
+        inputPercents[totalCount] = parseInt(inputValue);
+        
+        let errorValue = Math.log2(Math.abs(inputPercents[totalCount]-actualPercents[totalCount]) + (1/8));
+        if(errorValue == -3)
+        {
+            errorValue = 0;
+        }
+        error[totalCount] = errorValue;
+
+        document.getElementById("input").value = "";
+        document.getElementById("input").focus();
+
+        var trial = {
+            "Chart Type": chartTypeArray[totalCount],
+            "Input Percent": inputPercents[totalCount],
+            "Actual Percent": actualPercents[totalCount],
+            "Error": error[totalCount]
+        };
+        totalCount++;
+        trials.push(trial);
+        console.log(trials);
+
+        console.log(barChartTrials + " " + treeMapChartTrials + " " + pieChartTrials + " " + totalCount)
+        if(barChartTrials == numberOfTrials && 
+        treeMapChartTrials == numberOfTrials && 
+        pieChartTrials == numberOfTrials){
+            console.log("Done");
+            finish();
+            return;
+        }
+
+        generateChart();
+    });
+
+    document.getElementById("downloadButton").addEventListener("click", function() {
+        var csvContent = "data:text/csv;charset=utf-8,";
+        csvContent += Object.keys(trials[0]).join(",") + "\n";
+        trials.forEach(function(trial) {
+            csvContent += Object.values(trial).join(",") + "\n";
+        });
+
+        var encodedUri = encodeURI(csvContent);
+        var link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "trials.csv");
+        link.click();
+    });
+
+    document.getElementById("input").addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            document.getElementById("nextButton").click();
+        }
+    });
+    
 </script>
+</body>
+</html>
