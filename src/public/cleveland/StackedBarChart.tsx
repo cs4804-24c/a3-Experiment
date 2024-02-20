@@ -14,15 +14,26 @@ const chartSettings = {
   width: 400,
 };
 
+//randomly selects one of the 10 datasets and puts it into an array
+const ran = Math.floor(Math.random() * 10)
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function StackedBarChart({ parameters }: { parameters: any }) {
   const tickLength = 6;
   const [ref, dms] = useChartDimensions(chartSettings);
 
+  const t: any[] = []
+  t.push(parameters.data[ran])
+
+  const dArr = [];
+  for(let i =0;i<5;i++){
+    dArr.push(String(t.map((d: { name: any; datas:any; }) => d.datas[i].name)));
+  }
+
   const xScale = d3
     .scaleBand()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .domain(parameters.data.map((d: { name: any }) => d.name))
+    .domain(dArr)
     .range([0, dms.boundedWidth])
     .padding(0.2);
   const yScale = d3.scaleLinear().domain([100, 0]).range([0, dms.boundedWidth]);
@@ -35,7 +46,14 @@ function StackedBarChart({ parameters }: { parameters: any }) {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const createSeries = (seriesData: any[]) => {
-    const dataArr = seriesData.map((d) => +d.value);
+
+    const dataArr = [];
+    for(let i = 0;i<5;i++){
+      dataArr.push(Number(t.map((d) => d.datas[i].value)))
+      
+    }
+
+    console.log(dataArr)
     const sumOfData = dataArr.reduce((curSum, val) => Number(curSum) + Number(val));
     const dividend = sumOfData / 100;
     const obj1: { [key: string]: number } = {};
@@ -44,7 +62,13 @@ function StackedBarChart({ parameters }: { parameters: any }) {
     });
     const dataset = [obj1];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return d3.stack().keys(parameters.data.map((d: { name: any }) => d.name))(
+
+    const nArr = [];
+    for(let j = 0;j<5;j++){
+      nArr.push(String(t.map((d) => d.datas[j].name)))
+    }
+    console.log(nArr)
+    return d3.stack().keys(nArr)(
       dataset,
     );
   };
@@ -58,6 +82,12 @@ function StackedBarChart({ parameters }: { parameters: any }) {
     }));
   };
 
+  const f = [];
+  for(let i =0;i<5;i++){
+    f.push(t.map((d: { name: any; datas:any; }) => ({ name: d.datas[i].name, value: d.datas[i].value})));
+  }
+
+  console.log(f)
   const series = createSeries(parameters.data);
   const barWidth = Math.min(dms.width, dms.height) / 2 - 20;
   const markPositions = createMarkPositions(
