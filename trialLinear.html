@@ -62,14 +62,6 @@
         .attr("transform", "translate(0," + height / 2 + ")")
         .call(axis);
 
-    // Create and append a line representing the number line
-    svg.append("line")
-        .attr("x1", margin.left)
-        .attr("y1", height / 2)
-        .attr("x2", width)
-        .attr("y2", height / 2)
-        .attr("stroke", "white");
-
     //Creates are random value
     var answer = Math.floor(Math.random() * 701);
 
