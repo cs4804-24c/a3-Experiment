@@ -63,6 +63,20 @@ The above graphs, excluding the bar chart, are logistic regressions separated by
 
 Based on the trials conducted, there is sufficient evidence to suggest that color has a significant effect on perception of cardinality. For example, the trails that had a color pairing of green and yellow had correct guesses 96.66% of the time, while the color pairs of black and blue had correct guesses 78.33% of the time. In addition to the data shown on the bar graph, the odds ratios support that certain color pairs made it easier to guess cardinality. It is also worth noting that the color combinations black-green, black-yellow, and blue-yellow all tied for second place on the bar graph. Additionally, every color combination had at least a 75% accuracy rate. This could indicate that the experiment may have been easy, or that it wasn't fine tuned to getting the desired results.
 
+One of the most important concepts central to perceptual psychology, as formulated in accordance with Weber’s law, is the just-noticeable difference (JND). JND’s are artefacts of human perception which describe differences within a certain set of stimuli that are ordinarily barely registered by the observer. More formally, as a statistical concept, a JND represents some difference in stimuli that is identified by observers nearly half of the time it is present. For the sake of simplicity, we take the JND threshold of human perception of numerosity (by proportion) to be roughly 5%; any disparity in the cardinalities of two visual sets that represents a difference in magnitudes less than or equal to 5% is perceptible approximately 50% of the times it appears.
+
+Hence, the expected probability of a human observer being capable of discriminating between two randomly-distributed sets of 20 to 100 cardinal objects each is precisely 1265313122​96.426%, granted they can accurately do so every single instance in which the difference between the cardinalities of both sets is strictly greater than 5% and only partially do so when said difference is, at most, 5%. As such, the null hypothesis (H0) is defined in each particular instance by the difference in the expected and observed proportions of correct answers to the total number of trials being precisely equal to 0:
+<img width="635" alt="image" src="https://github.com/YifuYuan/a3-Experiment/assets/90162512/729043b0-8b90-4d96-99b4-0072d92cdb8b">
+
+The z-test statistics are provided as follows:
+<img width="655" alt="image" src="https://github.com/YifuYuan/a3-Experiment/assets/90162512/94a45a79-1f13-487c-846f-2d6f62e39455">
+<img width="651" alt="image" src="https://github.com/YifuYuan/a3-Experiment/assets/90162512/9c9e3c64-3f27-4d9c-8870-4c2b1ff83ec4">
+
+As is shown above, all of the z-test values are outside of the 95% confidence interval bounds of a standardized normal distribution except for the green–yellow z-test value. Hence, in every color pairing outside of green–yellow, there is sufficient evidence with which to reject the null hypothesis. And, in doing so, one verifies that there does exist some non-negligible effect that can be observed from unequal color pairings.
+
+
+
+
 ## Future Steps
 If we were to do this experiment again, we would make the difference between the two groups be within a range as opposed to being a random number between 20-100. Also we would make it so the two groups cannot have the same number of circles, this did not happen often but when it did happen which affected our analysis. It might also be worth considering reducing the time that the dots are shown to within one second so that the experiment can focus more on how easily people can immediately interpret cardinality of data based on color.
 
