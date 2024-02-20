@@ -1,9 +1,927 @@
 <!DOCTYPE html>
-<div id="container"></div>
-<script type="module">
+<html lang="en" style="background-color: #c7dfe2; font-family: Arial, Helvetica, sans-serif">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content=
+            "width=device-width, initial-scale=1.0">
+    <title>D3 : Random Number Generation - Column Chart</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js" charset="utf-8"></script>
+    <style type="text/css">
 
-import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .hidden {
+            display: none;
+        }
 
-console.log(d3);
+        button {
+            /*set border radius*/
+            border-radius: 15px;
+        }
+        
+        /* Style for starting screen */
+        #startScreen {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            font-size: 16px;
+            background-color: #c7dfe2;
+        }
+        /* Style for the tab bar on the top of the screen */
+        .top-bar {
+            display: flex;
+            justify-content: flex-end;
+            background-color: #207d89;
+            color: white;
+            padding: 16px;
+        }
 
+        /* Style for the tab with "Background" and "experiment" */
+        .tab {
+            display: inline-block;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        /* Adding a line between the words in the top bar because it was hard to read */
+        .tab:not(:last-child) {
+            border-right: 1px solid white;
+        }
+
+        /* Changing the color of the tabs when you hover over it */
+        .tab:hover {
+            background-color: #fff; 
+            color: #207d89;
+            border-radius: 15px;
+        }
+ 
+        /* Adding my font preferences for the Welcome font */
+        #startScreen h1 {
+        font-size: 40px;
+        color: #207d89;
+        }
+
+        /* Adding my font preferences for the creators font */
+        #startScreen h2 {
+        font-size: 24px;
+        color: #11535c;
+        }
+
+        /* Adding my font preferences for the generic body font */
+        #startScreen h3 {
+        font-size: 16px;
+        color: black;
+        max-width: calc(100% - 2in);
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 1in;
+        padding-right: 1in;
+    }
+
+        /* Adding my font preferences for the generic body font */
+        #startScreen h4 {
+        font-size: 18px;
+        color: #1d0281;
+        max-width: calc(100% - 2in);
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 1in;
+        padding-right: 1in;
+    }
+
+    #startScreen img {
+        max-width: 25%; /* Set the maximum width of the image to be 50% of its container */
+        height: auto; /* Maintain the aspect ratio of the image */
+        margin-top: 20px; /* Add some space between the text and the image */
+    }
+
+        #doneScreen {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            font-size: 16px;
+            /* font-family: Times New Roman; */
+            background-color: #c7dfe2;
+        }
+
+
+        /* Style for the screen if user does not agree to do the experiment*/
+        #disagreeScreen {
+            display: block;
+            text-align: center;
+            margin-top: 50px;
+            font-size: 12px;
+            font-family: Arial;
+        }
+
+        /* Style for the screen if user does not agree to do the experiment*/
+        #resultsScreen {
+            display: block;
+            text-align: center;
+            margin-top: 50px;
+            font-size: 12px;
+            font-family: Arial;
+        }
+
+        /* Style the "Agree" button */
+        #agreeButton {
+            margin-top: 2rem;
+            padding: 10px 20px;
+            width: 150px;
+            font-size:24px;
+            /* font-family: Times New Roman; */
+            background-color: #207d89;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        #backButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #0277d0;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Style for the "Disagree" button */
+        #disagreeButton {
+            margin-top: 2rem;
+            padding: 10px 20px;
+            width: 150px;
+            font-size: 24px;
+            /* font-family: Times New Roman; */
+            background-color: #207d89;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Style for the "Next" button */
+        #nextButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #207d89;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Style for the download button */
+        #downloadButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #0277d0;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Style for the results button */
+        #resultsButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #0277d0;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Style for the page displaying the graph */
+        #chartholder {
+            height: 600px;
+            width: 600px;
+            /*outline the left and bottom edges of the chart*/
+            border-left: 3px solid black;
+            border-bottom: 3px solid black;
+            position: relative;
+            display:flex;
+            justify-content: flex-start;
+            flex-direction: row; /*(column = stacked bar chart)*/
+            align-items: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .bar {
+            width: 25px;
+            margin-left: 3px;
+            background-color: white; /* White fill for D3 bars */
+            border: 3px solid black; /* Black outline for D3 bars */
+            bottom: 0;
+        }
+
+        /*controls positioned horizontally at the bottom of the chart*/
+        #controlsholder {
+            display: flex;
+            justify-content: left;
+            align-items: left;
+        }
+
+
+
+
+
+
+        @import url('https://fonts.googleapis.com/css?family=Noto+Sans:400,400i,700,700i&subset=greek-ext');
+
+    /* Taken from: https://codepen.io/nikstech/pen/xmMxpr for the styling of the name input*/
+    /*-------------------------------------------------------------------------------------*/
+    .text-center{
+        color:#fff;	
+        text-transform:uppercase;
+        font-size: 23px;
+        /* margin: -50px 0 80px 0; */
+        display: block;
+        text-align: center;
+    }
+
+    .input-container{
+        position:relative;
+        margin-bottom:25px;
+        width: 200px;
+        /*center*/
+        margin: 0 auto;
+    }
+    .input-container label{
+        position:absolute;
+        top:0px;
+        left:0px;
+        font-size:16px;
+        color:#207d89;	
+        pointer-event: none;
+        transition: all 0.5s ease-in-out;
+    }
+    .input-container input{ 
+    border:0;
+    border-bottom:1px solid #555;  
+    background:transparent;
+    width:100%;
+    padding:8px 0 5px 0;
+    font-size:16px;
+    color:#207d89;
+    }
+    .input-container input:focus{ 
+    border:none;	
+    outline:none;
+    border-bottom:1px solid #000000;	
+    }
+    .input-container input:focus ~ label,
+    .input-container input:valid ~ label{
+        top:-12px;
+        font-size:12px;
+        
+    }
+    /*-------------------------------------------------------------------------------------*/
+
+    </style>
+</head>
+<body>
+<!-- Start Screen (always shown) -->
+<div id="startScreen">
+    <div class="top-bar">
+        <div class="tab" id="backgroundTab">Background</div>
+        <div class="tab" id="experimentTab">Try Experiment</div>
+    </div>
+    <div id="backgroundContent" class="content hidden">
+        <h1>Background on this assignment</h1>
+        <a href="https://oa.mg/work/10.1080/01621459.1984.10478080">
+            <img src="https://og.oa.mg/Graphical%20Perception%3A%20Theory%2C%20Experimentation%2C%20and%20Application%20to%20the%20Development%20of%20Graphical%20Methods.png?author=%20William%20S.%20Cleveland,%20Robert%20McGill" alt="Cleveland McGill Paper">
+        </a>
+        <h4>William Cleveland and Robert McGill conducted several controlled experiments with the goal of understanding the effectiveness
+            of various graphs and visualizations at conveying data in a way that the reader can understand. In 1984, the results of their experiments were published in a paper titled "Graphical Perception: Theory, Experimentation, and Application to the Development of Graphical Methods." This paper appeared in the Journal of the American Statistical Association and became a key paper in the field of data visualization.<br><br> In this assignment, we are implementing a simple controlled experiment similar to those conducted by Cleveland and McGill. The four visualizations being tested are a vertical bar chart, a horizontal bar chart, a stacked bar chart, and a packed circle chart (adapted from https://d3-graph-gallery.com/graph/circularpacking_basic.html). The role of each volunteer will be to read the visuals as best they can! <br><br> Using various error metrics, we will be reporting our finding on which graphical representations are easiest for readers to interpret.</h4>
+    </div>
+    <div id="experimentContent" class="content">
+        <h1>Welcome to our assignment 3 experiment!</h1>
+    <h2>Creators: Audrey Mongillo, Connor Ehrensperger, and Alysha Creelman<br></h2>
+    <h3><br>In this experiment, you are asked to judge what is the percent of a smaller value to a larger value in several charts.<br><br> Please enter your name below and then click "Agree" to begin.<br>Thank you! <br></h3>
+
+
+        <div type = "text" class="input-container">
+            <input type="text" id="nameInput" > <br><br>
+                        <label>First Name</label>
+                    </div>
+
+
+        <button id="agreeButton" style="margin-right: 1rem;">Agree</button>
+    <button id="disagreeButton">Disagree</button>
+    </div>
+</div>
+
+<!-- Disagree Screen (shown when user hits "Disagree") -->
+<div id="disagreeScreen" style="display: none;">
+    <h2>Thank you for your consideration. You may close out of this window. </h2>
+</div>
+
+<!-- Chart Screen (only shown if the user hits "Agree") -->
+<div id="chartholderholder" style="display: none; flex-direction: column; align-items: center; margin-top: 2rem; background-color: #c7dfe2;">
+    <div id="chartholder" sylte="background-color: #c7dfe2"></div>
+    <div id="controlsholder" style="padding-left: 1rem; background-color: #c7dfe2;">
+        <!-- text input -->
+        <input type="text" id="percentInput" placeholder="Enter the percent here" style="margin-right: 1rem; border-radius: 10px;">
+        <button id="nextButton">Next</button>
+    </div>
+</div>
+
+<div id="doneScreen" style="display: none;">
+    <h2>Thank you for participating. Here are your results: </h2>
+    <button id="downloadButton" style="background-color: #207d89;">Download CSV</button>
+    <button id="resultsButton" style="background-color: #207d89;">View Results</button>
+</div>
+
+<div id="resultsScreen" style="display: none;">
+    <h2>Results of this experiment: </h2>
+    <div id="resultChart"></div>
+    <br><br>
+    <button id="backButton" style="background-color: #207d89;">Back</button>
+</div>
+
+
+<script type="text/javascript">
+    let madeChart = false;
+    //used to make sure we are getting 20 trials for each type of chart
+    let normalBarCount = 0;
+    let stackedCount = 0;
+    let rotateBarCount = 0;
+    let packedCirclesCount = 0;
+
+    //changed to 1 for testing - need to be changed back to 20
+    let maxTrialsPerChartType = 20;
+
+    //keeping track of the two heights we are comparing for each round
+    let index1height = 0;
+    let index2height = 0;
+
+    //what the correct answers are
+    let actualPercents = new Array(80);
+    //what the user input for each
+    let inputPercents = new Array(80);
+
+    let error = new Array(80);
+
+    //for setting each of the array values
+    let totalCount = 0;
+    let userID = ""
+
+    //saves the type of chart the trial is on
+    let typeArray = new Array(80);
+
+    let trials = [];
+
+    function finishedTest(){
+        document.getElementById("doneScreen").style.display = "block";
+        document.getElementById("chartholderholder").style.display = "none";
+    }
+
+   const download = function (data) {
+
+        const blob = new Blob([data], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.setAttribute('href', url)
+        a.setAttribute('download', userID + '.csv');
+        a.click()
+    }
+
+    const csvmaker = function (data) {
+
+        const csvRows = [];
+
+        const headers = Object.keys(data[0]);
+
+        csvRows.push(headers.join(','));
+
+        for (const row of data) {
+            const values = headers.map(header => {
+                const val = row[header]
+                return `"${val}"`;
+            });
+
+            csvRows.push(values.join(','));
+        }
+
+        return csvRows.join('\n');
+    }
+
+    const get = async function () {
+        const data = trials
+        const csvdata = csvmaker(data);
+        download(csvdata);
+    }
+
+    const btn = document.getElementById('downloadButton');
+    btn.addEventListener('click', get);
+
+    //calculate the error for that trial
+    function calculateError(){
+        let errorHold = Math.log2(Math.abs(inputPercents[totalCount]-actualPercents[totalCount]) + (1/8));
+        if(errorHold == -3)
+        {
+            errorHold = 0;
+        }
+        error[totalCount] = errorHold;
+    }
+
+
+    function generateChart() {
+
+        // randomly pick one from stacked, regular, rotated, or packed circles
+        let chartType = Math.random();
+        let packedCircles = chartType < 0.25;
+        let stackedBarChart = chartType < 0.5 && chartType >= 0.25;
+        let rotatedBarChart = chartType < 0.75 && chartType >= 0.5;
+        let normalBarChart = chartType < 1 && chartType >= 0.75;
+        
+
+        if(normalBarCount >= maxTrialsPerChartType && 
+        packedCirclesCount >= maxTrialsPerChartType && 
+        stackedCount >= maxTrialsPerChartType && 
+        rotateBarCount >= maxTrialsPerChartType){
+            console.log("Finished!");
+            finishedTest();
+            return;
+        }
+
+        // If the chart chosen already has 20 trials, choose a new one
+        while(  (packedCircles && packedCirclesCount >= maxTrialsPerChartType) || 
+                (stackedBarChart && stackedCount >= maxTrialsPerChartType)     || 
+                (rotatedBarChart && rotateBarCount >= maxTrialsPerChartType)   || 
+                (normalBarChart && normalBarCount >= maxTrialsPerChartType)      ) {
+                    console.log("Choosing a new chart type");
+            chartType = Math.random();
+            packedCircles = chartType < 0.25;
+            stackedBarChart = chartType < 0.5 && chartType >= 0.25;
+            rotatedBarChart = chartType < 0.75 && chartType >= 0.5;
+            normalBarChart = chartType < 1 && chartType >= 0.75;
+        }
+
+        let minimumBarHeight = stackedBarChart? 31 : 40;
+        let multiplier = stackedBarChart? 50 : 400;
+        
+
+        // Generate new random data
+        data = d3.range(10).map(function() {
+            return Math.random();
+        });
+
+
+        let width = 600;
+        let height = 600;
+        console.log("width:", width);
+        console.log("height:", height);
+        
+        // Generate two unique random indices
+        index1 = Math.floor(Math.random() * data.length);
+        index2 = Math.floor(Math.random() * data.length);
+
+        while(index1 === index2) {
+            index2 = Math.floor(Math.random() * data.length);
+        }
+
+        // Remove all old circles and circle containers
+        d3.select('.circleContainer').remove();
+        d3.select('.circle').remove();
+        for(let i = 0; i < data.length; i++) {
+            d3.select('.circleContainer' + i).remove();
+            d3.select('.circle' + i).remove();
+        }
+
+        // Remove the old chart
+        d3.select('#chartholder').selectAll('*').remove();
+
+        if(packedCircles) {
+            //Packed circles
+            //Adapted from: https://d3-graph-gallery.com/graph/circularpacking_basic.html
+
+            typeArray[totalCount] = "Packed Circles";
+
+            let minimumCircleRadius = 10;
+            let circleRadiusMultiplier = 50;
+            let dummyData = [];
+            
+            // Format the data for how the force simulation expects it
+            for(let i = 0; i < data.length; i++) {
+                dummyData.push({name: "i", size: data[i]});
+
+            }
+
+            let svg = d3.select('#chartholder')
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+            let node = svg.append('g')
+            .selectAll('g') // Select groups, not circles directly
+            .data(dummyData)
+            .enter()
+            .append('g') // Append groups
+            .attr('transform', function(d) {
+                return 'translate(' + (width / 2) + ',' + (height / 2) + ')';
+            });
+
+            // Append data circles to each group
+            node.append('circle')
+                .attr('r', function(d) {
+                    return d.size * circleRadiusMultiplier + minimumCircleRadius;
+                })
+                .style('fill', '#ffffff')
+                .attr('stroke', '#000000')
+                .style('stroke-width', 4);
+
+            // Append black circles to selected groups
+            node.each(function(d, i) {
+                // Append black circles to the randomly chosen bars
+                if (i === index1 || i === index2) {
+                    d3.select(this) // Select the current group
+                        .append('circle') // Append a circle to it
+                        .attr('r', 4) // Set the radius
+                        .style('fill', 'black'); // Set the fill color
+                    if(i === index1){
+                        index1height = Math.PI * Math.pow(d.size * circleRadiusMultiplier + minimumCircleRadius, 2);
+                    }
+                    if(i === index2){
+                        index2height = Math.PI * Math.pow(d.size * circleRadiusMultiplier + minimumCircleRadius, 2);
+                    }
+                }
+            });
+
+
+            // Features of the forces applied to the nodes:
+            let simulation = d3.forceSimulation()
+                .force("center", d3.forceCenter().x(width / 2).y(height / 2)) // Attraction to the center of the svg area
+                .force("charge", d3.forceManyBody().strength(-20)) // Nodes are attracted one each other of value is > 0
+                .force("collide", d3.forceCollide().strength(1).radius(30).iterations(1)) // Force that avoids circle overlapping
+
+            // Apply these forces to the nodes and update their positions.
+            // Once the force algorithm is happy with positions ('alpha' value is low enough), simulations will stop.
+            simulation
+            .nodes(dummyData)
+            .on("tick", function() {
+                // Update the positions of the groups
+                node.attr("transform", function(d) {
+                    return "translate(" + d.x + "," + d.y + ")";
+                });
+            });
+
+            packedCirclesCount ++;
+        } else {
+
+            // Display a simple Column Chart using the above Random Data
+            var svg = d3.select('#chartholder').selectAll('div')
+                .data(data)
+                .enter()
+                .append('div')
+                .attr('class', 'bar')
+                .style('fill', '#ffffff')
+                .style('height', function (d) {
+                    let result = (d*multiplier + minimumBarHeight) + 'px';
+
+                    return result;
+                })
+                .style('width', stackedBarChart? '100px' : '25px')
+                .each(function(d, i) {
+
+                    // Append circles to the randomly chosen bars
+                    if (i === index1 || i === index2) {
+                        let bar = d3.select(this);
+                        let barWidth = parseInt(bar.style('width'));
+                        let barHeight = d*multiplier + minimumBarHeight;
+                        console.log(bar);
+                        if(stackedBarChart) {
+                            bar.append('svg')
+                                .attr('width', barWidth)
+                                .attr('height', barHeight)
+                                .attr('class', 'circleContainer' + i)
+                                .append('circle')
+                                .attr('class', 'circle' + i)
+                                .attr('r', 4)
+                                .attr('cx', barWidth / 2)
+                                .attr('cy', barHeight / 2)
+                                .style('fill', 'black');
+                                typeArray[totalCount] = "Stacked Bar Chart";
+                        } else {
+                            bar.append('svg')
+                                .attr('width', barWidth)
+                                .attr('height', '100%')
+                                .attr('class', 'circleContainer' + i)
+                                .append('circle')
+                                .attr('class', 'circle' + i)
+                                .attr('r', 4)
+                                .attr('cx', barWidth / 2)
+                                .style('fill', 'black');
+
+                            let y =d*multiplier + minimumBarHeight;
+                            console.log("d:", d*multiplier + minimumBarHeight);
+
+
+                            d3.select('.circle' + i).attr('cy', y - 15);
+                        }
+
+                        //save the heights of the bars with the dots
+                        if(i === index1){
+                            index1height = barHeight;
+                            console.log("index1height:", index1height);
+                        }
+                        if(i === index2){
+                            index2height = barHeight;
+                            console.log("index2height:", index2height);
+                        }
+                    }
+                });
+            
+            
+            if (stackedBarChart) {
+                stackedCount++;
+                d3.select('#chartholder').style('flex-direction', 'column');
+                d3.select('#chartholder').style('transform', 'rotate(0deg)');
+                d3.select('#chartholder').style('align-items', 'center');
+                d3.select('#chartholder').style('justify-content', 'flex-end');
+
+                d3.selectAll('.bar').style('display', 'flex');
+                d3.selectAll('.bar').style('justify-content', 'center');
+                d3.selectAll('.bar').style('align-items', 'center');
+
+                // set the circles to be in the middle of the bars
+                for(let i = 0; i < data.length; i++) {
+                    d3.selectAll('.circleContainer' + i).style('display', 'flex');
+                    d3.selectAll('.circleContainer' + i).style('justify-content', 'center');
+                    d3.selectAll('.circleContainer' + i).style('align-items', 'center');
+                }
+
+            } else {
+
+                typeArray[totalCount] = "Bar Chart";
+                d3.select('#chartholder').style('align-items', 'flex-end');
+                d3.select('#chartholder').style('justify-content', 'flex-start');
+                d3.select('#chartholder').style('flex-direction', 'row');
+            }
+
+
+            // Only rotate it if it's not a stacked bar chart
+            if(!stackedBarChart) {
+                if(rotateBarCount >= 20){rotate = false;}
+                if (rotatedBarChart) {
+                    rotateBarCount++
+                    d3.select('#chartholder').style('transform', 'rotate(90deg)');
+                    typeArray[totalCount] = "Horizontal Bar Chart";
+                } else {
+                    if(normalBarCount >= 20){generateChart();}
+                    else {
+                        normalBarCount++
+                        d3.select('#chartholder').style('transform', 'rotate(0deg)');
+                        typeArray[totalCount] = "Bar Chart";
+                    }
+                }
+            }
+
+
+        }
+        
+        //calculate the percentage
+        if(index1height < index2height)
+        {
+            let percent = (index1height/index2height) * 100;
+            actualPercents[totalCount] = Math.round(percent);
+        }
+        else {
+            let percent = (index2height/index1height) * 100;
+            actualPercents[totalCount] = Math.round(percent);
+        }
+
+    }
+
+    // Generate the first chart
+    generateChart();
+
+    // Listener for when "Agree" button is clicked (only show chart screen)
+    document.getElementById("agreeButton").addEventListener("click", function() {
+        document.getElementById("startScreen").style.display = "none";
+        document.getElementById("disagreeScreen").style.display = "none";
+        document.getElementById("chartholderholder").style.display = "flex";
+        userID = document.getElementById("nameInput").value;
+    });
+
+    // Listener for when "Disagree" button is clicked (only show disagree screen)
+    document.getElementById("disagreeButton").addEventListener("click", function() {
+        document.getElementById("startScreen").style.display = "none";
+        document.getElementById("disagreeScreen").style.display = "block";
+        document.getElementById("chartholderholder").style.display = "none";
+    });
+
+    document.getElementById("nextButton").addEventListener("click", function()
+    {
+        //set user input for that chart in array
+        inputPercents[totalCount] = document.getElementById("percentInput").value;
+        calculateError();
+        var trial = {
+            "Participant": userID,
+            "Trial Number": totalCount + 1,
+            "Graph Type": typeArray[totalCount],
+            "Input Percent": inputPercents[totalCount],
+            "Actual Percent": actualPercents[totalCount],
+            "Error": error[totalCount]
+        };
+        trials.push(trial);
+        //clear text box value
+        document.getElementById("percentInput").value = "";
+        //increment array counter
+        totalCount++;
+
+        console.log(actualPercents);
+        console.log(inputPercents);
+        console.log(typeArray);
+        //put focus on the text input
+        document.getElementById("percentInput").focus();
+        generateChart();
+
+    });
+
+    // Listener for when "View Results" button is clicked
+    document.getElementById("resultsButton").addEventListener("click", function() {
+        document.getElementById("startScreen").style.display = "none";
+        document.getElementById("disagreeScreen").style.display = "none";
+        document.getElementById("chartholderholder").style.display = "none";
+        document.getElementById("doneScreen").style.display = "none";
+        document.getElementById('resultsScreen').style.display = "block";
+        if(!madeChart)
+        {
+            createResultChart(typeArray, error)
+            madeChart = true;
+        }
+
+    });
+
+    document.getElementById("backButton").addEventListener("click", function() {
+        document.getElementById("startScreen").style.display = "none";
+        document.getElementById("disagreeScreen").style.display = "none";
+        document.getElementById("chartholderholder").style.display = "none";
+        document.getElementById("doneScreen").style.display = "block";
+        document.getElementById('resultsScreen').style.display = "none";
+    });
+
+    document.getElementById("percentInput").addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            document.getElementById("nextButton").click();
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+    const backgroundTab = document.getElementById("backgroundTab");
+    const backgroundContent = document.getElementById("backgroundContent");
+    const experimentTab = document.getElementById("experimentTab");
+    const experimentContent = document.getElementById("experimentContent");
+
+    // Listener for when 'Background' is hit in the top bar
+    backgroundTab.addEventListener("click", function() {
+        // Hide the experiment content
+        document.getElementById("experimentContent").classList.add("hidden");
+        backgroundContent.classList.remove("hidden");
+    });
+
+    // Listener for when 'Experiment' is hit in the tob bar
+    experimentTab.addEventListener("click", function() {
+        document.getElementById("backgroundContent").classList.add("hidden");
+        experimentContent.classList.remove("hidden");
+    });
+});
+
+function createResultChart (typeArray, error) {
+    
+    // Creating an array of all the category sums (also need the count to calculate average later)
+    const sumPerType = {};
+    for (let index = 0; index < typeArray.length; index++) {
+        const category = typeArray[index];
+        if (!sumPerType[category]) {
+            sumPerType[category] = { sum: 0, count: 0 };
+        }
+        sumPerType[category].sum += error[index];
+        sumPerType[category].count++;
+    }
+
+    // creating an array of all the category averages
+    const averagePerType = [];
+    for (const category in sumPerType) {
+        if (category != 'undefined') {
+            const average = sumPerType[category].sum / sumPerType[category].count;
+            averagePerType.push({ category: category, average: average });
+        }
+    }
+
+    // Dimensions for chart
+    const margin = { top: 20, right: 20, bottom: 180, left: 50 };
+    const width = 400;
+    const height = 300;
+
+    // Appenging the SVG
+    const svg = d3.select("#resultChart")
+                  .append("svg")
+                  .attr("width", width + margin.left + margin.right + 20)
+                  .attr("height", height + margin.top + margin.bottom + 20)
+                  .append("g")
+                  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // X scale
+    const x = d3.scaleBand()
+                .domain(averagePerType.map(d => d.category))
+                .range([0, width]);
+
+    // Y scale
+    const y = d3.scaleLinear()
+                .domain([0, d3.max(averagePerType, d => d.average)])
+                .range([height, 0]);
+
+    // X axis
+    svg.append("g")
+       .attr("transform", "translate(0," + height + ")")
+       .call(d3.axisBottom(x));
+
+    // Y-axis
+    svg.append("g")
+       .call(d3.axisLeft(y));
+
+    // Append bars to the SVG
+    svg.selectAll(".bar")
+       .data(averagePerType)
+       .enter().append("rect")
+       .attr("class", "bar")
+       .attr("x", d => x(d.category) + 38)
+       .attr("y", d => y(d.average))
+       .attr("width", 30)
+       .attr("height", d => height - y(d.average))
+       .attr("fill", "#207d89");
+
+    // Append x-axis title
+    svg.append("text")
+        .attr("x", width / 2)
+        .attr("y", height + margin.top + 20)
+        .style("text-anchor", "middle")
+        .style("font-size", "16px")
+        .text("Type of Visualization");
+
+    // Append y-axis title
+    svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("x", -height / 2)
+        .attr("y", -margin.left)
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .style("font-size", "16px")
+        .text("Error Score");  
+
+    svg.append("text")
+        .attr("x", 70)
+        .attr("y", 400)
+        .text("Visualization")
+        .attr("fill", "#207d89")
+        .style("font-weight", "bold")
+        .style("font-size", "20px");
+
+
+    svg.append("text")
+        .attr("x", 270)
+        .attr("y", 400)
+        .text("Error")
+        .attr("fill", "#207d89")
+        .style("font-weight", "bold")
+        .style("font-size", "20px");
+
+    let y_pos = 410;
+
+        for (let index = 0; index < averagePerType.length; index++) {
+        let category = averagePerType[index].category;
+        let avg_error = averagePerType[index].average;
+        y_pos = y_pos + 20;
+        
+        svg.append("text")
+        .attr("x", 70)
+        .attr("y", y_pos)
+        .text(category)
+        .attr("fill", "#207d89")
+        .style("font-size", "16px");
+
+        svg.append("text")
+        .attr("x", 270)
+        .attr("y", y_pos)
+        .text(avg_error.toFixed(2))
+        .attr("fill", "#207d89")
+        .style("font-size", "16px");
+    }
+
+}
+    
 </script>
+</body>
+</html>
