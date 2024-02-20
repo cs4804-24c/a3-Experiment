@@ -1,23 +1,52 @@
 <!DOCTYPE html>
 <div id="container">
+
     <head>
         <link rel="stylesheet" type="text/css" href="css/style.css" />
-    
+
         <meta name="viewport" content="width=device-width, user-scalable=no" />
         <title> Number Line Experiment </title>
     </head>
 
-<body>
-    Wow! Results!
-</body>
+    <body>
+        Wow! Results!
+    </body>
 
 
 
 </div>
 <script type="module">
 
-import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+    import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
-console.log(d3);
+    // define svg containter
+    var svgWidth = 1000;
+    var svgHeight = 1000;
+    var margin = { top: 50, right: 50, bottom: 50, left: 50 };
+    var width = svgWidth - margin.left - margin.right;
+    var height = svgHeight - margin.top - margin.bottom;
+
+    var svg = d3.select("body")
+        .append("svg")
+        .attr("width", svgWidth)
+        .attr("height", svgHeight);
+    // Create the scale
+    var xScale = d3.scaleLinear()
+        .domain([0, 700])
+        .range([margin.left, width + margin.right]);
+
+    var yScale = d3.scaleLinear()
+        .domain([0, 700])
+        .range([height + margin.bottom, margin.top]);
+
+    // Create and append the axis
+    var xAxis = d3.axisBottom(xScale);
+    var yAxis = d3.axisLeft(yScale);
+    svg.append("g")
+        .attr("transform", "translate(0," + (height + margin.top) + ")")
+        .call(xAxis);
+    svg.append("g")
+        .attr("transform", "translate(" + margin.left + ",0)")
+        .call(yAxis);
 
 </script>
