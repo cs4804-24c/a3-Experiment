@@ -13,9 +13,9 @@ Testing: In https://andrewsalls.github.io/study-a3/ is where the experiment was 
 
 Visualizations: The visuals we created for the testing includes:
 
-[image]
 
-We calculated the accuracy of identofying the major quadrants and if the the graph outlined a dinosaur or a gorilla. We found that
+We calculated the accuracy of identifying the major quadrants and if the the graph outlined a dinosaur or a gorilla. We found that these were the results.
+![Test](img/rates.png)
 
 Technical Achievements
 - Generation of data for scatter plots that had the same number of points in each quadrant, the same mean, and the same variance as the datasaurus graph.
