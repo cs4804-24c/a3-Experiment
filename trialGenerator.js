@@ -51,20 +51,20 @@ const svg = d3
 // Function to save results to a text file
 function saveResults() {
   // Prepare CSV header
-  let csv = "TrialNumber,TruePercentage,YourAnswer,Accuracy\n";
+  let csv = "TrialNumber,TruePercentage,YourAnswer,Error\n";
   // Iterate over resultsArray and format each result as a CSV row
   resultsArray.forEach(function (result, index) {
     // Parse relevant information from the result string
     const regex =
-      /True Percentage: (\d+\.\d+), Your Answer: (\d+\.\d+), Accuracy: (\d+\.\d+)/;
+      /True Percentage: (\d+\.\d+), Your Answer: (\d+\.\d+), Error: (\d+\.\d+)/;
     const match = result.match(regex);
     if (match) {
       const truePercentage = parseFloat(match[1]);
       const yourAnswer = parseFloat(match[2]);
-      const accuracy = parseFloat(match[3]);
+      const error = parseFloat(match[3]);
 
       // Add formatted row to CSV
-      csv += `${index + 1},${truePercentage},${yourAnswer},${accuracy}\n`;
+      csv += `${index + 1},${truePercentage},${yourAnswer},${error}\n`;
     }
   });
   // Create a Blob containing the CSV data
@@ -98,15 +98,15 @@ document
 
     const percentage = parseFloat(document.getElementById("percentage").value);
     if (!isNaN(percentage) && trialNumber <= 6) {
-      const accuracy = Math.log2(Math.abs(percentage - truePercentage) + 0.125);
+      const error = Math.log2(Math.abs(percentage - truePercentage) + 0.125);
       console.log("percentage: " + percentage);
       console.log("true percentage: " + truePercentage);
-      console.log("accuracy: " + accuracy);
+      console.log("error: " + error);
 
       // Add result to the array
       const result = `Trial ${trialNumber} - True Percentage: ${truePercentage.toFixed(
         2
-      )}, Your Answer: ${percentage.toFixed(2)}, Accuracy: ${accuracy.toFixed(
+      )}, Your Answer: ${percentage.toFixed(2)}, Error: ${error.toFixed(
         2
       )}`;
       resultsArray.push(result);
@@ -114,7 +114,7 @@ document
       if (trialNumber >= 6) {
         // load results
         saveResults();
-        return;
+        window.location.href = "voronoitreemap.html";
       }
       trialNumber++;
       document.getElementById("trialNum").innerHTML = "Trial " + trialNumber;
