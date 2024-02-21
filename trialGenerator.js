@@ -31,7 +31,10 @@ document
 
     const percentage = parseFloat(document.getElementById("percentage").value);
     if (!isNaN(percentage) && trialNumber <= 20) {
-      const error = Math.log2(Math.abs(percentage - truePercentage) + 0.125);
+      let error = Math.log2(Math.abs(percentage - truePercentage) + 0.125);
+      if (error < 0) {
+        error = 0;
+      }
       console.log("percentage: " + percentage);
       console.log("true percentage: " + truePercentage);
       console.log("error: " + error);
@@ -114,6 +117,7 @@ function loadTrial(trialNumber) {
   console.log("Smaller data point area: ", smallerDataPointArea);
   // Calculate true percentage
   truePercentage = (smallerDataPointArea / largerDataPointArea) * 100;
+  console.log("True percentage: ", truePercentage);
 
   svg
     .selectAll("rect")
