@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <style>
+        #hbox {
+            display: flex;
+            flex-direction: row;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        #vbox {
+            display: flex;
+            flex-direction: column;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        .lin-r {
+            padding: 1px;
+        }
+
+        p {
+            padding: 2px;
+            margin: 0px;
+        }
+
+        input {
+            margin-right: 10px;
+        }
+
+        label {
+            margin-right: 20px;
+            margin-bottom: 2px;
+        }
+
+        button {
+            margin-left: 20px;
+            margin-bottom: 2px;
+        }
+
+        header {
+            text-align: center;
+            font-weight: bolder;
+            font-size: xx-large;
+        }
+    </style>
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <title> Number Line Experiment </title>
+    <header> Number Line Experiment</header>
+</head>
+
+<body>
+    <div id="container">
+        <div id="hbox">
+            <div id="data">
+            </div>
+            <div id="error">
+            </div>
+        </div>
+
+
+        <button id="updateButton">
+            Update Graph
+        </button>
+        <div id="hbox">
+            <div id="vbox" class="checks">
+
+                <h2>
+                    Toggles
+                </h2>
+                <div id="hbox">
+                    <input type="checkbox" id="all" name="all" value="0" checked="true">
+                    <label for="all"> Aggregate </label><br>
+                </div>
+
+                <div id="hbox">
+                    <input type="checkbox" id="trial_1" name="trial_1" value="1">
+                    <label for="trial_1"> Trial 1 </label><br>
+                </div>
+
+                <div id="hbox">
+                    <input type="checkbox" id="trial_2" name="trial_2" value="2">
+                    <label for="trial_2"> Trial 2 </label><br>
+                </div>
+
+                <div id="hbox">
+                    <input type="checkbox" id="trial_3" name="trial_3" value="3">
+                    <label for="trial_3"> Trial 3</label><br>
+                </div>
+
+                <div id="hbox">
+                    <input type="checkbox" id="trial_4" name="trial_4" value="4">
+                    <label for="trial_4"> Trial 4</label><br>
+                </div>
+
+                <div id="hbox">
+                    <input type="checkbox" id="trial_5" name="trial_5" value="5">
+                    <label for="trial_5"> Trial 5</label><br>
+                </div>
+
+                <div id="hbox">
+                    <input type="checkbox" id="trial_6" name="trial_6" value="6">
+                    <label for="trial_6"> Trial 6</label><br>
+                </div>
+
+                <div id="hbox">
+                    <input type="checkbox" id="trial_7" name="trial_7" value="7">
+                    <label for="trial_7"> Trial 7</label><br>
+                </div>
+
+                <div id="hbox">
+                    <input type="checkbox" id="trial_8" name="trial_8" value="8">
+                    <label for="trial_8"> Trial 8</label><br>
+                </div>
+
+                <div id="hbox">
+                    <input type="checkbox" id="trial_9" name="trial_9" value="9">
+                    <label for="trial_9"> Trial 9</label><br>
+                </div>
+
+                <div id="hbox">
+                    <input type="checkbox" id="trial_10" name="trial_10" value="10">
+                    <label for="trial_10"> Trial 10</label><br>
+                </div>
+
+            </div>
+
+            <div id="vbox" class="linear r">
+                <h2>
+                    Linear R
+                </h2>
+                <p class="lin-r">
+                    0.9852
+                </p>
+                <p class="lin-r">
+                    0.9933
+                </p>
+                <p class="lin-r">
+                    0.9956
+                </p>
+                <p class="lin-r">
+                    0.9827
+                </p>
+                <p class="lin-r">
+                    0.9975
+                </p>
+                <p class="lin-r">
+                    0.877
+                </p>
+                <p class="lin-r">
+                    0.9967
+                </p>
+                <p class="lin-r">
+                    0.981
+                </p>
+                <p class="lin-r">
+                    0.9988
+                </p>
+                <p class="lin-r">
+                    0.9848
+                </p>
+                <p class="lin-r">
+                    0.9995
+                </p>
+            </div>
+
+            <div id="vbox">
+                <h2>
+                    Logarithmic R
+                </h2>
+                <p class="lin-r">
+                    0.8675
+                </p>
+                <p class="lin-r">
+                    0.9588
+                </p>
+                <p class="lin-r">
+                    0.9683
+                </p>
+                <p class="lin-r">
+                    0.996
+                </p>
+                <p class="lin-r">
+                    undefined
+                </p>
+                <p class="lin-r">
+                    0.9054
+                </p>
+                <p class="lin-r">
+                    0.8819
+                </p>
+                <p class="lin-r">
+                    0.9628
+                </p>
+                <p class="lin-r">
+                    0.9563
+                </p>
+                <p class="lin-r">
+                    0.9358
+                </p>
+                <p class="lin-r">
+                    0.956
+                </p>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+<script type="module">
+
+    import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+
+    var svg;
+
+    var points1 = [
+        [450, 404],
+        [50, 49],
+        [100, 120],
+        [650, 640],
+        [500, 433]
+    ]
+
+    var points2 = [
+        [50, 58],
+        [120, 150],
+        [340, 347],
+        [320, 301],
+        [540, 495]
+    ]
+
+    var points3 = [
+        [690, 673],
+        [280, 273],
+        [600, 618],
+        [420, 453],
+        [250, 167]
+    ]
+
+    var points4 = [
+        [630, 637],
+        [425, 443],
+        [696, 698],
+        [385, 427],
+        [670, 659]
+    ]
+
+    var points5 = [
+        [300, 286],
+        [430, 472],
+        [590, 559],
+        [510, 502],
+        [580, 463]
+    ]
+
+    var points6 = [
+        [300, 287],
+        [80, 76],
+        [305, 298],
+        [550, 474],
+        [5, 13]
+    ]
+
+    var points7 = [
+        [400, 443],
+        [325, 285],
+        [360, 406],
+        [100, 62],
+        [360, 377]
+    ]
+
+    var points8 = [
+        [154, 103],
+        [250, 210],
+        [215, 174],
+        [550, 469],
+        [77, 39]
+    ]
+
+    var points9 = [
+        [610, 609],
+        [400, 311],
+        [200, 191],
+        [500, 468],
+        [100, 95]
+    ]
+
+    var points10 = [
+        [620, 592],
+        [30, 12],
+        [115, 83],
+        [675, 671],
+        [75, 42]
+    ]
+    // define svg containter
+
+    var svgWidth = 500;
+    var svgHeight = 500;
+    var margin = { top: 50, right: 50, bottom: 50, left: 50 };
+    var width = svgWidth - margin.left - margin.right;
+    var height = svgHeight - margin.top - margin.bottom;
+
+
+    //Make the first svg
+    svg = d3.select("#data")
+        .append("svg")
+        .attr("width", svgWidth)
+        .attr("height", svgHeight);
+    // Create the scale
+    var xScale = d3.scaleLinear()
+        .domain([0, 700])
+        .range([margin.left, width + margin.right]);
+
+    var yScale = d3.scaleLinear()
+        .domain([0, 700])
+        .range([height + margin.bottom, margin.top]);
+    svg.append("text")
+        .attr("class", "x label")
+        .attr("x", width / 2)
+        .attr("y", svgHeight - 10)
+        .style("fill", "white")
+        .text("Guessed Numbers");
+    svg.append("text")
+        .attr("class", "y label")
+        .attr("x", -325)
+        .attr("y", 0)
+        .attr("dy", ".75em")
+        .attr("transform", "rotate(-90)")
+        .style("fill", "white")
+        .text("Generated Numbers");
+
+    // Create and append the axis
+    var xAxis = d3.axisBottom(xScale);
+    var yAxis = d3.axisLeft(yScale);
+    svg.append("g")
+        .attr("transform", "translate(0," + (height + margin.top) + ")")
+        .call(xAxis);
+    svg.append("g")
+        .attr("transform", "translate(" + margin.left + ",0)")
+        .call(yAxis);
+    render();
+    function render() {
+        svg.selectAll('line').remove();
+        svg.selectAll('circle').remove();
+
+        // All
+
+        if (document.getElementById("all").checked) {
+            svg.append('line')
+                .attr('x1', xScale(0))
+                .attr('y1', yScale(-10.5598))
+                .attr('x2', xScale(700))
+                .attr('y2', yScale(0.984 * 700 - 10.5598))
+                .attr('stroke', 'white');
+
+
+
+
+            // add points for trial 1
+            for (var i = 0; i < 5; i++) {
+                var trial1Points = svg.append('circle')
+                    .attr("cx", xScale(points1[i][0]))
+                    .attr("cy", yScale(points1[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "white");
+                var trial2Points = svg.append('circle')
+                    .attr("cx", xScale(points2[i][0]))
+                    .attr("cy", yScale(points2[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "white");
+                var trial3Points = svg.append('circle')
+                    .attr("cx", xScale(points3[i][0]))
+                    .attr("cy", yScale(points3[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "white");
+                var trial4Points = svg.append('circle')
+                    .attr("cx", xScale(points4[i][0]))
+                    .attr("cy", yScale(points4[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "white");
+                var trial5Points = svg.append('circle')
+                    .attr("cx", xScale(points5[i][0]))
+                    .attr("cy", yScale(points5[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "white");
+                var trial6Points = svg.append('circle')
+                    .attr("cx", xScale(points6[i][0]))
+                    .attr("cy", yScale(points6[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "white");
+                var trial7Points = svg.append('circle')
+                    .attr("cx", xScale(points7[i][0]))
+                    .attr("cy", yScale(points7[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "white");
+                var trial8Points = svg.append('circle')
+                    .attr("cx", xScale(points8[i][0]))
+                    .attr("cy", yScale(points8[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "white");
+                var trial9Points = svg.append('circle')
+                    .attr("cx", xScale(points9[i][0]))
+                    .attr("cy", yScale(points9[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "white");
+                var trial10Points = svg.append('circle')
+                    .attr("cx", xScale(points10[i][0]))
+                    .attr("cy", yScale(points10[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "white");
+            }
+
+            // add the log curve
+
+            var a = 423.229;
+            var b = -682.112;
+
+            for (var i = 0.1; i < 690.1; i += 10) {
+                svg.append('line')
+                    .attr('x1', xScale(i))
+                    .attr('y1', yScale(a * Math.log10(i) + b))
+                    .attr('x2', xScale(i + 10))
+                    .attr('y2', yScale(a * Math.log10(i + 10) + b))
+                    .attr('stroke', 'white');
+            }
+
+        }
+
+        //Trial 1
+        if (document.getElementById("trial_1").checked) {
+            var trial1Line = svg.append('line')
+                .attr('x1', xScale(0))
+                .attr('y1', yScale(7.6455))
+                .attr('x2', xScale(700))
+                .attr('y2', yScale(0.9187 * 700 + 7.6455))
+                .attr('stroke', 'blue');
+
+
+
+
+            // add points for trial 1
+            for (var i = 0; i < 5; i++) {
+                var trial1Points = svg.append('circle')
+                    .attr("cx", xScale(points1[i][0]))
+                    .attr("cy", yScale(points1[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "blue");
+            }
+
+            // add the log curve
+
+            var a = 471.745;
+            var b = -790.162;
+
+            for (var i = 0.1; i < 690.1; i += 10) {
+                svg.append('line')
+                    .attr('x1', xScale(i))
+                    .attr('y1', yScale(a * Math.log10(i) + b))
+                    .attr('x2', xScale(i + 10))
+                    .attr('y2', yScale(a * Math.log10(i + 10) + b))
+                    .attr('stroke', 'blue');
+            }
+
+        }
+
+        //Trial 2
+        if (document.getElementById("trial_2").checked) {
+            var trial2Line = svg.append('line')
+                .attr('x1', xScale(0))
+                .attr('y1', yScale(30.2759))
+                .attr('x2', xScale(700))
+                .attr('y2', yScale(0.8756 * 700 + 30.2759))
+                .attr('stroke', 'steelblue');
+
+            // add points for trial 2
+            for (var i = 0; i < 5; i++) {
+                var trial2Points = svg.append('circle')
+                    .attr("cx", xScale(points2[i][0]))
+                    .attr("cy", yScale(points2[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "steelblue");
+            }
+
+            // add the log curve
+
+            var a = 397.84;
+            var b = -648.585;
+
+            for (var i = 0.1; i < 690.1; i += 10) {
+                svg.append('line')
+                    .attr('x1', xScale(i))
+                    .attr('y1', yScale(a * Math.log10(i) + b))
+                    .attr('x2', xScale(i + 10))
+                    .attr('y2', yScale(a * Math.log10(i + 10) + b))
+                    .attr('stroke', 'steelblue');
+            }
+        }
+
+        //Trial 3
+        if (document.getElementById("trial_3").checked) {
+            var trial3Line = svg.append('line')
+                .attr('x1', xScale(0))
+                .attr('y1', yScale(-56.9565))
+                .attr('x2', xScale(700))
+                .attr('y2', yScale(1.1021 * 700 - 56.9565))
+                .attr('stroke', 'yellow');
+
+            // add points for trial 3
+            for (var i = 0; i < 5; i++) {
+                var trial3Points = svg.append('circle')
+                    .attr("cx", xScale(points3[i][0]))
+                    .attr("cy", yScale(points3[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "yellow");
+            }
+
+            // add the log curve
+
+            var a = 1108.94;
+            var b = -2465.38;
+
+            for (var i = 0.1; i < 690.1; i += 10) {
+                svg.append('line')
+                    .attr('x1', xScale(i))
+                    .attr('y1', yScale(a * Math.log10(i) + b))
+                    .attr('x2', xScale(i + 10))
+                    .attr('y2', yScale(a * Math.log10(i + 10) + b))
+                    .attr('stroke', 'yellow');
+            }
+        }
+
+        //Trial 4
+        if (document.getElementById("trial_4").checked) {
+            var trial4Line = svg.append('line')
+                .attr('x1', xScale(0))
+                .attr('y1', yScale(80.1214))
+                .attr('x2', xScale(700))
+                .attr('y2', yScale(0.8779 * 700 + 80.1214))
+                .attr('stroke', 'red');
+
+            // add points for trial 4
+            for (var i = 0; i < 5; i++) {
+                var trial4Points = svg.append('circle')
+                    .attr("cx", xScale(points4[i][0]))
+                    .attr("cy", yScale(points4[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "red");
+            }
+
+            // add the log curve
+
+            var a = 1058.24;
+            var b = -2322.94;
+
+            for (var i = 0.1; i < 690.1; i += 10) {
+                svg.append('line')
+                    .attr('x1', xScale(i))
+                    .attr('y1', yScale(a * Math.log10(i) + b))
+                    .attr('x2', xScale(i + 10))
+                    .attr('y2', yScale(a * Math.log10(i + 10) + b))
+                    .attr('stroke', 'red');
+            }
+        }
+        //Trial 5
+        if (document.getElementById("trial_5").checked) {
+            var trial5Line = svg.append('line')
+                .attr('x1', xScale(0))
+                .attr('y1', yScale(96.5988))
+                .attr('x2', xScale(700))
+                .attr('y2', yScale(0.7465 * 700 + 96.5988))
+                .attr('stroke', 'green');
+
+            // add points for trial 5
+            for (var i = 0; i < 5; i++) {
+                var trial5Points = svg.append('circle')
+                    .attr("cx", xScale(points5[i][0]))
+                    .attr("cy", yScale(points5[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "green");
+            }
+
+            // add the log curve
+
+            var a = 764.251;
+            var b = -1584.52;
+
+            for (var i = 0.1; i < 690.1; i += 10) {
+                svg.append('line')
+                    .attr('x1', xScale(i))
+                    .attr('y1', yScale(a * Math.log10(i) + b))
+                    .attr('x2', xScale(i + 10))
+                    .attr('y2', yScale(a * Math.log10(i + 10) + b))
+                    .attr('stroke', 'green');
+            }
+        }
+
+        //Trial 6
+        if (document.getElementById("trial_6").checked) {
+            var trial6Line = svg.append('line')
+                .attr('x1', xScale(0))
+                .attr('y1', yScale(15.6192))
+                .attr('x2', xScale(700))
+                .attr('y2', yScale(0.8628 * 700 + 15.6192))
+                .attr('stroke', 'orange');
+
+            // add points for trial 6
+            for (var i = 0; i < 5; i++) {
+                var trial6Points = svg.append('circle')
+                    .attr("cx", xScale(points6[i][0]))
+                    .attr("cy", yScale(points6[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "orange");
+            }
+
+            // add the log curve
+
+            var a = 199.762;
+            var b = -182.063;
+
+            for (var i = 0.1; i < 690.1; i += 10) {
+                svg.append('line')
+                    .attr('x1', xScale(i))
+                    .attr('y1', yScale(a * Math.log10(i) + b))
+                    .attr('x2', xScale(i + 10))
+                    .attr('y2', yScale(a * Math.log10(i + 10) + b))
+                    .attr('stroke', 'orange');
+            }
+        }
+
+        //Trial 7
+        if (document.getElementById("trial_7").checked) {
+            var trial7Line = svg.append('line')
+                .attr('x1', xScale(0))
+                .attr('y1', yScale(-72.0428))
+                .attr('x2', xScale(700))
+                .attr('y2', yScale(1.2513 * 700 - 72.0428))
+                .attr('stroke', 'purple');
+
+            // add points for trial 7
+            for (var i = 0; i < 5; i++) {
+                var trial7Points = svg.append('circle')
+                    .attr("cx", xScale(points7[i][0]))
+                    .attr("cy", yScale(points7[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "purple");
+            }
+
+            // add the log curve
+
+            var a = 586.293;
+            var b = -1119.07;
+
+            for (var i = 0.1; i < 690.1; i += 10) {
+                svg.append('line')
+                    .attr('x1', xScale(i))
+                    .attr('y1', yScale(a * Math.log10(i) + b))
+                    .attr('x2', xScale(i + 10))
+                    .attr('y2', yScale(a * Math.log10(i + 10) + b))
+                    .attr('stroke', 'purple');
+            }
+        }
+
+        //Trial 8
+        if (document.getElementById("trial_8").checked) {
+            var trial8Line = svg.append('line')
+                .attr('x1', xScale(0))
+                .attr('y1', yScale(-28.0343))
+                .attr('x2', xScale(700))
+                .attr('y2', yScale(0.9111 * 700 - 28.0343))
+                .attr('stroke', 'cyan');
+
+            // add points for trial 8
+            for (var i = 0; i < 5; i++) {
+                var trial8Points = svg.append('circle')
+                    .attr("cx", xScale(points8[i][0]))
+                    .attr("cy", yScale(points8[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "cyan");
+            }
+
+            // add the log curve
+
+            var a = 505.728;
+            var b = -968.701;
+
+            for (var i = 0.1; i < 690.1; i += 10) {
+                svg.append('line')
+                    .attr('x1', xScale(i))
+                    .attr('y1', yScale(a * Math.log10(i) + b))
+                    .attr('x2', xScale(i + 10))
+                    .attr('y2', yScale(a * Math.log10(i + 10) + b))
+                    .attr('stroke', 'cyan');
+            }
+
+        }
+
+        //Trial 9
+        if (document.getElementById("trial_9").checked) {
+            var trial9Line = svg.append('line')
+                .attr('x1', xScale(0))
+                .attr('y1', yScale(-16.3981))
+                .attr('x2', xScale(700))
+                .attr('y2', yScale(0.9702 * 700 - 16.3981))
+                .attr('stroke', 'maroon');
+
+            // add points for trial 9
+            for (var i = 0; i < 5; i++) {
+                var trial9Points = svg.append('circle')
+                    .attr("cx", xScale(points9[i][0]))
+                    .attr("cy", yScale(points9[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "maroon");
+            }
+
+            // add the log curve
+
+            var a = 599.38;
+            var b = -1150.15;
+
+            for (var i = 0.1; i < 690.1; i += 10) {
+                svg.append('line')
+                    .attr('x1', xScale(i))
+                    .attr('y1', yScale(a * Math.log10(i) + b))
+                    .attr('x2', xScale(i + 10))
+                    .attr('y2', yScale(a * Math.log10(i + 10) + b))
+                    .attr('stroke', 'maroon');
+            }
+        }
+
+        //Trial 10
+        if (document.getElementById("trial_10").checked) {
+            var trial10Line = svg.append('line')
+                .attr('x1', xScale(0))
+                .attr('y1', yScale(-29.117))
+                .attr('x2', xScale(700))
+                .attr('y2', yScale(1.0202 * 700 - 29.117))
+                .attr('stroke', 'magenta');
+
+            // add points for trial 10
+            for (var i = 0; i < 5; i++) {
+                var trial10Points = svg.append('circle')
+                    .attr("cx", xScale(points10[i][0]))
+                    .attr("cy", yScale(points10[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "magenta");
+            }
+
+            // add the log curve
+
+            var a = 523.142;
+            var b = -874.529;
+
+            for (var i = 0.1; i < 690.1; i += 10) {
+                svg.append('line')
+                    .attr('x1', xScale(i))
+                    .attr('y1', yScale(a * Math.log10(i) + b))
+                    .attr('x2', xScale(i + 10))
+                    .attr('y2', yScale(a * Math.log10(i + 10) + b))
+                    .attr('stroke', 'magenta');
+            }
+        }
+    }
+
+    //Make the second svg
+    var svg2 = d3.select("#error")
+        .append("svg")
+        .attr("width", svgWidth)
+        .attr("height", svgHeight);
+    // Create the scale
+    var xScale2 = d3.scaleLinear()
+        .domain([0, 6])
+        .range([margin.left, width + margin.right]);
+
+    var yScale2 = d3.scaleLinear()
+        .domain([0, 700])
+        .range([height + margin.bottom, margin.top]);
+
+    // Create and append the axis
+    var xAxis2 = d3.axisBottom(xScale2).ticks(12);
+    var yAxis2 = d3.axisLeft(yScale2).ticks(7);
+    svg2.append("g")
+        .attr("transform", "translate(0," + (height + margin.top) + ")")
+        .call(xAxis2);
+    svg2.append("g")
+        .attr("transform", "translate(" + margin.left + ",0)")
+        .call(yAxis2);
+    svg2.append("text")
+        .attr("class", "x label")
+        .attr("x", width / 2 + margin.left)
+        .attr("y", svgHeight - 10)
+        .style("fill", "white")
+        .text("Error");
+    svg2.append("text")
+        .attr("class", "y label")
+        .attr("x", -350)
+        .attr("y", 0)
+        .attr("dy", ".75em")
+        .attr("transform", "rotate(-90)")
+        .style("fill", "white")
+        .text("Generated Numbers");
+
+    // 0 - 100
+    var sumAndCount = sumAndCountErrors(0, 100);
+    var avg = sumAndCount[0] / sumAndCount[1];
+    var sd = sdErrors(0, 100);
+
+    svg2.append('circle')
+        .attr("cx", xScale2(avg))
+        .attr("cy", yScale2(50))
+        .attr("r", 5)
+        .attr("fill", "white");
+
+    //confidence interval
+    svg2.append('line')
+        .attr("x1", xScale2(avg - (0.95 * (sd / Math.sqrt(sumAndCount[1])))))
+        .attr("y1", yScale2(50))
+        .attr("x2", xScale2(avg + (0.95 * (sd / Math.sqrt(sumAndCount[1])))))
+        .attr("y2", yScale2(50))
+        .attr("stroke", "white");
+    svg2.append('line')
+        .attr("x1", xScale2(avg - (0.95 * (sd / Math.sqrt(sumAndCount[1])))))
+        .attr("y1", yScale2(40))
+        .attr("x2", xScale2(avg - (0.95 * (sd / Math.sqrt(sumAndCount[1])))))
+        .attr("y2", yScale2(60))
+        .attr("stroke", "white");
+    svg2.append('line')
+        .attr("x1", xScale2(avg + (0.95 * (sd / Math.sqrt(sumAndCount[1])))))
+        .attr("y1", yScale2(40))
+        .attr("x2", xScale2(avg + (0.95 * (sd / Math.sqrt(sumAndCount[1])))))
+        .attr("y2", yScale2(60))
+        .attr("stroke", "white");
+
+    // 101 - 200
+    for (var i = 101; i <= 601; i += 100) {
+        sumAndCount = sumAndCountErrors(i, i + 99);
+        avg = sumAndCount[0] / sumAndCount[1]
+        svg2.append('circle')
+            .attr("cx", xScale2(avg))
+            .attr("cy", yScale2(i + 49))
+            .attr("r", 5)
+            .attr("fill", "white");
+
+        //confidence interval
+        svg2.append('line')
+            .attr("x1", xScale2(avg - (0.95 * (sd / Math.sqrt(sumAndCount[1])))))
+            .attr("y1", yScale2(i + 49))
+            .attr("x2", xScale2(avg + (0.95 * (sd / Math.sqrt(sumAndCount[1])))))
+            .attr("y2", yScale2(i + 49))
+            .attr("stroke", "white");
+        svg2.append('line')
+            .attr("x1", xScale2(avg - (0.95 * (sd / Math.sqrt(sumAndCount[1])))))
+            .attr("y1", yScale2(i + 39))
+            .attr("x2", xScale2(avg - (0.95 * (sd / Math.sqrt(sumAndCount[1])))))
+            .attr("y2", yScale2(i + 59))
+            .attr("stroke", "white");
+        svg2.append('line')
+            .attr("x1", xScale2(avg + (0.95 * (sd / Math.sqrt(sumAndCount[1])))))
+            .attr("y1", yScale2(i + 39))
+            .attr("x2", xScale2(avg + (0.95 * (sd / Math.sqrt(sumAndCount[1])))))
+            .attr("y2", yScale2(i + 59))
+            .attr("stroke", "white");
+    }
+
+
+    // A function counts and sums the errors in a certain range
+    function sumAndCountErrors(bottom, top) {
+        //The average error for less than 100
+        var sum = 0;
+        var count = 0;
+        for (var i = 0; i < 5; i++) {
+            if (points1[i][1] >= bottom && points1[i][1] <= top) {
+                sum = sum + Math.log2(Math.abs(points1[i][0] - points1[i][1]) + (1 / 8));
+                count++;
+            }
+            if (points2[i][1] >= bottom && points2[i][1] <= top) {
+                sum = sum + Math.log2(Math.abs(points2[i][0] - points2[i][1]) + (1 / 8));
+                count++;
+            }
+            if (points3[i][1] >= bottom && points3[i][1] <= top) {
+                sum = sum + Math.log2(Math.abs(points3[i][0] - points3[i][1]) + (1 / 8));
+                count++;
+            }
+            if (points4[i][1] >= bottom && points4[i][1] <= top) {
+                sum = sum + Math.log2(Math.abs(points4[i][0] - points4[i][1]) + (1 / 8));
+                count++;
+            }
+            if (points5[i][1] >= bottom && points5[i][1] <= top) {
+                sum = sum + Math.log2(Math.abs(points5[i][0] - points5[i][1]) + (1 / 8));
+                count++;
+            }
+            if (points6[i][1] >= bottom && points6[i][1] <= top) {
+                sum = sum + Math.log2(Math.abs(points6[i][0] - points6[i][1]) + (1 / 8));
+                count++;
+            }
+            if (points7[i][1] >= bottom && points7[i][1] <= top) {
+                sum = sum + Math.log2(Math.abs(points7[i][0] - points7[i][1]) + (1 / 8));
+                count++;
+            }
+            if (points8[i][1] >= bottom && points8[i][1] <= top) {
+                sum = sum + Math.log2(Math.abs(points8[i][0] - points8[i][1]) + (1 / 8));
+                count++;
+            }
+            if (points9[i][1] >= bottom && points9[i][1] <= top) {
+                sum = sum + Math.log2(Math.abs(points9[i][0] - points9[i][1]) + (1 / 8));
+                count++;
+            }
+            if (points10[i][1] >= bottom && points10[i][1] <= top) {
+                sum = sum + Math.log2(Math.abs(points10[i][0] - points10[i][1]) + (1 / 8));
+                count++;
+            }
+        }
+        return [sum, count];
+    }
+
+    // A function counts and sums the errors in a certain range
+    function sdErrors(bottom, top) {
+        //The average error for less than 100
+        var snc = sumAndCountErrors(bottom, top);
+        var sum = snc[0];
+        var count = snc[1];
+        var avg = sum / count;
+        sum = 0;
+        for (var i = 0; i < 5; i++) {
+            if (points1[i][1] >= bottom && points1[i][1] <= top) {
+                sum = sum + Math.pow((avg - Math.log2(Math.abs(points1[i][0] - points1[i][1]) + (1 / 8))), 2);
+            }
+            if (points2[i][1] >= bottom && points2[i][1] <= top) {
+                sum = sum + Math.pow((avg - Math.log2(Math.abs(points2[i][0] - points2[i][1]) + (1 / 8))), 2);
+            }
+            if (points3[i][1] >= bottom && points3[i][1] <= top) {
+                sum = sum + Math.pow((avg - Math.log2(Math.abs(points3[i][0] - points3[i][1]) + (1 / 8))), 2);
+            }
+            if (points4[i][1] >= bottom && points4[i][1] <= top) {
+                sum = sum + Math.pow((avg - Math.log2(Math.abs(points4[i][0] - points4[i][1]) + (1 / 8))), 2);
+            }
+            if (points5[i][1] >= bottom && points5[i][1] <= top) {
+                sum = sum + Math.pow((avg - Math.log2(Math.abs(points5[i][0] - points5[i][1]) + (1 / 8))), 2);
+            }
+            if (points6[i][1] >= bottom && points6[i][1] <= top) {
+                sum = sum + Math.pow((avg - Math.log2(Math.abs(points6[i][0] - points6[i][1]) + (1 / 8))), 2);
+            }
+            if (points7[i][1] >= bottom && points7[i][1] <= top) {
+                sum = sum + Math.pow((avg - Math.log2(Math.abs(points7[i][0] - points7[i][1]) + (1 / 8))), 2);
+            }
+            if (points8[i][1] >= bottom && points8[i][1] <= top) {
+                sum = sum + Math.pow((avg - Math.log2(Math.abs(points8[i][0] - points8[i][1]) + (1 / 8))), 2);
+            }
+            if (points9[i][1] >= bottom && points9[i][1] <= top) {
+                sum = sum + Math.pow((avg - Math.log2(Math.abs(points9[i][0] - points9[i][1]) + (1 / 8))), 2);
+            }
+            if (points10[i][1] >= bottom && points10[i][1] <= top) {
+                sum = sum + Math.pow((avg - Math.log2(Math.abs(points10[i][0] - points10[i][1]) + (1 / 8))), 2);
+            }
+        }
+        return Math.sqrt(sum / (count - 1));
+    }
+
+    document.getElementById("updateButton").addEventListener("click", render);
+</script>
+
+</html>
