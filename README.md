@@ -10,7 +10,7 @@ We designed an experiment to have people guess the value of a point on a number 
 
 The sample data was taken from victims unfortunate enough to be in the library after midnight. 
 
-The process (still available on the hosted site) involved viewing a point on a number line from 0 to 700. You input your guess and another random point shows up. Each individual's data is collected locally where we integrate it into the master data sheet manually. 
+The process (still available on the hosted site: https://gibsonphillips.github.io/a3-Experiment/) involved viewing a point on a number line from 0 to 700. You input your guess and another random point shows up. Each individual's data is collected locally where we integrate it into the master data sheet manually. 
 
 ### dataProcessing
 We plot the actual numbers on the y-axis, and the guessed numbers on the x-axis. 
@@ -36,7 +36,7 @@ This is an interactive graph overlaying as many as 11 separately colored layers 
 
 We chose to have the r Values next to the checkboxes as to easily assess which ones would be most interesting to examine further. 
 
-https://gibsonphillips.github.io/a3-Experiment/visuals.html
+https://gibsonphillips.github.io/a3-Experiment/
 
 References:
 https://stackoverflow.com/questions/11189284/d3-axis-labeling
