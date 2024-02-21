@@ -28,9 +28,13 @@ Generating graphs in d3:
 
 # Results:
 We calculated the accuracy of identifying the major quadrants and if the the graph outlined a dinosaur or a gorilla. We found that these were the results.
-![results](img/results.png)
+
+![Results](img/result.png)
+This graph is modified with the clean data to show the percentage of the right to wrong. The Gorilla was nnever seen which is good but seeing the dinosaur and the right wuadrant were difficult to spot.
 
 ![Test](img/rates.png)
+
+Note: This percentage account for every participants even the ones who did not answer the questions. 
 
 Based off these calculations it can be said that noticing the dinosaur did not work since it seem many people are were seeing the gorilla which was not even in the test. The gorilla question was to ask whether they paid attention to the changing scatter plots, as an indication of whether they actually saw the dinosaur or just assumed it was there. Also, the participants were not sucessful in identifying which quadrant has the most number of blue X's, so their visual perception could not keep up. There were too many moving parts.
 

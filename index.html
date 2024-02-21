@@ -46,9 +46,9 @@
         const errors = [errorCommonQuadrant, errorSawGorilla, errorSawDinosaur];
 
         // Set up chart dimensions
-        const margin = { top: 20, right: 20, bottom: 30, left: 40 };
-        const width = 400 - margin.left - margin.right;
-        const height = 300 - margin.top - margin.bottom;
+        const margin = { top: 50, right: 50, bottom: 70, left: 80 };
+        const width = 600 - margin.left - margin.right;
+        const height = 400 - margin.top - margin.bottom;
 
         // Create SVG element
         const svg = d3.select("#chart")
@@ -97,6 +97,20 @@
         // Add Y axis
         svg.append("g")
             .call(d3.axisLeft(yScale));
+
+        // Add X axis label
+        svg.append("text")
+            .attr("text-anchor", "middle")
+            .attr("transform", "translate(" + (width / 2) + "," + (height + margin.bottom - 20) + ")")
+            .text("Categories");
+
+        // Add Y axis label
+        svg.append("text")
+            .attr("text-anchor", "middle")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0 - margin.left + 25)
+            .attr("x", 0 - (height / 2))
+            .text("Percentage");
     });
 
 </script>
