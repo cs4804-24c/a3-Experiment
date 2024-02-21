@@ -1,4 +1,4 @@
-# Humans scewed logarithmic?
+# Humans skewed logarithmic?
 
 ### premise
 
