@@ -36,8 +36,6 @@ This is an interactive graph overlaying as many as 11 separately colored layers 
 
 We chose to have the r Values next to the checkboxes as to easily assess which ones would be most interesting to examine further. 
 
-https://gibsonphillips.github.io/a3-Experiment/
-
 References:
 https://stackoverflow.com/questions/11189284/d3-axis-labeling
 https://stackoverflow.com/questions/30058750/how-to-code-checkbox-checked-unchecked-behavior-in-d3-js
