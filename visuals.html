@@ -71,6 +71,10 @@
                 <h2>
                     Toggles
                 </h2>
+                <div id="hbox">
+                    <input type="checkbox" id="all" name="all" value="0" checked="true">
+                    <label for="all"> Aggregate </label><br>
+                </div>
 
                 <div id="hbox">
                     <input type="checkbox" id="trial_1" name="trial_1" value="1">
@@ -121,12 +125,16 @@
                     <input type="checkbox" id="trial_10" name="trial_10" value="10">
                     <label for="trial_10"> Trial 10</label><br>
                 </div>
+
             </div>
 
             <div id="vbox" class="linear r">
                 <h2>
                     Linear R
                 </h2>
+                <p class="lin-r">
+                    0.9852
+                </p>
                 <p class="lin-r">
                     0.9933
                 </p>
@@ -161,8 +169,11 @@
 
             <div id="vbox">
                 <h2>
-                    Logorithmic R
+                    Logarithmic R
                 </h2>
+                <p class="lin-r">
+                    0.8675
+                </p>
                 <p class="lin-r">
                     0.9588
                 </p>
@@ -330,10 +341,94 @@
     svg.append("g")
         .attr("transform", "translate(" + margin.left + ",0)")
         .call(yAxis);
-
+    render();
     function render() {
         svg.selectAll('line').remove();
         svg.selectAll('circle').remove();
+
+        // All
+
+        if (document.getElementById("all").checked) {
+            svg.append('line')
+                .attr('x1', xScale(0))
+                .attr('y1', yScale(-10.5598))
+                .attr('x2', xScale(700))
+                .attr('y2', yScale(0.984 * 700 - 10.5598))
+                .attr('stroke', 'white');
+
+
+
+
+            // add points for trial 1
+            for (var i = 0; i < 5; i++) {
+                var trial1Points = svg.append('circle')
+                    .attr("cx", xScale(points1[i][0]))
+                    .attr("cy", yScale(points1[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "white");
+                var trial2Points = svg.append('circle')
+                    .attr("cx", xScale(points2[i][0]))
+                    .attr("cy", yScale(points2[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "white");
+                var trial3Points = svg.append('circle')
+                    .attr("cx", xScale(points3[i][0]))
+                    .attr("cy", yScale(points3[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "white");
+                var trial4Points = svg.append('circle')
+                    .attr("cx", xScale(points4[i][0]))
+                    .attr("cy", yScale(points4[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "white");
+                var trial5Points = svg.append('circle')
+                    .attr("cx", xScale(points5[i][0]))
+                    .attr("cy", yScale(points5[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "white");
+                var trial6Points = svg.append('circle')
+                    .attr("cx", xScale(points6[i][0]))
+                    .attr("cy", yScale(points6[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "white");
+                var trial7Points = svg.append('circle')
+                    .attr("cx", xScale(points7[i][0]))
+                    .attr("cy", yScale(points7[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "white");
+                var trial8Points = svg.append('circle')
+                    .attr("cx", xScale(points8[i][0]))
+                    .attr("cy", yScale(points8[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "white");
+                var trial9Points = svg.append('circle')
+                    .attr("cx", xScale(points9[i][0]))
+                    .attr("cy", yScale(points9[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "white");
+                var trial10Points = svg.append('circle')
+                    .attr("cx", xScale(points10[i][0]))
+                    .attr("cy", yScale(points10[i][1]))
+                    .attr("r", 5)
+                    .attr("fill", "white");
+            }
+
+            // add the log curve
+
+            var a = 423.229;
+            var b = -682.112;
+
+            for (var i = 0.1; i < 690.1; i += 10) {
+                svg.append('line')
+                    .attr('x1', xScale(i))
+                    .attr('y1', yScale(a * Math.log10(i) + b))
+                    .attr('x2', xScale(i + 10))
+                    .attr('y2', yScale(a * Math.log10(i + 10) + b))
+                    .attr('stroke', 'white');
+            }
+
+        }
+
         //Trial 1
         if (document.getElementById("trial_1").checked) {
             var trial1Line = svg.append('line')
@@ -609,7 +704,7 @@
                 .attr('y1', yScale(-16.3981))
                 .attr('x2', xScale(700))
                 .attr('y2', yScale(0.9702 * 700 - 16.3981))
-                .attr('stroke', 'white');
+                .attr('stroke', 'maroon');
 
             // add points for trial 9
             for (var i = 0; i < 5; i++) {
@@ -617,7 +712,7 @@
                     .attr("cx", xScale(points9[i][0]))
                     .attr("cy", yScale(points9[i][1]))
                     .attr("r", 5)
-                    .attr("fill", "white");
+                    .attr("fill", "maroon");
             }
 
             // add the log curve
@@ -631,7 +726,7 @@
                     .attr('y1', yScale(a * Math.log10(i) + b))
                     .attr('x2', xScale(i + 10))
                     .attr('y2', yScale(a * Math.log10(i + 10) + b))
-                    .attr('stroke', 'white');
+                    .attr('stroke', 'maroon');
             }
         }
 
