@@ -12,86 +12,92 @@
 
 <script>
     // Load CSV data
-d3.csv("a3Results.csv").then(function(data) {
-    // Process the data
-    data.forEach(function(d) {
-        d.commonQuadrant = +d.commonQuadrant;
-        d.sawGorilla = +d.sawGorilla;
-        d.sawDinosaur = +d.sawDinosaur;
+    d3.csv("a3Results.csv").then(function(data) {
+        // Process the data
+        data.forEach(function(d) {
+            d.commonQuadrant = +d.commonQuadrant;
+            d.sawGorilla = +d.sawGorilla;
+            d.sawDinosaur = +d.sawDinosaur;
+        });
+
+        // Calculate accuracy and error for each category
+        const accuracyCommonQuadrant = d3.mean(data, d => d.commonQuadrant === 0 ? 1 : 0);
+        const errorCommonQuadrant = 1 - accuracyCommonQuadrant;
+
+        const accuracySawGorilla = d3.mean(data, d => d.sawGorilla === 0 ? 1 : 0);
+        const errorSawGorilla = 1 - accuracySawGorilla;
+
+        const accuracySawDinosaur = d3.mean(data, d => d.sawDinosaur === 1 ? 1 : 0);
+        const errorSawDinosaur = 1 - accuracySawDinosaur;
+
+        // Log the results
+        console.log("Accuracy - Common Quadrant:", accuracyCommonQuadrant);
+        console.log("Error - Common Quadrant:", errorCommonQuadrant);
+
+        console.log("Accuracy - Saw Gorilla:", accuracySawGorilla);
+        console.log("Error - Saw Gorilla:", errorSawGorilla);
+
+        console.log("Accuracy - Saw Dinosaur:", accuracySawDinosaur);
+        console.log("Error - Saw Dinosaur:", errorSawDinosaur);
+
+        // Create bar graph
+        const categories = ["Common Quadrant", "Saw Gorilla", "Saw Dinosaur"];
+        const accuracies = [accuracyCommonQuadrant, accuracySawGorilla, accuracySawDinosaur];
+        const errors = [errorCommonQuadrant, errorSawGorilla, errorSawDinosaur];
+
+        // Set up chart dimensions
+        const margin = { top: 20, right: 20, bottom: 30, left: 40 };
+        const width = 400 - margin.left - margin.right;
+        const height = 300 - margin.top - margin.bottom;
+
+        // Create SVG element
+        const svg = d3.select("#chart")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        // Set up the scales
+        const xScale = d3.scaleBand()
+            .domain(categories)
+            .range([0, width])
+            .padding(0.1);
+
+        const yScale = d3.scaleLinear()
+            .domain([0, 1])
+            .range([height, 0]);
+
+        // Draw bars for accuracy and error
+        svg.selectAll(".bar-accuracy")
+            .data(accuracies)
+            .enter().append("rect")
+            .attr("class", "bar-accuracy")
+            .attr("x", (d, i) => xScale(categories[i]))
+            .attr("y", d => yScale(d))
+            .attr("width", xScale.bandwidth() / 2)
+            .attr("height", d => height - yScale(d))
+            .style("fill", "green");
+
+        svg.selectAll(".bar-error")
+            .data(errors)
+            .enter().append("rect")
+            .attr("class", "bar-error")
+            .attr("x", (d, i) => xScale(categories[i]) + xScale.bandwidth() / 2)
+            .attr("y", d => yScale(d))
+            .attr("width", xScale.bandwidth() / 2)
+            .attr("height", d => height - yScale(d))
+            .style("fill", "red");
+
+        // Add X axis
+        svg.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(xScale));
+
+        // Add Y axis
+        svg.append("g")
+            .call(d3.axisLeft(yScale));
     });
-
-    // Calculate accuracy and error for each category
-    const accuracyCommonQuadrant = d3.mean(data, d => d.commonQuadrant === 0 ? 1 : 0);
-    const errorCommonQuadrant = 1 - accuracyCommonQuadrant;
-
-    const accuracySawGorilla = d3.mean(data, d => d.sawGorilla === 0 ? 1 : 0);
-    const errorSawGorilla = 1 - accuracySawGorilla;
-
-    const accuracySawDinosaur = d3.mean(data, d => d.sawDinosaur === 1 ? 1 : 0);
-    const errorSawDinosaur = 1 - accuracySawDinosaur;
-
-    // Log the results
-    console.log("Accuracy - Common Quadrant:", accuracyCommonQuadrant);
-    console.log("Error - Common Quadrant:", errorCommonQuadrant);
-
-    console.log("Accuracy - Saw Gorilla:", accuracySawGorilla);
-    console.log("Error - Saw Gorilla:", errorSawGorilla);
-
-    console.log("Accuracy - Saw Dinosaur:", accuracySawDinosaur);
-    console.log("Error - Saw Dinosaur:", errorSawDinosaur);
-
-    // Create bar graph
-    const categories = ["Common Quadrant", "Saw Gorilla", "Saw Dinosaur"];
-    const accuracies = [accuracyCommonQuadrant, accuracySawGorilla, accuracySawDinosaur];
-    const errors = [errorCommonQuadrant, errorSawGorilla, errorSawDinosaur];
-
-    // Set up chart dimensions
-    const margin = { top: 20, right: 20, bottom: 30, left: 40 };
-    const width = 400 - margin.left - margin.right;
-    const height = 300 - margin.top - margin.bottom;
-
-    // Create SVG element
-    const svg = d3.select("#chart")
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    // Set up the scales
-    const xScale = d3.scaleBand()
-        .domain(categories)
-        .range([0, width])
-        .padding(0.1);
-
-    const yScale = d3.scaleLinear()
-        .domain([0, 1])
-        .range([height, 0]);
-
-    // Draw bars for accuracy
-    svg.selectAll(".bar-accuracy")
-        .data(accuracies)
-        .enter().append("rect")
-        .attr("class", "bar-accuracy")
-        .attr("x", (d, i) => xScale(categories[i]))
-        .attr("y", d => yScale(d))
-        .attr("width", xScale.bandwidth())
-        .attr("height", d => height - yScale(d))
-        .style("fill", "green");
-
-    // Draw bars for error
-    svg.selectAll(".bar-error")
-        .data(errors)
-        .enter().append("rect")
-        .attr("class", "bar-error")
-        .attr("x", (d, i) => xScale(categories[i]))
-        .attr("y", d => yScale(d))
-        .attr("width", xScale.bandwidth())
-        .attr("height", d => height - yScale(d))
-        .style("fill", "red");
-
-   
-});
 
 </script>
 
