@@ -44,7 +44,7 @@ function loadTrial(trialNumber) {
   // Clear selected values at the beginning of each trial
   selectedValues = [];
 
-  if (trialNumber > 6) {
+  if (trialNumber > 20) {
     // load results
     saveResults();
     window.location.href = "congrats.html";
@@ -244,7 +244,7 @@ document
     event.preventDefault(); // Prevent default form submission
 
     const percentage = parseFloat(document.getElementById("percentage").value);
-    if (!isNaN(percentage) && trialNumber <= 6) {
+    if (!isNaN(percentage) && trialNumber <= 20) {
       let error = Math.log2(Math.abs(percentage - truePercentage) + 0.125);
       if (error < 0) {
         error = 0;
@@ -259,7 +259,7 @@ document
       )}, Your Answer: ${percentage.toFixed(2)}, Error: ${error.toFixed(2)}`;
       resultsArray.push(result);
 
-      if (trialNumber >= 6) {
+      if (trialNumber >= 20) {
         // load results
         saveResults();
         window.location.href = "voronoitreemap.html";

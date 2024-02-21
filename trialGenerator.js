@@ -30,7 +30,7 @@ document
     event.preventDefault(); // Prevent default form submission
 
     const percentage = parseFloat(document.getElementById("percentage").value);
-    if (!isNaN(percentage) && trialNumber <= 6) {
+    if (!isNaN(percentage) && trialNumber <= 20) {
       const error = Math.log2(Math.abs(percentage - truePercentage) + 0.125);
       console.log("percentage: " + percentage);
       console.log("true percentage: " + truePercentage);
@@ -42,7 +42,7 @@ document
       )}, Your Answer: ${percentage.toFixed(2)}, Error: ${error.toFixed(2)}`;
       resultsArray.push(result);
 
-      if (trialNumber >= 6) {
+      if (trialNumber >= 20) {
         // load results
         saveResults();
         window.location.href = "voronoitreemap.html";
@@ -56,7 +56,7 @@ document
   });
 
 function loadTrial(trialNumber) {
-  if (trialNumber > 6) {
+  if (trialNumber > 20) {
     return;
   }
 
