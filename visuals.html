@@ -308,16 +308,17 @@
         .range([height + margin.bottom, margin.top]);
     svg.append("text")
         .attr("class", "x label")
-        .attr("text-anchor", "end")
-        .attr("x", width)
-        .attr("y", height - 6)
+        .attr("x", width / 2)
+        .attr("y", svgHeight - 10)
+        .style("fill", "white")
         .text("Guessed Numbers");
     svg.append("text")
         .attr("class", "y label")
-        .attr("text-anchor", "end")
-        .attr("y", 6)
+        .attr("x", -325)
+        .attr("y", 0)
         .attr("dy", ".75em")
         .attr("transform", "rotate(-90)")
+        .style("fill", "white")
         .text("Generated Numbers");
 
     // Create and append the axis
@@ -691,6 +692,20 @@
     svg2.append("g")
         .attr("transform", "translate(" + margin.left + ",0)")
         .call(yAxis2);
+    svg2.append("text")
+        .attr("class", "x label")
+        .attr("x", width / 2 + margin.left)
+        .attr("y", svgHeight - 10)
+        .style("fill", "white")
+        .text("Error");
+    svg2.append("text")
+        .attr("class", "y label")
+        .attr("x", -350)
+        .attr("y", 0)
+        .attr("dy", ".75em")
+        .attr("transform", "rotate(-90)")
+        .style("fill", "white")
+        .text("Generated Numbers");
 
     // 0 - 100
     var sumAndCount = sumAndCountErrors(0, 100);
