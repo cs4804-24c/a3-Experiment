@@ -1,13 +1,13 @@
 html {
   font-size: 16px;
-  font-family: Arial, sans-serif;
+  font-family: "Times New Roman", Times, serif;
   background-color: #bebebe;
   color: #333;
 }
 
 h1 {
   color: #000000;
-  font-family: Arial, sans-serif;
+  font-family: "Times New Roman", Times, serif;
   font-size: 2em;
   text-align: center;
   display: flex;

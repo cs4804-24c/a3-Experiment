@@ -1,3 +1,5 @@
+//adapted from https://github.com/Kcnarf/d3-voronoi-treemap
+
 //begin: constants
 var _2PI = 2 * Math.PI;
 let trialNumber = 1;
