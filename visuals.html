@@ -2,7 +2,6 @@
 <html>
 
 <head>
-
     <link rel="stylesheet" type="text/css" href="css/style.css" />
     <style>
         #hbox {
@@ -41,9 +40,16 @@
             margin-left: 20px;
             margin-bottom: 2px;
         }
+
+        header {
+            text-align: center;
+            font-weight: bolder;
+            font-size: xx-large;
+        }
     </style>
     <meta name="viewport" content="width=device-width, user-scalable=no" />
     <title> Number Line Experiment </title>
+    <header> Number Line Experiment</header>
 </head>
 
 <body>
@@ -54,7 +60,6 @@
             <div id="error">
             </div>
         </div>
-        Wow! Results!
 
 
         <button id="updateButton">
@@ -301,6 +306,19 @@
     var yScale = d3.scaleLinear()
         .domain([0, 700])
         .range([height + margin.bottom, margin.top]);
+    svg.append("text")
+        .attr("class", "x label")
+        .attr("text-anchor", "end")
+        .attr("x", width)
+        .attr("y", height - 6)
+        .text("Guessed Numbers");
+    svg.append("text")
+        .attr("class", "y label")
+        .attr("text-anchor", "end")
+        .attr("y", 6)
+        .attr("dy", ".75em")
+        .attr("transform", "rotate(-90)")
+        .text("Generated Numbers");
 
     // Create and append the axis
     var xAxis = d3.axisBottom(xScale);
