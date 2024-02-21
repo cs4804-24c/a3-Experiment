@@ -3,10 +3,10 @@ library(readr)
 library(boot)
 
 # Read CSV
-#treemapData <- read_csv("A3 Experiment Results/treemapMaster.csv")
-treemapData <- read_csv("/Users/aaronzhang/Projects/a3-Experiment/A3_Experiment_Results/treemapMaster.csv")
-#voronoiData <- read_csv("A3 Experiment Results/voronoiMaster.csv")
-voronoiData <- read_csv("/Users/aaronzhang/Projects/a3-Experiment/A3_Experiment_Results/voronoiMaster.csv")
+#treemapData <- read_csv("D:/Organized School Folder/WPI/Senior/C Term/Data Visualization/a3/a3-Experiment/A3_Experiment_Results/treemapMaster.csv")
+treemapData <- read_csv("A3_Experiment_Results/treemapMaster.csv")
+#voronoiData <- read_csv("D:/Organized School Folder/WPI/Senior/C Term/Data Visualization/a3/a3-Experiment/A3_Experiment_Results/voronoiMaster.csv")
+voronoiData <- read_csv("A3_Experiment_Results/voronoiMaster.csv")
 
 #calculate the mean and bootstrap confidence interval
 bootstrap_mean_ci <- function(data, index) {

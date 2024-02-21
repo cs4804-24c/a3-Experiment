@@ -1,10 +1,10 @@
 # Treemap Experiment - Rectangluar vs Voronoi
 
-For our experiment we are testing if the shapes of the Treemaps effect readability and perception. For example, how does shapes effect the judgement of the size of a section in comparison to other sections. In our experiment we tested to different styles of treemaps, Rectangular and Voronoi.
+For our experiment we are testing if the shapes of the Treemaps affect readability and perception. For example, how does shapes effect the judgement of the size of a section in comparison to other sections. In reference to the Cleveland-Mcgill experiment for size perception of different graph or visualization styles: In our experiment we tested two different styles of treemaps, Rectangular and Voronoi.
 
-Each trial in the experiment generates a set of 10 random data points (S1-S10) with values from 5-100. Then two of those data points are marked red. Each trial is then recorded after a response from the user. At the end of each experiment (rectangular and voronoi) a set of data will be printed out as a csv. Displaying the trial number, the true percentage, your answer, and the error.
+Each trial in the experiment generates a set of 10 random data points (S1-S10) with values ranging from 5-100. Then two of those data points are marked red at random when portrayed on the window. Each trial is then recorded after a response from the user. At the end of each experiment (rectangular and voronoi respectively) a set of data will be printed out as a csv. Displaying the trial number, the true percentage, your answer, and the error.
 
-We repeated this experiment with 10 individuals, with 20 trials for each the rectangular and the voronoi treemap. We found that it generally easier to compare sizes on the rectangular treemap as opposed to the voronoi treemap. We displayed those results using R + ggplot2, using the average error of each experiment and a bootstrapped 95% interval. Refer to image below.
+We repeated this experiment with 10 individuals, with 20 trials for each study--rectangular and voronoi--to reach a total of 400 trials, 200 per study. We found that it generally easier to compare sizes on the rectangular treemap as opposed to the voronoi treemap. We displayed those results using R + ggplot2, using the average error of each experiment and a bootstrapped 95% interval. Refer to the images below.
 
 Results:
 ![visual](Write-Up_Images/ErrorPlot.png)
