@@ -5,8 +5,10 @@ library(boot)
 # Read CSV
 #treemapData <- read_csv("D:/Organized School Folder/WPI/Senior/C Term/Data Visualization/a3/a3-Experiment/A3_Experiment_Results/treemapMaster.csv")
 treemapData <- read_csv("A3_Experiment_Results/treemapMaster.csv")
+#treemapData <- read_csv("/Users/aaronzhang/Projects/a3-Experiment/A3_Experiment_Results/treemapMaster.csv")
 #voronoiData <- read_csv("D:/Organized School Folder/WPI/Senior/C Term/Data Visualization/a3/a3-Experiment/A3_Experiment_Results/voronoiMaster.csv")
 voronoiData <- read_csv("A3_Experiment_Results/voronoiMaster.csv")
+# voronoiData <- read_csv("/Users/aaronzhang/Projects/a3-Experiment/A3_Experiment_Results/voronoiMaster.csv")
 
 #calculate the mean and bootstrap confidence interval
 bootstrap_mean_ci <- function(data, index) {
@@ -24,9 +26,9 @@ ci2 <- boot.ci(boot2, type="perc")
 #new data frame
 plot_data <- data.frame(
   Trial = c(1, 2),
-  AvgError = c(mean(treemapData$Error), mean(voronoiData$Error)),
-  LowerCI = c(ci1$percent[4], ci2$percent[4]),
-  UpperCI = c(ci1$percent[5], ci2$percent[5]),
+  AvgError = c(mean(voronoiData$Error), mean(treemapData$Error)),
+  LowerCI = c(ci2$percent[4], ci1$percent[4]),
+  UpperCI = c(ci2$percent[5], ci1$percent[5]),
   TreemapType = c("Rectangle Treemap", "Voronoi Treemap")
 )
 
@@ -47,11 +49,11 @@ p <- ggplot(plot_data, aes(x=AvgError, y=factor(Trial), color=TreemapType)) +
         panel.grid.major = element_line(color = "black", size = 0), 
         panel.grid.minor = element_line(color = "black", size = 0.1),  
   text = element_text(family = "Times New Roman")) + 
-  scale_y_discrete(labels=c("Rectangle", "Voronoi")) +
+  scale_y_discrete(labels=c("2. Voronoi", "1. Rectangle")) +
   scale_x_continuous(breaks=seq(floor(min(plot_data$LowerCI)), ceiling(max(plot_data$UpperCI)), by=0.1)) + 
   coord_fixed(ratio=0.75) + 
   coord_cartesian(ylim=c(0.5,2.5), xlim=c(min(plot_data$LowerCI - 0.1), max(plot_data$UpperCI + 0.1)), expand=F) +
-  scale_color_manual(values = c("red", "#00203FFF")) # Set point colors
+  scale_color_manual(values = c("#00203FFF", "red")) # Set point colors
 
 # Adjust padding for x-axis title
 p <- p + theme(axis.title.x = element_text(margin = margin(t = 20, r = 0, b = 0, l = 0), family = "Times New Roman", face = "bold"))
