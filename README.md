@@ -51,4 +51,4 @@ Technical Achievements:
 - Implemented formatting and display boxes in css to keep everything in place and centered, even when the screen are different sizes.
 - Implemented a download csv button which allows the user to download the current trial's csv (only for rectangular)
 - Attempted to implement the same download feature for voronoi tree map. 
-
+- Implemented compatibility across different devices, including some phones.
