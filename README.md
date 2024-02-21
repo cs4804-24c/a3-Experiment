@@ -28,6 +28,7 @@ Generating graphs in d3:
 
 # Results:
 We calculated the accuracy of identifying the major quadrants and if the the graph outlined a dinosaur or a gorilla. We found that these were the results.
+![results](img/results.png)
 
 ![Test](img/rates.png)
 
