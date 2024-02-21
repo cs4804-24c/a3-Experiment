@@ -50,5 +50,6 @@ Technical Achievements:
 - Implemented an algorithm to save and keep track of the results of each trial, to then print them at the end of each experiment.
 - Implemented formatting and display boxes in css to keep everything in place and centered, even when the screen are different sizes.
 - Implemented a download csv button which allows the user to download the current trial's csv (only for rectangular)
+- Implemented compatibility across different devices, including some phones and tablets
 - Attempted to implement the same download feature for voronoi tree map. 
-- Implemented compatibility across different devices, including some phones.
+- Attempted to implement animations like hover on the graphs, but it did not fit with what we wanted from the experiment, and caused unnecessary distractions. (you can see traces of hover animations on the voronoi experiments)
