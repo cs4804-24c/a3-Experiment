@@ -28,7 +28,7 @@ There are many takaways to infer here, but I will refrain from diving too deep i
 
 When all of the data is compiled together there isn't nearly as much corrolation for logarithmic regression with still a pretty good corrolation for linear regression. 
 
-![cleveland equation](img/cleveland-equation.png)
+![website](img/screenshot-of-site)
 
 ### design and technical acheivements
 
