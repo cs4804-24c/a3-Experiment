@@ -8,19 +8,38 @@
         #hbox {
             display: flex;
             flex-direction: row;
-            margin: 20px;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        #vbox {
+            display: flex;
+            flex-direction: column;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        .lin-r {
+            padding: 1px;
+        }
+
+        p {
+            padding: 2px;
+            margin: 0px;
         }
 
         input {
-            margin: 10px;
+            margin-right: 10px;
         }
 
         label {
             margin-right: 20px;
+            margin-bottom: 2px;
         }
 
         button {
             margin-left: 20px;
+            margin-bottom: 2px;
         }
     </style>
     <meta name="viewport" content="width=device-width, user-scalable=no" />
@@ -36,40 +55,140 @@
             </div>
         </div>
         Wow! Results!
+
+
+        <button id="updateButton">
+            Update Graph
+        </button>
         <div id="hbox">
-            <input type="checkbox" id="trial_1" name="trial_1" value="1">
-            <label for="trial_1"> Trial 1 </label><br>
+            <div id="vbox" class="checks">
 
-            <input type="checkbox" id="trial_2" name="trial_2" value="2">
-            <label for="trial_2"> Trial 2 </label><br>
+                <h2>
+                    Toggles
+                </h2>
 
-            <input type="checkbox" id="trial_3" name="trial_3" value="3">
-            <label for="trial_3"> Trial 3</label><br>
+                <div id="hbox">
+                    <input type="checkbox" id="trial_1" name="trial_1" value="1">
+                    <label for="trial_1"> Trial 1 </label><br>
+                </div>
 
-            <input type="checkbox" id="trial_4" name="trial_4" value="4">
-            <label for="trial_4"> Trial 4</label><br>
+                <div id="hbox">
+                    <input type="checkbox" id="trial_2" name="trial_2" value="2">
+                    <label for="trial_2"> Trial 2 </label><br>
+                </div>
 
-            <input type="checkbox" id="trial_5" name="trial_5" value="5">
-            <label for="trial_5"> Trial 5</label><br>
+                <div id="hbox">
+                    <input type="checkbox" id="trial_3" name="trial_3" value="3">
+                    <label for="trial_3"> Trial 3</label><br>
+                </div>
 
-            <input type="checkbox" id="trial_6" name="trial_6" value="6">
-            <label for="trial_6"> Trial 6</label><br>
+                <div id="hbox">
+                    <input type="checkbox" id="trial_4" name="trial_4" value="4">
+                    <label for="trial_4"> Trial 4</label><br>
+                </div>
 
-            <input type="checkbox" id="trial_7" name="trial_7" value="7">
-            <label for="trial_7"> Trial 7</label><br>
+                <div id="hbox">
+                    <input type="checkbox" id="trial_5" name="trial_5" value="5">
+                    <label for="trial_5"> Trial 5</label><br>
+                </div>
 
-            <input type="checkbox" id="trial_8" name="trial_8" value="8">
-            <label for="trial_8"> Trial 8</label><br>
+                <div id="hbox">
+                    <input type="checkbox" id="trial_6" name="trial_6" value="6">
+                    <label for="trial_6"> Trial 6</label><br>
+                </div>
 
-            <input type="checkbox" id="trial_9" name="trial_9" value="9">
-            <label for="trial_9"> Trial 9</label><br>
+                <div id="hbox">
+                    <input type="checkbox" id="trial_7" name="trial_7" value="7">
+                    <label for="trial_7"> Trial 7</label><br>
+                </div>
 
-            <input type="checkbox" id="trial_10" name="trial_10" value="10">
-            <label for="trial_10"> Trial 10</label><br>
+                <div id="hbox">
+                    <input type="checkbox" id="trial_8" name="trial_8" value="8">
+                    <label for="trial_8"> Trial 8</label><br>
+                </div>
 
-            <button id="updateButton">
-                Update Graph
-            </button>
+                <div id="hbox">
+                    <input type="checkbox" id="trial_9" name="trial_9" value="9">
+                    <label for="trial_9"> Trial 9</label><br>
+                </div>
+
+                <div id="hbox">
+                    <input type="checkbox" id="trial_10" name="trial_10" value="10">
+                    <label for="trial_10"> Trial 10</label><br>
+                </div>
+            </div>
+
+            <div id="vbox" class="linear r">
+                <h2>
+                    Linear R
+                </h2>
+                <p class="lin-r">
+                    0.9933
+                </p>
+                <p class="lin-r">
+                    0.9956
+                </p>
+                <p class="lin-r">
+                    0.9827
+                </p>
+                <p class="lin-r">
+                    0.9975
+                </p>
+                <p class="lin-r">
+                    0.877
+                </p>
+                <p class="lin-r">
+                    0.9967
+                </p>
+                <p class="lin-r">
+                    0.981
+                </p>
+                <p class="lin-r">
+                    0.9988
+                </p>
+                <p class="lin-r">
+                    0.9848
+                </p>
+                <p class="lin-r">
+                    0.9995
+                </p>
+            </div>
+
+            <div id="vbox">
+                <h2>
+                    Logorithmic R
+                </h2>
+                <p class="lin-r">
+                    0.9588
+                </p>
+                <p class="lin-r">
+                    0.9683
+                </p>
+                <p class="lin-r">
+                    0.996
+                </p>
+                <p class="lin-r">
+                    undefined
+                </p>
+                <p class="lin-r">
+                    0.9054
+                </p>
+                <p class="lin-r">
+                    0.8819
+                </p>
+                <p class="lin-r">
+                    0.9628
+                </p>
+                <p class="lin-r">
+                    0.9563
+                </p>
+                <p class="lin-r">
+                    0.9358
+                </p>
+                <p class="lin-r">
+                    0.956
+                </p>
+            </div>
         </div>
 
     </div>
