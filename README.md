@@ -1,8 +1,8 @@
 # Humans scewed logorithmic?
 
-### premis
+### premise
 
-We came accross these websites claiming having experiments that show humans naturally tend to process things natually as logorithmic rather than naturally linear. While these claims were mainly claiming pre-k being naturally logorithmic, we wanted to see if normal people like us wpi stem folks still skew logorithmically. 
+We came across these websites claiming to have experiments that show humans naturally tend to process things natually as logorithmic rather than naturally linear. While these claims were mainly claiming pre-k being naturally logorithmic, we wanted to see if normal people like us wpi stem folks still skew logorithmically. 
 
 We designed an experiment to have people guess the value of a point on a number line from 0 to 700. The hope being if we still thought logorithmically, then the data would follow a more logorithmic trend instead of a strictly linear trend. 
 
