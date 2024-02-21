@@ -1,5 +1,7 @@
 # Treemap Experiment - Rectangluar vs Voronoi
 
+https://randyer.github.io/a3-Experiment/
+
 For our experiment we are testing if the shapes of the Treemaps affect readability and perception. For example, how does shapes effect the judgement of the size of a section in comparison to other sections. In reference to the Cleveland-Mcgill experiment for size perception of different graph or visualization styles: In our experiment we tested two different styles of treemaps, Rectangular and Voronoi.
 
 Each trial in the experiment generates a set of 10 random data points (S1-S10) with values ranging from 5-100. Then two of those data points are marked red at random when portrayed on the window. Each trial is then recorded after a response from the user. At the end of each experiment (rectangular and voronoi respectively) a set of data will be printed out as a csv. Displaying the trial number, the true percentage, your answer, and the error.
