@@ -30,7 +30,7 @@ Generating graphs in d3:
 We calculated the accuracy of identifying the major quadrants and if the the graph outlined a dinosaur or a gorilla. We found that these were the results.
 
 ![Results](img/result.png)
-This graph is modified with the clean data to show the percentage of the right to wrong. The Gorilla was nnever seen which is good but seeing the dinosaur and the right wuadrant were difficult to spot.
+This graph is modified with the clean data to show the percentage of the right to wrong. The Gorilla was never seen which is good but seeing the dinosaur and the right quadrant were difficult to spot.
 
 ![Test](img/rates.png)
 
