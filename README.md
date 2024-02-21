@@ -7,20 +7,20 @@ Each trial in the experiment generates a set of 10 random data points (S1-S10) w
 We repeated this experiment with 10 individuals, with 20 trials for each the rectangular and the voronoi treemap. We found that it generally easier to compare sizes on the rectangular treemap as opposed to the voronoi treemap. We displayed those results using R + ggplot2, using the average error of each experiment and a bootstrapped 95% interval. Refer to image below.
 
 Results:
-![visual](Wrie-Up_Images/ErrorPlot.png)
+![visual](Write-Up_Images/ErrorPlot.png)
 
 Our Experiment:
-![visual](Wrie-Up_Images/IntroductionsPage.png)
+![visual](Write-Up_Images/IntroductionsPage.png)
 
-![visual](Wrie-Up_Images/RectangleTreeMapTrial.png)
+![visual](Write-Up_Images/RectangleTreeMapTrial.png)
 
-![visual](Wrie-Up_Images/RectangleTreeMapExample.png)
+![visual](Write-Up_Images/RectangleTreeMapExample.png)
 
-![visual](Wrie-Up_Images/VoronoiTreeMapTrial.png)
+![visual](Write-Up_Images/VoronoiTreeMapTrial.png)
 
-![visual](Wrie-Up_Images/VoronoiTreeMapExample.png)
+![visual](Write-Up_Images/VoronoiTreeMapExample.png)
 
-![visual](Wrie-Up_Images/EndPage.png)
+![visual](Write-Up_Images/EndPage.png)
 
 
 Design Achievement:
