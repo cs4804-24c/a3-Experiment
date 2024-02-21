@@ -10,7 +10,8 @@ Results:
 ![visual](Write-Up_Images/ErrorPlot.png)
 
 Our Experiment:
-![visual](Write-Up_Images/IntroductionsPage.png)
+
+![visual](Write-Up_Images/InstructionsPage.png)
 
 ![visual](Write-Up_Images/RectangleTreeMapTrial.png)
 
