@@ -1,6 +1,7 @@
 Assignment 3 - Replicating a Classic Experiment  
 ===
 Team Members : Joselin Barbosa and Abigail Boafo
+Site: https://joselinb.github.io/a3-Experiment/
 
 # Description of Study
 In our study, we conducted a controlled experiment with four types of graphs, each marked with two dots, and participants were tasked with judging the percentage of a smaller value to a larger one in 80 questions. Through a text box, participants submitted their reported percentages based on the marked dots. The aim was to assess perceptual accuracy across various visualizations, drawing inspiration from Cleveland and McGill's 1984 experiment. The project involved generating random data points, implementing error calculation using the log-base-2 formula, and running the experiment with at least 10 participants. The visualizations, including bar charts, pie charts, and stacked-bar charts, were designed following Cleveland and McGill's style, with emphasis on controlled elements and spacing. We hypothesized that the donut chart would exhibit superior performance among the visualizations tested. However, the experiment results diverged from our initial expectations, highlighting the importance of empirical testing in evaluating the effectiveness of different chart types.
