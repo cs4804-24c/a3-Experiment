@@ -9,6 +9,7 @@ In our study, we conducted a controlled experiment with four types of graphs, ea
 ![Pie chart](img/Piechart.png)
 ![Donut chart](img/Donutchart.png)
 ![Single stack bar chart](img/Singlestackbarchart.png)
+![Side Bar chart](img/Barchart.jpg)
 ![End page](img/Endpage.png)
 
 # Results
