@@ -1,9 +1,582 @@
 <!DOCTYPE html>
-<div id="container"></div>
-<script type="module">
+<html lang="en">
 
-import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Next Page</title>
+  <script src="https://cdn.jsdelivr.net/npm/d3-funnel@2"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #e6f7ff; 
+      font-family: 'Roboto', sans-serif; 
+      color: #333; 
+    }
 
-console.log(d3);
+    h1 {
+      margin-bottom: 20px;
+    }
+    #chartContainer {
+      width: 530px;
+      height: 450px;
+    }
+    iframe {
+      border: none;
+      width: 100%;
+      height: 100%;
+    }
+    #buttonContainer {
+      display: flex;
+      margin-top: 20px; 
+    }
+    button:last-child {
+      margin-right: 0; 
+    }
+    button:hover {
+      background-color: #2980b9;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    #page1 {
+    text-align: center; 
+    }
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s, box-shadow 0.3s;
+      margin-right: 10px; 
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    }
 
-</script>
+    #textBox {
+      padding: 10px;
+      font-size: 16px;
+      margin-right: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    #textContainer {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    p {
+      margin: 10;
+      text-align: center;
+    }
+    #end {
+    text-align: center; 
+    }
+    #count {
+    position: fixed;
+    top: 20px;
+    right: 30px;
+    font-size: 14px;
+    color: #333;
+    }
+    #test {
+    text-align: center;
+    }
+    #reported {
+      padding: 10px;
+      font-size: 16px;
+      margin-right: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+  </style>
+</head>
+
+<body>
+    <div id="page1">
+      <p>In this experiment</p>
+      <p>you are asked to judge</p>
+      <p>what is the percent of a smaller value to a larger value in several charts.</p>
+      <p>We won't record any other information from you except your answers.</p>
+      <p>Click the "Agree" button to begin.</p>
+      <p>Thank you!</p>
+      <p></p>
+
+      <button id ="Disagree" onclick="return Exit()">Disagree</button>
+        <button id ="Agree" onclick="return test()">Agree</button>
+        
+        
+    </div>
+    <div id="Exit" style="display: none;">
+      <h1>Thank you for your consideration</h1>
+       <p>We appreciate your time and attention in reviewing the survey</p>
+   </div>
+    <div id="test" style="display:none">
+        <h1>
+        </h1>
+        <p>Two values are marked with dots.</p>
+        <p>What do you think the percent of the smaller value to the larger value?</p>
+        <p>Please put your reported below.</p>
+        <p>e.g. If you think the smaller one is exactly a half of the bigger one, please input "50".</p>
+        <h3 id="count"></h3>
+        <div id="vis"></div>
+        <input id="reported" type="text" value=""></input>
+        <button id="Next" onclick="return saveTest()">Next</button>
+    </div>
+
+  <div id="end" style="display:none">
+    <h1>
+        You have reached the end of the experiment
+    </h1>
+    <p>
+        Thank you! your testResults have been exported to a csv file.
+    </p>
+    <div id="printedend"></div>
+    <button id="export" onclick="return exportCSV()">Export to .csv</button>
+</div>
+
+<script>
+    console.log(d3); 
+
+    var graph = [];
+    var testResults = [];
+    var count = 0;
+
+    var vis = "";
+    var truePercent = 0;
+
+    function test() {
+        document.getElementById('page1').style.display='none';
+        document.getElementById('test').style.display='block';
+        starttest();
+    }
+
+    function Exit() {
+    document.getElementById('page1').style.display = 'none';
+    document.getElementById('test').style.display = 'none';
+    document.getElementById('Exit').style.display = 'block';
+    startExit();
+    }
+
+    function showResults() {
+        document.getElementById('test').style.display='none';
+        document.getElementById('end').style.display='block';
+    }
+
+    function randomData() {
+        var data = d3.range(1, 6).map(function (d) {
+            return{
+                idx: d.toString(),
+                val: Math.floor(Math.random()*100 + 1)
+            };
+        });
+
+        let firstPoint = Math.floor(Math.random()*5)
+        let secPoint = Math.floor(Math.random()*5);
+
+        while (firstPoint == secPoint) {
+            secPoint = Math.floor(Math.random()*5);
+        }
+
+        var dataset = {
+            data: data,
+            firstPoint: firstPoint,
+            secPoint: secPoint
+        }
+
+        console.log(data)
+        console.log(firstPoint);
+        console.log(secPoint);
+        return dataset;
+    }
+
+    function randomOrder() {
+        var barNum = 0;
+        var pieNum = 0;
+        var stackNum = 0;
+        var donutNum = 0;
+        var order = [];
+
+        while (barNum < 20 || pieNum < 20 || stackNum < 20 || donutNum < 20) {
+            let num = Math.floor(Math.random()*4) + 1;
+
+if (num == 1) {
+    if (barNum < 20) {
+        order.push(num);
+        barNum++;
+    }
+    else {
+        continue;
+    }
+}
+else if (num == 2) {
+    if (pieNum < 20) {
+        order.push(num);
+        pieNum++;
+    }
+    else {
+        continue;
+    }
+}
+else if (num == 3) {
+    if (stackNum < 20) {
+        order.push(num);
+        stackNum++;
+    }
+    else {
+        continue;
+    }
+}
+else {
+    if (donutNum < 20) {
+        order.push(num);
+        donutNum++;
+    }
+    else {
+        continue;
+    }
+}
+}
+console.log(order);
+return order;
+}
+
+function makeTest(num) {
+    count++;
+    let dataset = randomData();
+
+    if (dataset.data[dataset.firstPoint].val < dataset.data[dataset.secPoint].val) {
+        truePercent = Math.floor(dataset.data[dataset.firstPoint].val / ((dataset.data[dataset.secPoint].val)/100));
+    }
+    else if (dataset.data[dataset.firstPoint].val > dataset.data[dataset.secPoint].val) {
+        truePercent = Math.floor(dataset.data[dataset.secPoint].val / ((dataset.data[dataset.firstPoint].val)/100));
+    }
+    else {
+        truePercent = 100;
+    }
+
+    var currSvg = d3.select("div#vis").select('svg')
+    currSvg.remove();
+    document.getElementById('count').innerHTML = "Question " + (count) + "/80"
+
+    if (graph[num] == 1) {
+        vis = "Bar Chart";
+        makeBarChart(dataset);
+    }
+    else if (graph[num] == 2) {
+        vis = "Pie Chart";
+        makePieChart(dataset);
+    }
+    else if (graph[num] == 3) {
+        vis = "Stack Chart";
+        makeStackChart(dataset);
+    }   
+    else {
+        vis = "Donut Chart";
+        makeDonutChart(dataset);
+    }
+    }
+
+function saveTest() {
+    let result = {
+        trialNum: count,
+        vis: vis,
+        reported: parseInt(document.getElementById('reported').value),
+        truePercent: truePercent
+    }
+    console.log(result);
+    testResults.push(result);
+
+    if (count == 80) {
+        showResults();
+    }
+    else {
+        document.getElementById("reported").value="";
+        makeTest(count);
+    }
+}
+
+// side bar chart time
+function makeBarChart(dataset) {
+    var margin = { top: 30, right: 30, bottom: 40, left: 60 },
+        width = 460 - margin.left - margin.right,
+        height = 400 - margin.top - margin.bottom;
+
+    var svg = d3.select("div#vis")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var y = d3.scaleBand() 
+        .domain(dataset.data.map(function (d) { return d.idx; }))
+        .range([0, height]) 
+        .padding(0.1); 
+
+    svg.append("g")
+        .call(d3.axisLeft(y));
+
+    var x = d3.scaleLinear() 
+        .domain([0, d3.max(dataset.data, function (d) { return d.val; })])
+        .range([0, width]); 
+
+    svg.append("g")
+        .attr("transform", "translate(0," + height + ")") 
+        .call(d3.axisBottom(x));
+
+   
+    svg.selectAll("rect")
+        .data(dataset.data)
+        .enter()
+        .append("rect")
+        .attr("x", 0) 
+        .attr("y", function (d) { return y(d.idx); }) 
+        .attr("width", function (d) { return x(d.val); }) 
+        .attr("height", y.bandwidth()) 
+        .attr("fill", function (d, i) {
+            return d3.schemeCategory10[i % d3.schemeCategory10.length];
+        });
+
+    var circlesData = [
+        { idx: dataset.firstPoint, val: dataset.data[dataset.firstPoint].val },
+        { idx: dataset.secPoint, val: dataset.data[dataset.secPoint].val }
+    ];
+
+    svg.selectAll("circle")
+        .data(circlesData)
+        .enter()
+        .append("circle")
+        .attr("cx", function (d) { 
+            return x(dataset.data[d.idx].val); 
+        })
+        .attr("cy", function (d) { 
+            return y(dataset.data[d.idx].idx) + y.bandwidth() / 2; 
+        })
+        .attr("r", 5)
+        .style("fill", "black");
+}
+
+// pie chart time
+function makePieChart(dataset) {
+    var width = 460,
+        height = 400,
+        radius = Math.min(width, height) / 2;
+
+    var svg = d3.select("div#vis")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height + 70)
+        .append("g")
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+    var pie = d3.pie();
+
+    var arc = d3.arc()
+        .innerRadius(0)
+        .outerRadius(radius);
+
+    let dataVals = [];
+    dataset.data.forEach(function (row) {
+        dataVals.push(row.val);
+    })
+
+    var tempData = pie(dataVals);
+    let data = [];
+    let index = 1;
+
+    tempData.forEach(function (row) {
+        d = {
+            index: index,
+            pieData: row
+        };
+        data.push(d);
+        index++;
+    })
+
+    const slices = svg.selectAll("path")
+        .data(tempData)
+        .enter()
+        .append("path")
+        .attr("d", arc)
+        .attr("fill", function (d, i) {
+            return d3.schemeCategory10[i % d3.schemeCategory10.length];
+        });
+
+    var circleData = [
+        { startAngle: data[dataset.firstPoint].pieData.startAngle, endAngle: data[dataset.firstPoint].pieData.endAngle},  
+        { startAngle: data[dataset.secPoint].pieData.startAngle, endAngle: data[dataset.secPoint].pieData.endAngle}
+    ];
+
+    svg.selectAll("circle")
+        .data(circleData)
+        .enter()
+        .append("circle")
+        .attr("cx", function (d) { return arc.centroid(d)[0]; })
+        .attr("cy", function (d) { return arc.centroid(d)[1]; })
+        .attr("r", 5)
+        .style("fill", "black"); 
+    }
+
+// single stack bar chart
+    function makeStackChart(dataset) {
+    const width = 460;
+    const height = 200;
+    const margin = { top: 20, right: 10, bottom: 20, left: 10 };
+    const h = height * 0.66;
+    const barHeight = 100;
+    const halfBarHeight = barHeight / 2;
+    const dotRadius = 5;
+    const colors = ["red", "blue", "yellow", "green", "orange"];
+
+    const total = d3.sum(dataset.data, d => d.val);
+
+    function groupDataFunc(data) {
+        const percent = d3.scaleLinear()
+            .domain([0, total])
+            .range([0, 100]);
+
+        let cumulative = 0;
+        const _data = data.map((d, i) => {
+            cumulative += d.val;
+            return {
+                value: d.val,
+                cumulative: cumulative - d.val,
+                label: 'Group ' + (i + 1),
+                percent: percent(d.val)
+            };
+        }).filter(d => d.value > 0);
+
+        return _data;
+    }
+
+    const groupData = groupDataFunc(dataset.data);
+
+    const svg = d3.select("#vis").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", h + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    const xScale = d3.scaleLinear()
+        .domain([0, total])
+        .range([0, width]);
+
+    const join = svg.selectAll('g')
+        .data(groupData)
+        .enter().append('g')
+        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+    join.append('rect')
+        .attr('class', 'rect-stacked')
+        .attr('x', d => xScale(d.cumulative))
+        .attr('y', h / 2 - halfBarHeight)
+        .attr('height', barHeight)
+        .attr('width', d => xScale(d.value))
+        .style('fill', (d, i) => colors[i]);
+
+    join.filter((d, i) => i === dataset.firstPoint || i === dataset.secPoint)
+        .append('circle')
+        .attr('cx', (d, i) => xScale(d.cumulative) + (xScale(d.value) / 2))
+        .attr('cy', h / 2)
+        .attr('r', dotRadius)
+        .style('fill', 'black');
+}
+
+    
+// donut chart
+function makeDonutChart(dataset) {
+    var width = 460,
+        height = 400,
+        radius = Math.min(width, height) / 2;
+
+    var innerRadius = radius * 0.6; 
+    var svg = d3.select("div#vis")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height + 70)
+        .append("g")
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+    var pie = d3.pie();
+    var arc = d3.arc()
+        .innerRadius(innerRadius) 
+        .outerRadius(radius);
+
+        let dataVals = [];
+
+    dataset.data.forEach(function (row) {
+        dataVals.push(row.val);
+    })
+    var tempData = pie(dataVals);
+    let data = [];
+    let index = 1;
+
+    tempData.forEach(function (row) {
+        d = {
+            index: index,
+            pieData: row
+        };
+        data.push(d);
+        index++;
+    })
+
+    const slices = svg.selectAll("path")
+        .data(tempData)
+        .enter()
+        .append("path")
+        .attr("d", arc)
+        .attr("fill", function (d, i) {
+            return d3.schemeCategory10[i % d3.schemeCategory10.length];
+        });
+
+    var circleData = [
+        data[dataset.firstPoint].pieData,  
+        data[dataset.secPoint].pieData
+    ];
+
+    svg.selectAll("circle")
+        .data(circleData)
+        .enter()
+        .append("circle")
+        .attr("cx", function (d) { return arc.centroid(d)[0]; })
+        .attr("cy", function (d) { return arc.centroid(d)[1]; })
+        .attr("r", 5)
+        .style("fill", "black"); 
+}
+
+
+function starttest() {
+    graph = randomOrder();
+
+    csvHeadings = {
+        trialNum: "trialNum",
+        vis: "Vis Type",
+        reported: "Reported Percent",
+        truePercent: "True Percent"
+    }
+
+    testResults.push(csvHeadings);
+    makeTest(count);
+}
+
+function exportCSV() {
+    csvData = "";
+    testResults.forEach(function(row) {
+        csvData += row.trialNum + ',' + row.vis + ',' + row.reported + ',' + row.truePercent + '\n';
+    });
+    let anchor = document.createElement('a');
+    anchor.href = 'data:text/csv;charset=utf-8,' + encodeURI(csvData);
+    anchor.target = '_blank';
+    anchor.download = 'data.csv';
+    anchor.click();
+}
+         </script>
+     </body>
+ </html> 
