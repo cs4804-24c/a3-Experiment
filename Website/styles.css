@@ -1,0 +1,157 @@
+/* Basic styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+main {
+    padding: 20px;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+ body {
+     font-family: Arial, sans-serif;
+     background-color: #f4f4f4;
+     margin: 0;
+     padding: 0;
+     text-align: center;
+     /* Center align content */
+ }
+
+ header {
+     background-color: #333;
+     color: #fff;
+     padding: 10px;
+ }
+
+ nav ul {
+     list-style-type: none;
+     padding: 0;
+     margin: 0;
+ }
+
+ nav ul li {
+     display: inline;
+     margin-right: 20px;
+ }
+
+ nav ul li a {
+     text-decoration: none;
+     color: #fff;
+     font-weight: bold;
+ }
+
+ main {
+     padding: 20px;
+ }
+
+ footer p {
+     margin: 0;
+ }
+
+ h1 {
+     color: #333;
+     font-size: 36px;
+     /* Adjust font size */
+     font-weight: bold;
+     margin-bottom: 20px;
+     /* Add margin bottom */
+ }
+
+ p {
+     color: #666;
+     font-size: 18px;
+     /* Adjust font size */
+     font-weight: bold;
+     margin-bottom: 20px;
+     /* Add margin bottom */
+ }
+
+ form {
+     margin-bottom: 20px;
+     /* Add margin bottom */
+ }
+
+ label {
+     font-size: 20px;
+     /* Adjust font size */
+     font-weight: bold;
+ }
+
+ input[type="text"] {
+     width: 200px;
+     height: 30px;
+     font-size: 16px;
+     /* Adjust font size */
+     margin-top: 10px;
+     /* Add margin top */
+     margin-bottom: 20px;
+     /* Add margin bottom */
+     border-radius: 5px;
+     /* Add border radius */
+     border: 1px solid #ccc;
+     /* Add border */
+     padding: 5px;
+     /* Add padding */
+ }
+
+ button[type="submit"] {
+     background-color: #000000;
+     color: #fff;
+     font-size: 18px;
+     /* Adjust font size */
+     font-weight: bold;
+     border: none;
+     border-radius: 5px;
+     /* Add border radius */
+     padding: 10px 20px;
+     cursor: pointer;
+     transition-duration: 0.4s;
+ }
+
+ button[type="submit"]:hover {
+     background-color: #45a049;
+ }
+
+ #result {
+     font-size: 18px;
+     /* Adjust font size */
+     font-weight: bold;
+ }
+
+ #my_dataviz {
+     margin-top: 20px;
+     /* Add margin top */
+ }
