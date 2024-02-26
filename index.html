@@ -1,9 +1,39 @@
 <!DOCTYPE html>
-<div id="container"></div>
-<script type="module">
 
-import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Begin Trials</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="start">
+      <h1>Instructions</h1>
+      <p>
+        Welcome! In this experiment, you will be presented with a series of
+        treemaps. Two of the sections will light up red, and your job is to
+        determine the percentage of of the smaller section compared to the
+        bigger section. For example: 100% means the smaller section is the same
+        size as the larger section. 50% means the smaller section is half the
+        size of the larger section.
+      </p>
+      <p>
+        At the end of the trials, you will be given the results of your
+        performance. Press begin trials to start the experiment. Good Luck!
+      </p>
+      <div class="buttondiv">
+        <!-- Begin button to start trials -->
+        <button id="beginButton">Begin Trials</button>
+      </div>
 
-console.log(d3);
-
-</script>
+      <script>
+        document
+          .getElementById("beginButton")
+          .addEventListener("click", function () {
+            window.location.href = "treemapGenerator.html"; // Redirect to the trials page
+          });
+      </script>
+    </div>
+  </body>
+</html>
