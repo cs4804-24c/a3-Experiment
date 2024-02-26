@@ -4,7 +4,7 @@ Robert Philpot Assignment 3
 Question: What type of chart, bubble chart, donut chart, pie chart, tree map, or
 vertical bar chart is best for visually representing data?
 
-Link to survey: http://Rob-hub-lang.github.io/experiment/
+Link to survey: http://Rob-hub-lang.github.io/experiment/index.html
 
 Ranking charts for visually representing data from best to worst:
 ![Pie Chart](img/PieChart.png)
