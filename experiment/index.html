@@ -1,0 +1,32 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <div>
+        <p class="first">In this experiment, <br> you are asked to judge <br>
+            what is the percent of a smaller value to a larger value
+            in serveral charts.</p>
+        <p class="second">We won't record any other information from you except your answers. <br>
+            Click the "agree" button to begin.</p>
+        <p class="third">Thank you!</p>
+    </div>
+    <div class="SecondDiv">
+        <a href="your_link_here" class="ButtonFirst">DISAGREE</a>
+        <a href="javascript:void(0);" onclick="redirectToPage1()" class="ButtonSecond">AGREE</a>
+
+    </div>
+
+    <script>
+        function redirectToPage1() {
+            window.location.href = "page1.html";
+        }
+    </script>
+</body>
+
+</html>
