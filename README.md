@@ -18,6 +18,13 @@ Tree map: (-2.7884958948062883, 2.0588936890535687)
 ![Bubble Chart](img/BubbleChart.png)
 Bubble chart: (-2.700439718141092, 2.234465253637023)
 
+Technical Achievements:
+Retrieving the JSON data from local storage and compiling all the data into a CSV within admin.html
+Creating a survey using html and css
+
+Design Achievements:
+Created a total of 5 different types of graphs with 5-10 random generated data points
+
 Assignment 3 - Replicating a Classic Experiment  
 ===
 
