@@ -1,0 +1,52 @@
+body{
+    text-align: center;
+    margin-top: 100px;
+    font-size: large;
+}
+.number{
+    margin-left: 600px;
+}
+
+
+.inputDiv{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.SecondDiv a {
+    margin-right: 150px; 
+
+}
+.ButtonFirst{
+    width: 350px;
+    padding: 12px 0;
+    background:  rgb(8, 26, 52);
+    color: white;
+    border: 1px solid rgb(8, 26, 52);
+    text-decoration: none;
+    margin-right: 40px; 
+}
+.ButtonSecond{
+    padding: 10px 20px;
+    background: rgb(69, 112, 176);
+    color: white;
+    border: 1px solid rgb(69, 112, 176);
+    text-decoration: none;
+    margin-left: 10px;
+}
+.ButtonSecond:hover {
+    background: rgba(74, 143, 255, 0.613);
+    border-color: rgba(74, 143, 255, 0.613);
+    color: white;
+    text-decoration: none; 
+}
+
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+}
+.visual{
+    display: none;
+}

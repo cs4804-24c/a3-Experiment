@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="pages.css">
+    <title>Thanks!</title>
+    <style>
+        .thanks-message {
+            text-align: center;
+            margin-top: 20%;
+        }
+        p{
+            font-size: 40px;
+        }
+
+        .ButtonClose {
+            padding: 10px 20px;
+            background: rgb(69, 112, 176);
+            color: white;
+            border: 1px solid rgb(69, 112, 176);
+            text-decoration: none;
+            margin-top: 100px;
+        }
+
+        .ButtonClose:hover {
+            background: rgba(74, 143, 255, 0.613);
+            border-color: rgba(74, 143, 255, 0.613);
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="thanks-message">
+        <p>Thanks!</p>
+        <button onclick="goBack()" class="ButtonClose">Close</button>
+    </div>
+
+    <script>
+        function goBack() {
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,49 @@
+body{
+    text-align: center;
+    margin-top: 220px;
+    font-size: large;
+}
+.first{
+    margin-bottom: 65px;
+}
+.second{
+    margin-bottom: 65px;
+}
+.third{
+    margin-bottom: 130px;
+
+}
+.SecondDiv{
+    margin-left: 70px;
+}
+.SecondDiv a {
+    margin-right: 100px; 
+
+}
+.ButtonFirst{
+    padding: 10px 20px;
+    background: rgb(69, 112, 176);
+    color: white;
+    border: 1px solid rgb(69, 112, 176);
+    text-decoration: none;
+}
+.ButtonFirst:hover {
+    padding: 10px 20px;
+    background: rgb(250, 128, 22);
+    color: white;
+    border: 1px solid rgb(250, 128, 22);
+    text-decoration: none;
+}
+.ButtonSecond{
+    padding: 10px 20px;
+    background: rgb(69, 112, 176);
+    color: white;
+    border: 1px solid rgb(69, 112, 176);
+    text-decoration: none;
+}
+.ButtonSecond:hover {
+    background: rgba(74, 143, 255, 0.613);
+    border-color: rgba(74, 143, 255, 0.613);
+    color: white;
+    text-decoration: none; 
+}

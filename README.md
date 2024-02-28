@@ -1,3 +1,38 @@
+Robert Philpot Assignment 3
+===
+
+Question: What type of chart, bubble chart, donut chart, pie chart, tree map, or
+vertical bar chart is best for visually representing data?
+
+Link to survey: http://Rob-hub-lang.github.io/experiment/index.html
+
+Ranking charts for visually representing data from best to worst:
+![Pie Chart](img/PieChart.png)
+Pie chart: (-2.5178483048626195, 1.968291140272662)
+![Donut Chart](img/DonutChart.png)
+Donut chart: (-2.6555421582152983, 2.0339473319233377)
+![Vertical Bar Chart](img/VerticalBarChart.png)
+Vertical bar chart: (-2.450661409009565, 2.2479275134435857)
+![Tree Map](img/TreeMap.png)
+Tree map: (-2.7884958948062883, 2.0588936890535687)
+![Bubble Chart](img/BubbleChart.png)
+Bubble chart: (-2.700439718141092, 2.234465253637023)
+
+Technical Achievements:
+Retrieving the JSON data from local storage and compiling all the data into a CSV within admin.html. 
+Creating a survey using html, css and charts using d3. 
+User Interface is responsive, adjusts in size according to different screen sizes.
+Visualizations are shuffled randomly for different order for each survey.
+Creates unique ID for each participant taking survey.
+The Bubble Chart is interactive, brings bubbles closer together.
+
+Design Achievements:
+Created a total of 5 different types of graphs with 5-10 random generated data points. 
+Used dots to represent which data points to compare with one another. 
+Created an instructions page and thank you page to enchance user experience. 
+Handle errors such as participant cannot leave answer blank and number must be between 0-100. 
+Interface clear and intuitive with numbered sequence 1-6 to show participants progress.
+
 Assignment 3 - Replicating a Classic Experiment  
 ===
 
