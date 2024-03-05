@@ -1,0 +1,201 @@
+Experiment Type, Prompt Value, Dot 1 Value, Dot 2 Value, Accuracy
+Black White,15,98,92,3.1898
+Black White,25,59,88,1.9542
+Black White,27,61,23,3.4429
+Black White,43,25,84,3.9887
+Black White,18,1,38,4.2384
+Black White,20,75,17,5.2432
+Black White,30,63,10,4.5157
+Black White,60,99,16,4.5157
+Black White,20,61,41,0
+Black White,42,75,27,2.5546
+Black White,5,0,17,3.1498
+Black White,40,2,55,3.6865
+Black White,30,32,78,3.9887
+Black White,33,32,72,2.7814
+Black White,21,49,50,4.3309
+Black White,66,22,94,2.5546
+Black White,28,56,33,2.3576
+Black White,20,69,81,3.0224
+Black White,11,64,51,0.9069
+Black White,33,34,12,3.4757
+Black White,26,23,34,3.9189
+Black White,49,62,35,4.4676
+Black White,50,6,56,0
+Black White,25,77,48,1.9542
+Black White,42,68,41,3.9189
+Black White,18,73,82,3.1898
+Black White,92,96,21,4.098
+Black White,16,27,46,1.5236
+Black White,53,7,63,1.5236
+Black White,73,89,34,4.1799
+Black White,61,99,62,4.5925
+Black White,63,78,32,4.098
+Black White,5,9,35,4.3837
+Black White,19,91,92,4.1799
+Black White,14,91,87,3.3399
+Black White,33,58,50,4.6511
+Black White,59,2,47,3.8202
+Black White,49,43,18,4.5925
+Black White,21,36,45,3.5999
+Black White,52,3,57,0.9069
+Black White,80,32,100,3.5999
+Black White,39,54,34,4.2574
+Black White,68,74,2,1.9542
+Black White,12,31,13,2.5546
+Black White,18,36,57,1.5236
+Black White,24,41,41,4.5925
+Black White,75,13,76,3.5999
+Black White,22,38,15,-0.1926
+Black White,21,61,87,2.2854
+Black White,18,34,72,4.3129
+Rainbow,25,41,77,3.4429
+Rainbow,50,77,13,3.7944
+Rainbow,25,49,7,4.0768
+Rainbow,14,84,64,2.5546
+Rainbow,24,12,56,4.3129
+Rainbow,80,99,31,3.5999
+Rainbow,5,88,87,2.0444
+Rainbow,45,77,37,2.3576
+Rainbow,60,2,69,2.7814
+Rainbow,18,83,59,2.5546
+Rainbow,2,12,14,0
+Rainbow,55,20,84,3.1498
+Rainbow,20,81,99,1.0875
+Rainbow,79,23,96,2.6147
+Rainbow,78,99,6,3.8948
+Rainbow,69,99,16,3.7944
+Rainbow,19,29,16,2.6147
+Rainbow,22,58,88,2.9773
+Rainbow,15,7,0,3.0224
+Rainbow,65,13,76,1.0875
+Rainbow,18,68,94,2.9773
+Rainbow,38,96,51,2.7814
+Rainbow,50,3,64,3.4429
+Rainbow,51,12,73,3.3038
+Rainbow,38,69,96,3.4757
+Rainbow,22,85,96,3.4757
+Rainbow,9,39,58,3.3038
+Rainbow,58,72,35,4.4009
+Rainbow,53,80,28,0.1699
+Rainbow,44,40,16,4.3309
+Rainbow,93,12,97,3.0224
+Rainbow,62,89,47,4.3309
+Rainbow,5,10,35,4.3129
+Rainbow,21,58,67,3.5999
+Rainbow,34,72,99,2.8329
+Rainbow,59,70,14,1.6439
+Rainbow,44,68,21,1.5236
+Rainbow,20,28,29,4.2574
+Rainbow,69,60,14,4.5314
+Rainbow,18,13,44,3.6865
+Rainbow,19,92,92,4.2574
+Rainbow,68,22,78,3.5999
+Rainbow,22,80,96,2.6147
+Rainbow,30,70,58,4.1799
+Rainbow,110,98,7,4.2574
+Rainbow,52,100,53,2.3576
+Rainbow,35,73,52,3.8202
+Rainbow,54,22,63,3.7142
+Rainbow,20,63,71,3.5999
+Rainbow,25,38,59,2.0444
+Red Blue,30,10,53,3.6865
+Red Blue,35,25,85,4.6366
+Red Blue,13,29,42,0
+Red Blue,12,32,21,0.1699
+Red Blue,45,20,77,3.5699
+Red Blue,54,67,7,2.5546
+Red Blue,50,12,87,4.6366
+Red Blue,10,81,88,1.6439
+Red Blue,40,39,85,2.5546
+Red Blue,60,24,99,3.8948
+Red Blue,15,82,73,2.6147
+Red Blue,15,49,75,3.4429
+Red Blue,15,35,57,2.7814
+Red Blue,9,6,39,4.5774
+Red Blue,19,32,38,3.7142
+Red Blue,79,95,19,1.6439
+Red Blue,62,30,84,3.0224
+Red Blue,36,86,65,3.9189
+Red Blue,35,59,80,3.8202
+Red Blue,19,3,10,3.5999
+Red Blue,19,19,14,3.8202
+Red Blue,81,66,9,4.5925
+Red Blue,49,43,4,3.3399
+Red Blue,21,38,52,2.8329
+Red Blue,33,17,64,3.7944
+Red Blue,29,17,3,3.9189
+Red Blue,12,20,8,0
+Red Blue,19,92,98,3.7142
+Red Blue,16,45,62,-0.1926
+Red Blue,35,60,16,3.1497
+Red Blue,19,76,77,4.1799
+Red Blue,33,23,1,3.4757
+Red Blue,79,65,7,4.4009
+Red Blue,34,8,59,4.0768
+Red Blue,34,22,49,2.8329
+Red Blue,15,47,24,2.9773
+Red Blue,19,51,91,4.3837
+Red Blue,22,54,57,4.2574
+Red Blue,22,73,51,0
+Red Blue,22,75,56,1.6439
+Red Blue,47,75,35,2.8329
+Red Blue,35,31,85,4.2384
+Red Blue,49,41,82,3.0224
+Red Blue,6,65,53,2.5546
+Red Blue,20,83,49,3.7944
+Red Blue,17,53,61,3.1898
+Red Blue,45,23,84,3.9887
+Red Blue,10,90,100,0
+Red Blue,15,20,50,3.8948
+Red Blue,66,16,97,3.8948
+Red White,5,40,48,1.5236
+Red White,25,83,43,3.8948
+Red White,20,63,86,1.5236
+Red White,20,60,82,0.9069
+Red White,11,88,69,2.9773
+Red White,37,99,39,4.5157
+Red White,12,76,61,1.5236
+Red White,30,6,52,3.9887
+Red White,5,81,70,2.5546
+Red White,54,87,21,3.5699
+Red White,10,13,9,2.6147
+Red White,63,80,10,2.7814
+Red White,5,21,13,1.5236
+Red White,17,25,57,3.8948
+Red White,46,5,66,3.8948
+Red White,52,92,45,2.3576
+Red White,22,14,11,4.2574
+Red White,76,87,9,0.9069
+Red White,19,71,70,4.1799
+Red White,14,56,53,3.4757
+Red White,54,55,19,4.1799
+Red White,20,94,77,1.6439
+Red White,33,76,96,3.7142
+Red White,23,97,94,4.3309
+Red White,18,60,30,3.5699
+Red White,3,97,80,3.7944
+Red White,16,84,71,1.6439
+Red White,27,89,57,2.2854
+Red White,32,32,13,3.7142
+Red White,16,8,18,2.6147
+Red White,21,29,44,2.6147
+Red White,11,16,30,1.5236
+Red White,21,91,74,2.0444
+Red White,73,83,8,0.9069
+Red White,30,49,40,4.4009
+Red White,18,33,41,3.3399
+Red White,25,49,69,2.3576
+Red White,98,92,16,4.4676
+Red White,33,4,57,4.3129
+Red White,24,82,81,4.5314
+Red White,24,20,21,4.5314
+Red White,47,64,98,3.7142
+Red White,31,40,26,4.098
+Red White,23,23,34,3.5999
+Red White,37,95,74,4.0112
+Red White,23,55,55,4.5314
+Red White,87,0,87,0
+Red White,47,65,43,4.6511
+Red White,38,69,29,0.9069
+Red White,51,49,94,2.6147
